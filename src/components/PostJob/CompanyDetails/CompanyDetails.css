@@ -251,7 +251,7 @@
     font-size: 16px;
     height: 52px;
   }
-  
+
   /* Keep phone country code visible on mobile */
   .company-details-country-code {
     min-width: 100px;
@@ -304,4 +304,268 @@
   font-size: 16px;
   color: #003b71;
   font-weight: 500;
+}
+
+.post-job-step-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
+}
+
+.post-job-step-section h3 {
+  font-size: 1.8rem;
+  color: #0e3e7e;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.post-form-group {
+  margin-bottom: 25px;
+}
+
+.post-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.post-form-row .post-form-group {
+  flex: 1 1 calc(50% - 10px); /* Two columns with gap */
+}
+
+.post-form-row .post-form-group.post-form-phone-group {
+  flex: 1 1 calc(50% - 10px); /* Ensure it takes half width */
+}
+
+.post-form-phone-input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.post-form-country-code {
+  flex: 0 0 100px; /* Fixed width for country code dropdown */
+}
+
+.post-form-country-code select {
+  width: 100%;
+}
+
+.post-form-phone-input-container input[type="tel"] {
+  flex: 1;
+}
+
+.post-form-dropdown-wrapper {
+  position: relative;
+}
+
+.post-form-dropdown-wrapper select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none;
+  padding-right: 35px; /* Space for custom icon */
+}
+
+.post-form-dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #555;
+}
+
+.post-form-location-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.post-form-location-grid .post-form-group.post-form-wide {
+  grid-column: span 2; /* Make wide inputs span two columns */
+}
+
+.post-form-radio-option {
+  margin-bottom: 25px;
+}
+
+.post-form-radio-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background-color: #f8f8f8;
+}
+
+.post-form-radio-container:hover {
+  background-color: #f0f0f0;
+  border-color: #0e3e7e;
+}
+
+.post-form-radio-container input[type="checkbox"] {
+  display: none;
+}
+
+.post-form-radio-custom {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #0e3e7e;
+  border-radius: 50%; /* Circle for radio-like checkbox */
+  margin-right: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.post-form-radio-container
+  input[type="checkbox"]:checked
+  + .post-form-radio-custom {
+  background-color: #0e3e7e;
+  border-color: #0e3e7e;
+}
+
+.post-form-radio-checkmark {
+  color: white;
+  font-size: 14px;
+}
+
+.post-form-radio-label {
+  color: #333;
+  font-weight: 500;
+}
+
+.post-form-disabled input,
+.post-form-disabled select {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.post-form-disabled label {
+  color: #999;
+}
+
+/* Common styles for form elements */
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.required-star {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+textarea,
+select {
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #555;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #0e3e7e;
+  box-shadow: 0 0 0 3px rgba(14, 62, 126, 0.2);
+  outline: none;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .post-job-step-section {
+    padding: 20px;
+  }
+
+  .post-job-step-section h3 {
+    font-size: 1.5rem;
+  }
+
+  .post-form-group {
+    margin-bottom: 20px;
+  }
+
+  .post-form-row .post-form-group {
+    flex: 1 1 100%; /* Stack columns on small screens */
+  }
+
+  .post-form-phone-input-container {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .post-form-country-code {
+    flex: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .post-form-location-grid {
+    grid-template-columns: 1fr; /* Stack location fields on small screens */
+  }
+
+  .post-form-location-grid .post-form-group.post-form-wide {
+    grid-column: span 1;
+  }
+
+  .post-form-radio-container {
+    padding: 12px;
+  }
+
+  .post-form-radio-custom {
+    width: 18px;
+    height: 18px;
+  }
+
+  .post-form-radio-checkmark {
+    font-size: 12px;
+  }
+
+  label {
+    font-size: 0.95rem;
+  }
+
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  textarea,
+  select {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  textarea {
+    min-height: 100px;
+  }
 }

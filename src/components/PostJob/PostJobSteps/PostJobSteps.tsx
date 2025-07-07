@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import CompanyDetails from '../CompanyDetails/CompanyDetails';
-import JobDetails from '../JobDetails/JobDetails';
-import CandidateRequirements from '../CandidateRequirements/CandidateRequirements';
-import JobDescription from '../JobDescription/JobDescription';
-import './PostJobSteps.css';
+import React, { useState } from "react";
+import JobDetails from "../JobDetails/JobDetails";
+import JobDescription from "../JobDescription/JobDescription";
+import CompanyDetails from "../CompanyDetails/CompanyDetails";
+import CandidateRequirements from "../CandidateRequirements/CandidateRequirements";
+import "./PostJobSteps.css";
+import Header from "../../Header/header";
+import Footer from "../../Footer/Footer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 export interface JobPostingData {
   // Company Details
@@ -52,35 +59,35 @@ export interface JobPostingData {
 const PostJobSteps: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [jobPostingData, setJobPostingData] = useState<JobPostingData>({
-    companyName: '',
-    companySize: '',
-    yourName: '',
-    phoneNumber: '',
-    phoneCountryCode: '+1',
-    companyCity: '',
-    companyState: '',
-    companyCountry: 'USA',
-    companyAddress: '',
+    companyName: "",
+    companySize: "",
+    yourName: "",
+    phoneNumber: "",
+    phoneCountryCode: "+1",
+    companyCity: "",
+    companyState: "",
+    companyCountry: "USA",
+    companyAddress: "",
     sameAsCompanyLocation: false,
-    jobCity: '',
-    jobState: '',
-    jobCountry: 'USA',
-    jobAddress: '',
-    jobTitle: '',
-    jobType: '',
-    jobLocation: '',
-    salaryMin: '',
-    salaryMax: '',
-    paymentTerm: '',
+    jobCity: "",
+    jobState: "",
+    jobCountry: "USA",
+    jobAddress: "",
+    jobTitle: "",
+    jobType: "",
+    jobLocation: "",
+    salaryMin: "",
+    salaryMax: "",
+    paymentTerm: "",
     additionalCompensation: [],
     benefits: [],
-    experienceRequired: '',
-    numberOfHires: '',
-    hireUrgency: '',
-    availabilityNeeded: '',
-    companyWebsite: '',
+    experienceRequired: "",
+    numberOfHires: "",
+    hireUrgency: "",
+    availabilityNeeded: "",
+    companyWebsite: "",
     fullyRemote: false,
-    jobDescription: '',
+    jobDescription: "",
     seeVideoInterviews: false,
     videoCalling: false,
     email: false,
@@ -99,77 +106,94 @@ const PostJobSteps: React.FC = () => {
   };
 
   const handlePostJob = () => {
-    console.log('Job Posted:', jobPostingData);
-    alert('Job Posted Successfully!');
+    console.log("Job Posted:", jobPostingData);
+    alert("Job Posted Successfully!");
   };
 
   const steps = [
-    { id: 1, name: 'Company Details' },
-    { id: 2, name: 'Job Details' },
-    { id: 3, name: 'Candidate Requirements' },
-    { id: 4, name: 'Job Description' },
+    { id: 1, name: "Company Details" },
+    { id: 2, name: "Job Details" },
+    { id: 3, name: "Candidate Requirements" },
+    { id: 4, name: "Job Description" },
   ];
 
   return (
-    <div className="job-posting-container">
-      {/* <header className="job-posting-header">
-        <h1>Post a job</h1>
-      </header> */}
-
-      <div className="job-posting-card">
-        <div className="job-posting-title">
-          <h2>Post a job</h2>
+    <div className="post-job-form-page">
+      <Header />
+      <br />
+      <br />
+      <br />
+      <br />
+      <div className="post-job-form-container">
+        <div className="post-form-header">
+          <h1>Post a New Job</h1>
         </div>
+        <div className="post-form-body">
+          <h2>
+            Step {currentStep} of {steps.length}
+          </h2>
+          <form onSubmit={handlePostJob}>
+            {currentStep === 1 && (
+              <div data-aos="fade-up">
+                <CompanyDetails
+                  data={jobPostingData}
+                  onDataChange={handleDataChange}
+                />
+              </div>
+            )}
+            {currentStep === 2 && (
+              <div data-aos="fade-up">
+                <JobDetails
+                  data={jobPostingData}
+                  onDataChange={handleDataChange}
+                />
+              </div>
+            )}
+            {currentStep === 3 && (
+              <div data-aos="fade-up">
+                <CandidateRequirements
+                  data={jobPostingData}
+                  onDataChange={handleDataChange}
+                />
+              </div>
+            )}
+            {currentStep === 4 && (
+              <div data-aos="fade-up">
+                <JobDescription
+                  data={jobPostingData}
+                  onDataChange={handleDataChange}
+                />
+              </div>
+            )}
 
-        <div className="job-posting-tabs">
-          {steps.map((step) => (
-            <div
-              key={step.id}
-              className={`job-posting-tab ${currentStep === step.id ? 'active' : ''} ${
-                currentStep > step.id ? 'completed' : ''
-              }`}
-            >
-              {step.name}
-              {currentStep > step.id && <span className="checkmark">✓</span>}
+            <div className="post-form-navigation-btns">
+              {currentStep > 1 && (
+                <button
+                  type="button"
+                  onClick={handlePreviousStep}
+                  className="prev-post-btn"
+                >
+                  <FontAwesomeIcon icon={faChevronLeft} /> Previous
+                </button>
+              )}
+              {currentStep < steps.length ? (
+                <button
+                  type="button"
+                  onClick={handleNextStep}
+                  className="next-post-btn"
+                >
+                  Next <FontAwesomeIcon icon={faChevronRight} />
+                </button>
+              ) : (
+                <button type="submit" className="submit-post-btn">
+                  Post Job
+                </button>
+              )}
             </div>
-          ))}
-        </div>
-
-        <div className="job-posting-content">
-          {currentStep === 1 && (
-            <CompanyDetails
-              data={jobPostingData}
-              onDataChange={handleDataChange}
-              onNext={handleNextStep}
-              onPrevious={handlePreviousStep}
-            />
-          )}
-          {currentStep === 2 && (
-            <JobDetails
-              data={jobPostingData}
-              onDataChange={handleDataChange}
-              onNext={handleNextStep}
-              onPrevious={handlePreviousStep}
-            />
-          )}
-          {currentStep === 3 && (
-            <CandidateRequirements
-              data={jobPostingData}
-              onDataChange={handleDataChange}
-              onNext={handleNextStep}
-              onPrevious={handlePreviousStep}
-            />
-          )}
-          {currentStep === 4 && (
-            <JobDescription
-              data={jobPostingData}
-              onDataChange={handleDataChange}
-              onPostJob={handlePostJob}
-              onPrevious={handlePreviousStep}
-            />
-          )}
+          </form>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

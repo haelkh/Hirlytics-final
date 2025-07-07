@@ -1,20 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { JobPostingData } from '../PostJobSteps/PostJobSteps';
-import './JobDescription.css';
+import React, { useState, useEffect } from "react";
+import { JobPostingData } from "../PostJobSteps/PostJobSteps";
+import "./JobDescription.css";
 
 interface JobDescriptionProps {
   data: JobPostingData;
   onDataChange: (data: Partial<JobPostingData>) => void;
-  onPostJob: () => void;
-  onPrevious: () => void;
+  // Removed onPostJob and onPrevious
 }
 
-const JobDescription: React.FC<JobDescriptionProps> = ({ data, onDataChange, onPostJob, onPrevious }) => {
-  const [jobDescription, setJobDescription] = useState<string>(data.jobDescription || '');
-  const [seeVideoInterviews, setSeeVideoInterviews] = useState<boolean>(data.seeVideoInterviews || false);
-  const [videoCalling, setVideoCalling] = useState<boolean>(data.videoCalling || false);
+const JobDescription: React.FC<JobDescriptionProps> = ({
+  data,
+  onDataChange,
+}) => {
+  const [jobDescription, setJobDescription] = useState<string>(
+    data.jobDescription || ""
+  );
+  const [seeVideoInterviews, setSeeVideoInterviews] = useState<boolean>(
+    data.seeVideoInterviews || false
+  );
+  const [videoCalling, setVideoCalling] = useState<boolean>(
+    data.videoCalling || false
+  );
   const [email, setEmail] = useState<boolean>(data.email || false);
-  const [isJobPosted, setIsJobPosted] = useState<boolean>(false); // State to track if job is posted
+  // Removed isJobPosted as success message is handled by parent if needed
 
   // Update parent data when local state changes
   useEffect(() => {
@@ -24,7 +32,7 @@ const JobDescription: React.FC<JobDescriptionProps> = ({ data, onDataChange, onP
       videoCalling,
       email,
     });
-  }, [jobDescription, seeVideoInterviews, videoCalling, email]);
+  }, [jobDescription, seeVideoInterviews, videoCalling, email, onDataChange]); // Added onDataChange to dependency array
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -33,99 +41,85 @@ const JobDescription: React.FC<JobDescriptionProps> = ({ data, onDataChange, onP
 
   const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    if (name === 'seeVideoInterviews') setSeeVideoInterviews(checked);
-    if (name === 'videoCalling') setVideoCalling(checked);
-    if (name === 'email') setEmail(checked);
+    if (name === "seeVideoInterviews") setSeeVideoInterviews(checked);
+    if (name === "videoCalling") setVideoCalling(checked);
+    if (name === "email") setEmail(checked);
   };
 
-  const handlePostJob = () => {
-    onPostJob(); // Call the parent function to post the job
-    setIsJobPosted(true); // Set the job as posted
-  };
+  // Removed handlePostJob as it's handled by parent
 
   return (
-    <div className="job-description-container">
-      {/* Job Description */}
-      <div className="job-description-form-section">
-        <div className="job-description-section-title">Write Your Full Job Description</div>
-        <div className="job-description-form-group">
-          <textarea
-            id="jobDescription"
-            name="jobDescription"
-            value={jobDescription}
-            onChange={handleInputChange}
-            placeholder="Describe the job in detail, including requirements, skills, or education."
-            rows={8}
-          />
-        </div>
+    <div className="post-job-step-section">
+      <h3>Job Description</h3>
+      <div className="post-form-group">
+        <label htmlFor="jobDescription">
+          Write Your Full Job Description{" "}
+          <span className="required-star">*</span>
+        </label>
+        <textarea
+          id="jobDescription"
+          name="jobDescription"
+          value={jobDescription}
+          onChange={handleInputChange}
+          placeholder="Describe the job in detail, including requirements, skills, or education."
+          rows={8}
+          required
+        />
       </div>
 
-      {/* Options Included */}
-      <div className="job-description-form-section">
-        <div className="job-description-section-title">Options Included</div>
-        
-        <div className="job-description-toggle-group">
-          <label className="job-description-toggle-container">
-            <span className="job-description-toggle-label">See Video Interviews</span>
-            <label className="job-description-toggle-switch">
-              <input
-                type="checkbox"
-                name="seeVideoInterviews"
-                checked={seeVideoInterviews}
-                onChange={handleToggleChange}
-              />
-              <span className="job-description-slider"></span>
-            </label>
+      <h3>Options Included</h3>
+
+      <div className="post-form-toggle-group">
+        <label className="post-form-toggle-container">
+          <span className="post-form-toggle-label">See Video Interviews</span>
+          <label className="post-form-toggle-switch">
+            <input
+              type="checkbox"
+              name="seeVideoInterviews"
+              checked={seeVideoInterviews}
+              onChange={handleToggleChange}
+            />
+            <span className="post-form-slider"></span>
           </label>
-        </div>
-        
-        <div className="job-description-toggle-group">
-          <label className="job-description-toggle-container">
-            <span className="job-description-toggle-label">Video Calling</span>
-            <label className="job-description-toggle-switch">
-              <input
-                type="checkbox"
-                name="videoCalling"
-                checked={videoCalling}
-                onChange={handleToggleChange}
-              />
-              <span className="job-description-slider"></span>
-            </label>
-          </label>
-        </div>
-        
-        <div className="job-description-toggle-group">
-          <label className="job-description-toggle-container">
-            <span className="job-description-toggle-label">Email</span>
-            <label className="job-description-toggle-switch">
-              <input
-                type="checkbox"
-                name="email"
-                checked={email}
-                onChange={handleToggleChange}
-              />
-              <span className="job-description-slider"></span>
-            </label>
-          </label>
-        </div>
+        </label>
       </div>
 
-      {/* Success Message */}
-      {isJobPosted && (
-        <div className="job-description-success-message">
+      <div className="post-form-toggle-group">
+        <label className="post-form-toggle-container">
+          <span className="post-form-toggle-label">Video Calling</span>
+          <label className="post-form-toggle-switch">
+            <input
+              type="checkbox"
+              name="videoCalling"
+              checked={videoCalling}
+              onChange={handleToggleChange}
+            />
+            <span className="post-form-slider"></span>
+          </label>
+        </label>
+      </div>
+
+      <div className="post-form-toggle-group">
+        <label className="post-form-toggle-container">
+          <span className="post-form-toggle-label">Email</span>
+          <label className="post-form-toggle-switch">
+            <input
+              type="checkbox"
+              name="email"
+              checked={email}
+              onChange={handleToggleChange}
+            />
+            <span className="post-form-slider"></span>
+          </label>
+        </label>
+      </div>
+
+      {/* Success Message - Handled by parent if needed, or removed */}
+      {/* {isJobPosted && (
+        <div className="post-form-success-message">
           <p>Your job has been posted successfully!</p>
         </div>
-      )}
-
-      {/* Buttons */}
-      <div className="job-description-button-container">
-        <button className="job-description-previous-button" onClick={onPrevious}>
-          Previous
-        </button>
-        <button className="job-description-post-job-button" onClick={handlePostJob}>
-          Post Job
-        </button>
-      </div>
+      )} */}
     </div>
   );
 };

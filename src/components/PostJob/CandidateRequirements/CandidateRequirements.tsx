@@ -1,167 +1,154 @@
-import React, { useState, useEffect } from 'react';
-import { JobPostingData } from '../PostJobSteps/PostJobSteps';
-import './CandidateRequirements.css';
+import React, { useState, useEffect } from "react";
+import { JobPostingData } from "../PostJobSteps/PostJobSteps";
+import "./CandidateRequirements.css";
 
 interface CandidateRequirementsProps {
   data: JobPostingData;
   onDataChange: (data: Partial<JobPostingData>) => void;
-  onNext: () => void;
-  onPrevious: () => void;
+  // Removed onNext and onPrevious
 }
 
-const CandidateRequirements: React.FC<CandidateRequirementsProps> = ({ data, onDataChange, onNext, onPrevious }) => {
-  const [numberOfHires, setNumberOfHires] = useState<string>(data.numberOfHires || '');
-  const [hireUrgency, setHireUrgency] = useState<string>(data.hireUrgency || '');
-  const [availabilityNeeded, setAvailabilityNeeded] = useState<string>(data.availabilityNeeded || '');
-  const [companyWebsite, setCompanyWebsite] = useState<string>(data.companyWebsite || '');
-  const [fullyRemote, setFullyRemote] = useState<boolean>(data.fullyRemote || false);
+const CandidateRequirements: React.FC<CandidateRequirementsProps> = ({
+  data,
+  onDataChange,
+}) => {
+  // Removed local states, using data prop directly
+  // const [numberOfHires, setNumberOfHires] = useState<string>(data.numberOfHires || '');
+  // const [hireUrgency, setHireUrgency] = useState<string>(data.hireUrgency || '');
+  // const [availabilityNeeded, setAvailabilityNeeded] = useState<string>(data.availabilityNeeded || '');
+  // const [companyWebsite, setCompanyWebsite] = useState<string>(data.companyWebsite || '');
+  // const [fullyRemote, setFullyRemote] = useState<boolean>(data.fullyRemote || false);
 
-  // Update parent data when local state changes
+  // Update parent data when local state changes (now directly from data prop)
   useEffect(() => {
-    onDataChange({
-      numberOfHires,
-      hireUrgency,
-      availabilityNeeded,
-      companyWebsite,
-      fullyRemote,
-    });
-  }, [numberOfHires, hireUrgency, availabilityNeeded, companyWebsite, fullyRemote]);
+    // No need to explicitly call onDataChange here if data is always passed down
+    // and updated via handleInputChange directly calling onDataChange
+  }, [data]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    if (name === 'numberOfHires') setNumberOfHires(value);
-    if (name === 'hireUrgency') setHireUrgency(value);
-    if (name === 'availabilityNeeded') setAvailabilityNeeded(value);
-    if (name === 'companyWebsite') setCompanyWebsite(value);
+    onDataChange({ [name]: value });
   };
 
   const handleFullyRemoteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if (value === 'yes') {
-      setFullyRemote((prev) => (prev === true ? false : true)); // Toggle between true and false
-    } else if (value === 'no') {
-      setFullyRemote((prev) => (prev === false ? true : false)); // Toggle between false and true
-    }
+    onDataChange({ fullyRemote: value === "yes" }); // Directly update parent data
   };
 
   return (
-    <div className="candidate-requirements">
-      {/* Number of Hires */}
-      <div className="candidate-form-section">
-        <div className="candidate-section-title">How many hires do you require for this job?</div>
-        <div className="candidate-form-group">
-          <select
-            id="numberOfHires"
-            name="numberOfHires"
-            value={numberOfHires}
-            onChange={handleInputChange}
-          >
-            <option value="">Select number of hires</option>
-            <option value="1">1-5</option>
-            <option value="2">6-15</option>
-            <option value="3">16-30</option>
-            <option value="4">31-50</option>
-            <option value="5">51-100</option>
-            <option value="6">100+</option>
-          </select>
-        </div>
+    <div className="post-job-step-section">
+      <h3>Candidate Requirements</h3>
+      <div className="post-form-group">
+        <label htmlFor="numberOfHires">
+          How many hires do you require for this job?{" "}
+          <span className="required-star">*</span>
+        </label>
+        <select
+          id="numberOfHires"
+          name="numberOfHires"
+          value={data.numberOfHires}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select number of hires</option>
+          <option value="1-5">1-5</option>
+          <option value="6-15">6-15</option>
+          <option value="16-30">16-30</option>
+          <option value="31-50">31-50</option>
+          <option value="51-100">51-100</option>
+          <option value="100+">100+</option>
+        </select>
       </div>
 
-      {/* Hire Urgency */}
-      <div className="candidate-form-section">
-        <div className="candidate-section-title">How urgently do you need to make a hire?</div>
-        <div className="candidate-form-group">
-          <select
-            id="hireUrgency"
-            name="hireUrgency"
-            value={hireUrgency}
-            onChange={handleInputChange}
-          >
-            <option value="">Select urgency</option>
-            <option value="Immediately">Immediately</option>
-            <option value="Within 1 Week">Within 1 Week</option>
-            <option value="Within 1 Month">Within 1 Month</option>
-            <option value="Within 3 Months">Within 3 Months</option>
-            <option value="No Rush">No Rush</option>
-          </select>
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="hireUrgency">
+          How urgently do you need to make a hire?{" "}
+          <span className="required-star">*</span>
+        </label>
+        <select
+          id="hireUrgency"
+          name="hireUrgency"
+          value={data.hireUrgency}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">Select urgency</option>
+          <option value="Immediately">Immediately</option>
+          <option value="Within 1 Week">Within 1 Week</option>
+          <option value="Within 1 Month">Within 1 Month</option>
+          <option value="Within 3 Months">Within 3 Months</option>
+          <option value="No Rush">No Rush</option>
+        </select>
       </div>
 
-      {/* Availability Needed */}
-      <div className="candidate-form-section">
-        <div className="candidate-section-title">Additional Job Details</div>
-        <div className="candidate-form-group">
-          <input
-            type="text"
-            id="availabilityNeeded"
-            name="availabilityNeeded"
-            value={availabilityNeeded}
-            onChange={handleInputChange}
-            placeholder="e.g., Full-time availability required"
-          />
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="availabilityNeeded">Additional Job Details</label>
+        <input
+          type="text"
+          id="availabilityNeeded"
+          name="availabilityNeeded"
+          value={data.availabilityNeeded}
+          onChange={handleInputChange}
+          placeholder="e.g., Full-time availability required"
+        />
       </div>
 
-      {/* Company Website */}
-      <div className="candidate-form-section">
-        <div className="candidate-section-title">Please enter your company website (if there is one or leave the form empty)</div>
-        <div className="candidate-form-group">
-          <input
-            type="text"
-            id="companyWebsite"
-            name="companyWebsite"
-            value={companyWebsite}
-            onChange={handleInputChange}
-            placeholder="e.g., https://www.example.com"
-          />
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="companyWebsite">
+          Please enter your company website (if there is one or leave the form
+          empty)
+        </label>
+        <input
+          type="text"
+          id="companyWebsite"
+          name="companyWebsite"
+          value={data.companyWebsite}
+          onChange={handleInputChange}
+          placeholder="e.g., https://www.example.com"
+        />
       </div>
 
-      {/* Fully Remote */}
-      <div className="candidate-form-section">
-        <div className="candidate-section-title">Does this job allow hires fully remote?</div>
-        <div className="candidate-form-row">
-          <div className="candidate-radio-group">
-            <label className="candidate-radio-container">
+      <div className="post-form-group">
+        <label>
+          Does this job allow hires fully remote?{" "}
+          <span className="required-star">*</span>
+        </label>
+        <div className="post-form-row">
+          <div className="post-form-radio-group">
+            <label className="post-form-radio-container">
               <input
                 type="radio"
                 name="fullyRemote"
                 value="yes"
-                checked={fullyRemote === true}
+                checked={data.fullyRemote === true}
                 onChange={handleFullyRemoteChange}
+                required
               />
-              <span className="candidate-radio-custom">
-                <span className="candidate-radio-checkmark">✓</span>
+              <span className="post-form-radio-custom">
+                <span className="post-form-radio-checkmark">✓</span>
               </span>
-              <span className="candidate-radio-label">Yes</span>
+              <span className="post-form-radio-label">Yes</span>
             </label>
           </div>
-          <div className="candidate-radio-group">
-            <label className="candidate-radio-container">
+          <div className="post-form-radio-group">
+            <label className="post-form-radio-container">
               <input
                 type="radio"
                 name="fullyRemote"
                 value="no"
-                checked={fullyRemote === false}
+                checked={data.fullyRemote === false}
                 onChange={handleFullyRemoteChange}
+                required
               />
-              <span className="candidate-radio-custom">
-                <span className="candidate-radio-checkmark">✓</span>
+              <span className="post-form-radio-custom">
+                <span className="post-form-radio-checkmark">✓</span>
               </span>
-              <span className="candidate-radio-label">No</span>
+              <span className="post-form-radio-label">No</span>
             </label>
           </div>
         </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="candidate-requirements-button-container">
-        <button className="candidate-previous-button" onClick={onPrevious}>
-          Previous
-        </button>
-        <button className="candidate-next-button" onClick={onNext}>
-          Next
-        </button>
       </div>
     </div>
   );

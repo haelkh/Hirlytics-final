@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { JobPostingData } from '../PostJobSteps/PostJobSteps';
-import './JobDetails.css';
+import React, { useState, useEffect } from "react";
+import { JobPostingData } from "../PostJobSteps/PostJobSteps";
+import "./JobDetails.css";
 
 interface JobDetailsProps {
   data: JobPostingData;
   onDataChange: (data: Partial<JobPostingData>) => void;
-  onNext: () => void;
-  onPrevious: () => void;
 }
 
-const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange, onNext, onPrevious }) => {
-  const [jobType] = useState<string>(data.jobType || '');
-  const [salaryMin, setSalaryMin] = useState<string>(data.salaryMin || '');
-  const [salaryMax, setSalaryMax] = useState<string>(data.salaryMax || '');
-  const [paymentTerm, setPaymentTerm] = useState<string>(data.paymentTerm || '');
-  const [additionalCompensation, setAdditionalCompensation] = useState<string[]>(data.additionalCompensation || []);
+const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange }) => {
+  const [jobType] = useState<string>(data.jobType || "");
+  const [salaryMin, setSalaryMin] = useState<string>(data.salaryMin || "");
+  const [salaryMax, setSalaryMax] = useState<string>(data.salaryMax || "");
+  const [paymentTerm, setPaymentTerm] = useState<string>(
+    data.paymentTerm || ""
+  );
+  const [additionalCompensation, setAdditionalCompensation] = useState<
+    string[]
+  >(data.additionalCompensation || []);
   const [benefits, setBenefits] = useState<string[]>(data.benefits || []);
   const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
 
@@ -28,13 +30,22 @@ const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange, onNext, onP
       additionalCompensation,
       benefits,
     });
-  }, [jobType, salaryMin, salaryMax, paymentTerm, additionalCompensation, benefits]);
+  }, [
+    jobType,
+    salaryMin,
+    salaryMax,
+    paymentTerm,
+    additionalCompensation,
+    benefits,
+  ]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    if (name === 'salaryMin') setSalaryMin(value);
-    if (name === 'salaryMax') setSalaryMax(value);
-    if (name === 'paymentTerm') setPaymentTerm(value);
+    if (name === "salaryMin") setSalaryMin(value);
+    if (name === "salaryMax") setSalaryMax(value);
+    if (name === "paymentTerm") setPaymentTerm(value);
   };
 
   const handleJobTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,13 +57,17 @@ const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange, onNext, onP
     }
   };
 
-  const handleAdditionalCompensationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAdditionalCompensationChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { value, checked } = e.target;
     let updatedCompensation = [...additionalCompensation];
     if (checked) {
       updatedCompensation.push(value);
     } else {
-      updatedCompensation = updatedCompensation.filter((item) => item !== value);
+      updatedCompensation = updatedCompensation.filter(
+        (item) => item !== value
+      );
     }
     setAdditionalCompensation(updatedCompensation);
   };
@@ -69,181 +84,209 @@ const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange, onNext, onP
   };
 
   return (
-    <div className="job-details-container">
-      {/* Job Title */}
-      <div className="job-details-form-section">
-        <div className="job-details-form-group">
-          <label htmlFor="jobTitle">Job Title</label>
-          <input
-            type="text"
-            id="jobTitle"
-            name="jobTitle"
-            value={data.jobTitle || ''}
-            onChange={(e) => onDataChange({ jobTitle: e.target.value })}
-            placeholder="e.g., Looking for a creative designer"
-          />
-        </div>
+    <div className="post-job-step-section">
+      <h3>Job Details</h3>
+      <div className="post-form-group">
+        <label htmlFor="jobTitle">
+          Job Title <span className="required-star">*</span>
+        </label>
+        <input
+          type="text"
+          id="jobTitle"
+          name="jobTitle"
+          placeholder="e.g., Software Engineer, Marketing Specialist"
+          value={data.jobTitle}
+          onChange={(e) => onDataChange({ jobTitle: e.target.value })}
+          required
+        />
       </div>
-
-      {/* Job Type */}
-      <div className="job-details-form-section">
-        <div className="job-details-section-title">What Type of Job is it?</div>
-        <div className="job-details-form-row">
-          {['Full-Time', 'Part-Time', 'Internship', 'Contract', 'Commission'].map((type) => (
-            <div key={type} className="job-details-checkbox-group">
-              <label className="job-details-checkbox-container">
-                <input
-                  type="checkbox"
-                  name="jobType"
-                  value={type}
-                  checked={selectedJobTypes.includes(type)}
-                  onChange={handleJobTypeChange}
-                />
-                <span className="job-details-checkbox-custom">
-                  {selectedJobTypes.includes(type) && (
-                    <span className="job-details-checkbox-checkmark">✓</span>
-                  )}
-                </span>
-                <span className="job-details-checkbox-label">{type}</span>
-              </label>
-            </div>
-          ))}
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="jobType">
+          Job Type <span className="required-star">*</span>
+        </label>
+        <select
+          id="jobType"
+          name="jobType"
+          value={data.jobType}
+          onChange={(e) => onDataChange({ jobType: e.target.value })}
+          required
+        >
+          <option value="">Select Job Type</option>
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract</option>
+          <option value="Temporary">Temporary</option>
+          <option value="Internship">Internship</option>
+        </select>
       </div>
-
-      {/* Experience Required */}
-      <div className="job-details-form-section">
-        <div className="job-details-section-title">Experience Required</div>
-        <div className="job-details-form-group">
-          <input
-            type="text"
-            id="experienceRequired"
-            name="experienceRequired"
-            value={data.experienceRequired || ''}
-            onChange={(e) => onDataChange({ experienceRequired: e.target.value })}
-            placeholder="e.g., 2+ years of experience"
-          />
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="jobLocation">
+          Job Location <span className="required-star">*</span>
+        </label>
+        <input
+          type="text"
+          id="jobLocation"
+          name="jobLocation"
+          placeholder="e.g., New York, NY or Remote"
+          value={data.jobLocation}
+          onChange={(e) => onDataChange({ jobLocation: e.target.value })}
+          required
+        />
       </div>
-
-      {/* Pay for this Job */}
-      <div className="job-details-form-section">
-        <div className="job-details-section-title">What is the Pay for this Job?</div>
-        <div className="job-details-form-row">
-          <div className="job-details-form-group">
-            <label htmlFor="salaryMin">From</label>
-            <input
-              type="text"
-              id="salaryMin"
-              name="salaryMin"
-              value={salaryMin}
-              onChange={handleInputChange}
-              placeholder="e.g., $16"
-            />
-          </div>
-          <div className="job-details-form-group">
-            <label htmlFor="salaryMax">To</label>
-            <input
-              type="text"
-              id="salaryMax"
-              name="salaryMax"
-              value={salaryMax}
-              onChange={handleInputChange}
-              placeholder="e.g., $20"
-            />
-          </div>
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="salaryRange">
+          Salary Range (Annual) <span className="required-star">*</span>
+        </label>
+        <input
+          type="text"
+          id="salaryRange"
+          name="salaryRange"
+          placeholder="e.g., $60,000 - $80,000 or Competitive"
+          value={data.salaryRange}
+          onChange={(e) => onDataChange({ salaryRange: e.target.value })}
+          required
+        />
       </div>
-
-      {/* Contract Type */}
-      <div className="job-details-form-section">
-        <div className="job-details-form-group">
-          <label htmlFor="paymentTerm">Contract Type</label>
-          <select
-            id="paymentTerm"
-            name="paymentTerm"
-            value={paymentTerm}
-            onChange={handleInputChange}
-          >
-            <option value="">Select term</option>
-            <option value="per hour">Per Hour</option>
-            <option value="per month">Per Month</option>
-            <option value="per year">Per Year</option>
-          </select>
-        </div>
+      <div className="post-form-group">
+        <label htmlFor="experienceLevel">
+          Experience Level <span className="required-star">*</span>
+        </label>
+        <select
+          id="experienceLevel"
+          name="experienceLevel"
+          value={data.experienceLevel}
+          onChange={(e) => onDataChange({ experienceLevel: e.target.value })}
+          required
+        >
+          <option value="">Select Experience Level</option>
+          <option value="Entry-Level">Entry-Level</option>
+          <option value="Mid-Level">Mid-Level</option>
+          <option value="Senior-Level">Senior-Level</option>
+          <option value="Director">Director</option>
+          <option value="Executive">Executive</option>
+        </select>
       </div>
-
-      {/* Additional Compensation */}
-      <div className="job-details-form-section">
-        <div className="job-details-section-title">Are there Any Additional Form of Compensation Offered?</div>
-        <div className="job-details-form-row job-details-radio-row">
-          {['Tips', 'Commission', 'Bonuses', 'Store Discounts', 'Other Forms'].map((compensation) => (
-            <div key={compensation} className="job-details-checkbox-group">
-              <label className="job-details-checkbox-container">
+      <div className="post-form-group">
+        <label htmlFor="experienceRequired">Experience Required</label>
+        <input
+          type="text"
+          id="experienceRequired"
+          name="experienceRequired"
+          value={data.experienceRequired}
+          onChange={(e) => onDataChange({ experienceRequired: e.target.value })}
+          placeholder="e.g., 2+ years of experience"
+        />
+      </div>
+      <div className="post-form-group">
+        <label htmlFor="salaryMin">From</label>
+        <input
+          type="text"
+          id="salaryMin"
+          name="salaryMin"
+          value={data.salaryMin}
+          onChange={(e) => onDataChange({ salaryMin: e.target.value })}
+          placeholder="e.g., $16"
+        />
+      </div>
+      <div className="post-form-group">
+        <label htmlFor="salaryMax">To</label>
+        <input
+          type="text"
+          id="salaryMax"
+          name="salaryMax"
+          value={data.salaryMax}
+          onChange={(e) => onDataChange({ salaryMax: e.target.value })}
+          placeholder="e.g., $25"
+        />
+      </div>
+      <div className="post-form-group">
+        <label htmlFor="paymentTerm">Contract Type</label>
+        <select
+          id="paymentTerm"
+          name="paymentTerm"
+          value={data.paymentTerm}
+          onChange={(e) => onDataChange({ paymentTerm: e.target.value })}
+        >
+          <option value="">Select Contract Type</option>
+          <option value="Hourly">Hourly</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Bi-Weekly">Bi-Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Annually">Annually</option>
+        </select>
+      </div>
+      <div className="post-form-group">
+        <label>Are there Any Additional Form of Compensation Offered?</label>
+        <div className="post-form-row">
+          {[
+            "Tips",
+            "Commission",
+            "Bonuses",
+            "Store Discounts",
+            "Other Forms",
+          ].map((compensation) => (
+            <div key={compensation} className="post-form-checkbox-group">
+              <label className="post-form-checkbox-container">
                 <input
                   type="checkbox"
                   name="additionalCompensation"
                   value={compensation}
-                  checked={additionalCompensation.includes(compensation)}
-                  onChange={handleAdditionalCompensationChange}
+                  checked={data.additionalCompensation.includes(compensation)}
+                  onChange={(e) => {
+                    const updated = e.target.checked
+                      ? [...data.additionalCompensation, compensation]
+                      : data.additionalCompensation.filter(
+                          (item) => item !== compensation
+                        );
+                    onDataChange({ additionalCompensation: updated });
+                  }}
                 />
-                <span className="job-details-checkbox-custom">
-                  {additionalCompensation.includes(compensation) && (
-                    <span className="job-details-checkbox-checkmark">✓</span>
+                <span className="post-form-checkbox-custom">
+                  {data.additionalCompensation.includes(compensation) && (
+                    <span className="post-form-checkbox-checkmark">✓</span>
                   )}
                 </span>
-                <span className="job-details-checkbox-label">{compensation}</span>
+                <span className="post-form-checkbox-label">{compensation}</span>
               </label>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Benefits */}
-      <div className="job-details-form-section">
-        <div className="job-details-section-title">Are Any of the Following Benefits Offered?</div>
-        <div className="job-details-form-row job-details-radio-row">
+      <div className="post-form-group">
+        <label>Are Any of the Following Benefits Offered?</label>
+        <div className="post-form-row">
           {[
-            'Health Insurance',
-            'Dental Insurance',
-            'Vision Insurance',
-            'Retirement Plan',
-            'Signing Bonus',
-            'Paid Time Off',
-            'Work From Home',
-            'Flexible Schedule',
-            'Parental Leave',
-            'Relocation Assistance',
+            "Health Insurance",
+            "Dental Insurance",
+            "Vision Insurance",
+            "Paid Time Off",
+            "401K",
+            "Relocation Assistance",
           ].map((benefit) => (
-            <div key={benefit} className="job-details-checkbox-group">
-              <label className="job-details-checkbox-container">
+            <div key={benefit} className="post-form-checkbox-group">
+              <label className="post-form-checkbox-container">
                 <input
                   type="checkbox"
                   name="benefits"
                   value={benefit}
-                  checked={benefits.includes(benefit)}
-                  onChange={handleBenefitsChange}
+                  checked={data.benefits.includes(benefit)}
+                  onChange={(e) => {
+                    const updated = e.target.checked
+                      ? [...data.benefits, benefit]
+                      : data.benefits.filter((item) => item !== benefit);
+                    onDataChange({ benefits: updated });
+                  }}
                 />
-                <span className="job-details-checkbox-custom">
-                  {benefits.includes(benefit) && (
-                    <span className="job-details-checkbox-checkmark">✓</span>
+                <span className="post-form-checkbox-custom">
+                  {data.benefits.includes(benefit) && (
+                    <span className="post-form-checkbox-checkmark">✓</span>
                   )}
                 </span>
-                <span className="job-details-checkbox-label">{benefit}</span>
+                <span className="post-form-checkbox-label">{benefit}</span>
               </label>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Buttons */}
-      <div className="job-details-button-container">
-        <button className="job-details-previous-button" onClick={onPrevious}>
-          Previous
-        </button>
-        <button className="job-details-next-button" onClick={onNext}>
-          Next
-        </button>
       </div>
     </div>
   );

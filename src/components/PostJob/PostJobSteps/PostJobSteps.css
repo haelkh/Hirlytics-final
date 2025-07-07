@@ -6,7 +6,7 @@
   min-height: 100vh;
   font-family: Arial, sans-serif;
   /* background-color: #f5f5f5; */
-  background-image: url('/path-to-your-background-image.jpg');
+  background-image: url("/path-to-your-background-image.jpg");
   background-size: cover;
   background-position: center;
   padding: 60px;
@@ -44,7 +44,7 @@
   padding: 40px;
   text-align: center;
   /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
-  margin-bottom: 40px; 
+  margin-bottom: 40px;
   margin-top: -4%;
   width: 90%;
   max-width: 1600px; /* Wider container for desktop */
@@ -209,7 +209,7 @@
   .job-posting-content {
     padding: 20px 0;
   }
-  
+
   .next-button {
     width: 100%;
     background-color: #003b71;
@@ -254,5 +254,139 @@
     padding: 10px;
     font-size: 14px;
     height: 40px;
+  }
+}
+
+.post-job-form-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.post-job-form-container {
+  flex: 1;
+  width: 95%; /* Adjusted to match applyToAJob.css */
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.post-form-header {
+  background-color: #0e3e7e;
+  color: white;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.post-form-header h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.post-form-body {
+  padding: 30px 50px;
+}
+
+.post-form-body h2 {
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* Navigation Buttons */
+.post-form-navigation-btns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  gap: 20px;
+}
+
+.prev-post-btn,
+.next-post-btn,
+.submit-post-btn {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease,
+    box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.prev-post-btn {
+  background-color: #e0e0e0;
+  color: #555;
+}
+
+.prev-post-btn:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.next-post-btn,
+.submit-post-btn {
+  background-color: #0e3e7e;
+  color: white;
+}
+
+.next-post-btn:hover,
+.submit-post-btn:hover {
+  background-color: #0b2e5c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.submit-post-btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .post-job-form-container {
+    margin: 20px;
+    border-radius: 8px;
+  }
+
+  .post-form-header h1 {
+    font-size: 2rem;
+  }
+
+  .post-form-body {
+    padding: 20px;
+  }
+
+  .post-form-body h2 {
+    font-size: 1.6rem;
+  }
+
+  .post-form-navigation-btns {
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+  }
+
+  .prev-post-btn,
+  .next-post-btn,
+  .submit-post-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+
+  .submit-post-btn {
+    margin-top: 0;
   }
 }
