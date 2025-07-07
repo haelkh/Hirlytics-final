@@ -13,16 +13,25 @@ import Footer from "../Footer/Footer";
 import RecruitmentChatWidget from "../Chat/chat";
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignUp/SignUp";
+import { useNavigate } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const Home = (): React.JSX.Element => {
+  const navigate = useNavigate();
   const [activeSwitch, setActiveSwitch] = useState<"apply" | "hire">("apply");
   const [activeSlide, setActiveSlide] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const [isSignInModalOpen, setSignInModalOpen] = useState(false);
   const [isSignUpModalOpen, setSignUpModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem("user");
+    setIsLoggedIn(!!userData);
+  }, []);
 
   const openSignInModal = () => setSignInModalOpen(true);
   const closeSignInModal = () => setSignInModalOpen(false);
@@ -72,6 +81,15 @@ const Home = (): React.JSX.Element => {
     setActiveSlide(index);
   };
 
+  const handleSwitchClick = (type: "apply" | "hire") => {
+    setActiveSwitch(type);
+    if (type === "apply") {
+      navigate("/apply-to-a-job");
+    } else if (type === "hire") {
+      navigate("/post-a-job");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -92,29 +110,35 @@ const Home = (): React.JSX.Element => {
               </p>
             </div>
             <div className="row align-items-center py-3">
-              <div className="col-md-6 d-flex gap-3">
-                <button
-                  className="btn btn-light login-button"
-                  onClick={openSignInModal}
-                >
-                  Login
-                </button>
-                <button
-                  className="btn btn-outline-light signup-button"
-                  onClick={openSignUpModal}
-                >
-                  Sign Up
-                </button>
-              </div>
+              {!isLoggedIn && (
+                <div className="col-md-6 d-flex gap-3">
+                  <button
+                    className="btn btn-light login-button"
+                    onClick={openSignInModal}
+                  >
+                    Login
+                  </button>
+                  <button
+                    className="btn btn-outline-light signup-button"
+                    onClick={openSignUpModal}
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
 
               {/* Right: Apply for Job / Hire Talent */}
-              <div className="col-md-6 d-flex justify-content-end">
+              <div
+                className={`col-md-${isLoggedIn ? "12" : "6"} d-flex ${
+                  isLoggedIn ? "justify-content-center" : "justify-content-end"
+                }`}
+              >
                 <div className="btn-group switch-buttons">
                   <button
                     className={`btn btn-outline-light ${
                       activeSwitch === "apply" ? "active" : ""
                     }`}
-                    onClick={() => setActiveSwitch("apply")}
+                    onClick={() => handleSwitchClick("apply")}
                   >
                     Apply For a Job
                   </button>
@@ -122,7 +146,7 @@ const Home = (): React.JSX.Element => {
                     className={`btn btn-outline-light ${
                       activeSwitch === "hire" ? "active" : ""
                     }`}
-                    onClick={() => setActiveSwitch("hire")}
+                    onClick={() => handleSwitchClick("hire")}
                   >
                     Hire Talent
                   </button>
@@ -236,7 +260,7 @@ const Home = (): React.JSX.Element => {
         </div>
 
         {/* Partners Section */}
-        <section className="partners-section text-center py-5">
+        {/* <section className="partners-section text-center py-5">
           <h2 className="fw-bold collab" data-aos="fade-up">
             Who We Work With{" "}
             <span className="collab2" data-aos="fade-up" data-aos-delay="300">
@@ -273,7 +297,7 @@ const Home = (): React.JSX.Element => {
               <i className="fab fa-google fa-3x"></i>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Connecting Talent Section */}
         <section
@@ -305,9 +329,9 @@ const Home = (): React.JSX.Element => {
         </section>
 
         {/* Why Us Section - Updated Carousel */}
-        <section className="why-us-section py-5 text-center">
+        <section className="why-us-section py-5 text-center bg-white">
           <div className="container position-relative">
-            <h2 className="fw-bold text-white mb-5 fade-in">Why Choose Us</h2>
+            <h2 className="fw-bold text-primary mb-5 fade-in">Why Choose Us</h2>
 
             <div className="why-us-carousel">
               <div
@@ -326,7 +350,7 @@ const Home = (): React.JSX.Element => {
                 >
                   {/* Slide 1 - Industry Expertise */}
                   <div className="carousel-slide">
-                    <div className="card bg-light text-dark border-0 rounded-4 p-4 h-100">
+                    <div className="card shadow-lg border-0 rounded-4 p-4 h-100 hover-lift">
                       <div className="card-img-top text-center mb-3">
                         <img
                           src="/chart-icon.png"
@@ -335,13 +359,15 @@ const Home = (): React.JSX.Element => {
                           onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.parentElement!.innerHTML =
-                              '<i class="fa fa-chart-line fa-3x text-info"></i>';
+                              '<i class="fa fa-chart-line fa-3x text-primary"></i>';
                           }}
                         />
                       </div>
                       <div className="card-body">
-                        <h3 className="fw-bold mb-3">Industry Expertise</h3>
-                        <p className="mb-0">
+                        <h3 className="fw-bold mb-3 text-primary">
+                          Industry Expertise
+                        </h3>
+                        <p className="mb-0 text-muted">
                           We specialize in Technology, providing tailored
                           technical recruiting solutions.
                         </p>
@@ -354,7 +380,7 @@ const Home = (): React.JSX.Element => {
                     className="carousel-slide slide-fade-in"
                     style={{ animationDelay: "0.2s" }}
                   >
-                    <div className="card bg-light text-dark border-0 rounded-4 p-4 h-100">
+                    <div className="card shadow-lg border-0 rounded-4 p-4 h-100 hover-lift">
                       <div className="card-img-top text-center mb-3">
                         <img
                           src="/process-icon.png"
@@ -368,8 +394,10 @@ const Home = (): React.JSX.Element => {
                         />
                       </div>
                       <div className="card-body">
-                        <h3 className="fw-bold mb-3">Recruitment Process</h3>
-                        <p className="mb-0">
+                        <h3 className="fw-bold mb-3 text-primary">
+                          Recruitment Process
+                        </h3>
+                        <p className="mb-0 text-muted">
                           Our process includes needs analysis, candidate
                           sourcing, and rigorous technical/behavioral
                           assessments for optimal matches.
@@ -383,7 +411,7 @@ const Home = (): React.JSX.Element => {
                     className="carousel-slide slide-fade-in"
                     style={{ animationDelay: "0.4s" }}
                   >
-                    <div className="card bg-light text-dark border-0 rounded-4 p-4 h-100">
+                    <div className="card shadow-lg border-0 rounded-4 p-4 h-100 hover-lift">
                       <div className="card-img-top text-center mb-3">
                         <img
                           src="/checkmark-icon.png"
@@ -392,13 +420,15 @@ const Home = (): React.JSX.Element => {
                           onError={(e) => {
                             e.currentTarget.onerror = null;
                             e.currentTarget.parentElement!.innerHTML =
-                              '<i class="fa fa-check-circle fa-3x text-success"></i>';
+                              '<i class="fa fa-check-circle fa-3x text-primary"></i>';
                           }}
                         />
                       </div>
                       <div className="card-body">
-                        <h3 className="fw-bold mb-3">Why Choose Us</h3>
-                        <p className="mb-0">
+                        <h3 className="fw-bold mb-3 text-primary">
+                          Why Choose Us
+                        </h3>
+                        <p className="mb-0 text-muted">
                           Proven success, fast hiring, thorough screening,
                           flexible options, and performance guarantee.
                         </p>
@@ -410,14 +440,14 @@ const Home = (): React.JSX.Element => {
 
               {/* Carousel Navigation Controls */}
               <button
-                className="carousel-control prev"
+                className="carousel-control prev text-primary"
                 onClick={prevSlide}
                 aria-label="Previous slide"
               >
                 <FontAwesomeIcon icon={faChevronLeft} size="2x" />
               </button>
               <button
-                className="carousel-control next"
+                className="carousel-control next text-primary"
                 onClick={nextSlide}
                 aria-label="Next slide"
               >
@@ -429,7 +459,7 @@ const Home = (): React.JSX.Element => {
                 {Array.from({ length: totalSlides }).map((_, index) => (
                   <button
                     key={index}
-                    className={`carousel-indicator ${
+                    className={`carousel-indicator bg-primary ${
                       activeSlide === index ? "active" : ""
                     }`}
                     onClick={() => goToSlide(index)}
@@ -445,7 +475,10 @@ const Home = (): React.JSX.Element => {
             <div className="dual-path-container">
               {/* Job Seeker Panel */}
               <div className="dual-path-panel job-seeker-panel">
-                <div className="path-card job-seeker-card position-relative overflow-hidden">
+                <div
+                  className="path-card job-seeker-card position-relative overflow-hidden"
+                  onClick={() => navigate("/apply-to-a-job")}
+                >
                   <div className="path-content p-4 text-white">
                     <h2 className="path-title">Looking For a job?</h2>
                     <div className="overlay-blur"></div>
@@ -455,7 +488,10 @@ const Home = (): React.JSX.Element => {
 
               {/* Employer Panel */}
               <div className="dual-path-panel employer-panel">
-                <div className="path-card employer-card position-relative overflow-hidden">
+                <div
+                  className="path-card employer-card position-relative overflow-hidden"
+                  onClick={() => navigate("/post-a-job")}
+                >
                   <div className="path-content p-4 text-white">
                     <h2 className="path-title">Looking For a Talent?</h2>
                     <p className="path-subtitle">
