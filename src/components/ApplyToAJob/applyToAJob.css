@@ -1,0 +1,233 @@
+
+  .applyToAjob{
+    width: 100%;
+  }
+  .job-application-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .header2 {
+    background-color: #0e3e7e;
+    color: white;
+    padding: 30px 20px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .header2 h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .application-form {
+    background-color: #e6f0fa;
+    padding: 30px;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .application-form h2 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  
+  .form-page {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .required {
+    color: red;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  select[multiple] {
+    height: 120px;
+  }
+  
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: #aaa;
+  }
+  
+  .file-upload {
+    display: flex;
+    align-items: center;
+  }
+  
+  .upload-btn {
+    background-color: #0e3e7e;
+    color: white !important;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .file-name {
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .consent-group {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .consent-group input[type="checkbox"] {
+    margin-top: 5px;
+    margin-right: 10px;
+  }
+  
+  .form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .prev-btn, 
+  .next-btn, 
+  .submit-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .prev-btn {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .next-btn, 
+  .submit-btn {
+    background-color: #0e3e7e;
+    color: white;
+  }
+  
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .form-navigation {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .prev-btn, 
+    .next-btn {
+      width: 100%;
+    }
+    .app-container {
+      background: var(--ice);
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    .app-container::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1) 20%,
+        var(--aqua) 50%,
+        rgba(255, 255, 255, 0.1) 80%
+      );
+      z-index: 0;
+      animation: waterFlow 20s linear infinite;
+      opacity: 0.1;
+    }
+    
+    @keyframes waterFlow {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(50%, 50%) rotate(360deg);
+      }
+    }
+    
+    /* Hero Section - Frozen Wave */
+    .hero-section {
+      position: relative;
+      padding: 8rem 0;
+      background: var(--wave);
+      clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .hero-section::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      background: var(--ice);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    
+    .hero-title {
+      font-size: 4rem;
+      color: var(--ice);
+      text-shadow: 0 0 30px var(--glow);
+      position: relative;
+      animation: titleFloat 3s ease-in-out infinite;
+    }
+    
+    @keyframes titleFloat {
+      0%,
+      100% {
+        transform: translateY(0) rotate(-1deg);
+      }
+      50% {
+        transform: translateY(-10px) rotate(1deg);
+      }
+    }
+  }
+  

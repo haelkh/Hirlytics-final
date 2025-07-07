@@ -1,0 +1,771 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+/* Main container styles */
+.history-page {
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* About header styles */
+.about-header {
+  background-color: #003b88;
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.about-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+  padding: 50px;
+}
+
+/* History section styles */
+.history-section {
+  background-color: #f0f7ff;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.Colorhistory {
+  color: #043872;
+  font-weight: bold;
+}
+
+.history-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Left sidebar styles */
+.history-sidebar {
+  width: 25%;
+  padding-right: 2rem;
+}
+
+.know-about-us {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.blue-line {
+  width: 2.5rem;
+  height: 2px;
+  background-color: #2050b3;
+  margin-right: 0.75rem;
+}
+
+.know-about-us span {
+  color: #2050b3;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.history-title {
+  color: #003b88;
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  margin-left: 50px;
+}
+
+/* Right content area styles */
+.history-content {
+  width: 75%;
+}
+
+.history-text {
+  color: #475569;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.history-text p {
+  margin-bottom: 1rem;
+}
+
+/* Video container styles */
+.video-container {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 20rem;
+  width: 130%; 
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: -270px; 
+  margin-left: -270px; 
+}
+
+.team-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-button-wrapper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.play-button:hover {
+  transform: scale(1.1);
+}
+
+.play-button svg {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+/* Mission & Vision Section Styles */
+.mission-vision-section {
+  width: 100%;
+  background-color: white;
+}
+
+.mission-vision-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.mission-vision-image {
+  width: 30%;
+  height: 500px;
+  overflow: hidden;
+  margin-right: 50px;
+  
+}
+
+.collaboration-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mission-vision-content {
+  width: 50%;
+  padding: 3rem 3rem 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mission-vision-title {
+  color: #003b88;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-underline {
+  position: relative;
+  width: 45%;
+  height: 2px;
+  background-color: #003b88;
+  margin-top: 0.5rem;
+  align-self: center;
+  display: flex;
+}
+
+.title-dot {
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #003b88;
+}
+
+.mission-vision-text {
+  color: #333;
+  line-height: 2.5;
+  margin: 0;
+  font-family: poppins;
+}
+
+/* Why Choose Hirlytics Section Styles */
+.why-choose-section {
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 4rem 1rem;
+}
+
+.why-choose-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.why-choose-title {
+  color: #003b88;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.why-choose-title:after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 30%;
+  height: 3px;
+  background-color: #003b88;
+}
+
+.why-choose-title:before {
+  content: "";
+  position: absolute;
+  bottom: -12px; /* Adjust for proper alignment */
+  right: 70%;
+  width: 10px; /* Adjust size */
+  height: 10px; /* Adjust size */
+  background-color: #003b88;
+  border-radius: 50%;
+}
+
+.why-choose-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.why-choose-text {
+  width: 50%;
+  background-color: #003b88;
+  color: white;
+  padding: 3rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  height: 600px;
+}
+
+.why-choose-text h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-family: 'poppins';
+}
+
+.why-choose-text p {
+  font-size: 1.5rem;
+  line-height: 1.8;
+  text-align: center;
+  font-family: 'poppins';
+}
+
+.highlight {
+  font-weight: 500;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.why-choose-image {
+  width: 50%;
+  height: 600px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-meeting-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Team Section Styles */
+.team-section {
+  width: 100%;
+  padding: 5rem 1rem;
+  background-color: white;
+}
+
+.team-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.team-heading {
+  color: #333;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.team-subheading {
+  color: #666;
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto 4rem;
+  line-height: 1.6;
+}
+
+.team-members {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.team-member {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.member-image-container {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  margin-bottom: 1.5rem;
+}
+
+.member-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.member-name {
+  color: #003b88;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.member-title {
+  color: #003b88;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.member-bio {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 992px) {
+  .team-members {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .history-container, 
+  .mission-vision-container,
+  .why-choose-content {
+    flex-direction: column;
+  }
+  
+  .history-sidebar,
+  .history-content,
+  .mission-vision-image,
+  .mission-vision-content,
+  .why-choose-text,
+  .why-choose-image {
+    width: 100%;
+    padding-right: 0;
+  }
+  
+  .history-sidebar {
+    margin-bottom: 1.5rem;
+  }
+  
+  .video-container {
+    height: 18rem;
+    width: 100%;
+  }
+  
+  .mission-vision-image {
+    height: 250px;
+  }
+  
+  .mission-vision-content {
+    padding: 2rem 1.5rem;
+  }
+  
+  .why-choose-text {
+    padding: 2rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .why-choose-image {
+    height: 300px;
+  }
+  
+  .team-members {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .team-member {
+    max-width: 100%;
+    margin-bottom: 3rem;
+  }
+  
+  .team-member:last-child {
+    margin-bottom: 0;
+  }
+}
+/* Add these styles to your HistorySection.css file */
+
+/* Connect with Hirlytics Section */
+.connect-section {
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.connect-banner {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 80%;
+}
+
+.connect-overlay {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.connect-heading {
+  color: #003366;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.connect-buttons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.connect-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.schedule-button {
+  background-color: #DDEDFF;
+  color: #003b88;
+  border: 2px solid white;
+}
+
+.schedule-button:hover {
+  
+  background-color: transparent;
+  color: #003366;
+}
+
+.contact-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.contact-button:hover {
+  background-color: white;
+  color: #003366;
+}
+
+/* Events Section */
+.events-section {
+  width: 100%;
+  padding: 4rem 1rem;
+  background-color: white;
+}
+
+.events-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.events-heading {
+  color: #333;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+}
+
+.events-card-container {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.event-card {
+  flex: 1;
+  min-width: 300px;
+  background-color: #003b88;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.event-date {
+  background-color: #003b88;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.event-day {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.event-month {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+.event-details {
+  flex: 1;
+  padding: 1.5rem;
+}
+
+.event-label {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  position: relative; /* Ensure the pseudo-element is positioned relative to this element */
+  font-family: 'poppins';
+  
+}
+
+.event-label::after {
+  content: '';
+  position: absolute;
+  left: 100%; /* Position the line to the right of the text */
+  top: 50%; /* Align the line vertically with the text */
+  transform: translateY(-50%); /* Adjust for perfect vertical alignment */
+  width: 50px; /* Width of the line */
+  height: 2px; /* Height of the line */
+  background: #ffffff; /* Color of the line */
+  margin-left: 10px;
+}
+.event-title {
+  font-size: 1.6rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  font-family: 'poppins';
+}
+
+.event-arrow {
+  padding-right: 1.5rem;
+}
+
+.arrow-button {
+  background-color: transparent;
+  border: none;
+  color: rgb(0, 0, 0);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.arrow-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.arrow-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .connect-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+    gap: 1rem;
+  }
+  
+  .connect-button {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .events-card-container {
+    flex-direction: column;
+  }
+  
+  .event-card {
+    width: 100%;
+  }
+}
+
+/* Match the design more closely */
+.connect-banner {
+  height: 400px;
+}
+
+.event-card {
+  padding: 0;
+  transition: transform 0.3s ease;
+}
+
+.event-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Specific styling to match the image */
+.connect-heading {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.connect-button {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+}
+
+.events-heading {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Ensure proper spacing and alignment */
+.connect-section {
+  margin: 0;
+}
+
+.events-section {
+  padding-top: 3rem;
+  padding-bottom: 5rem;
+}
+
+/* Ensure the event cards look exactly like the mockup */
+.event-card {
+  background-color: #003b88;
+  height: 110px;
+}
+
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #003b88;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+}
+
+.event-day {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.event-month {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.event-details {
+  padding: 1rem 1.5rem;
+}
+
+.event-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
+.event-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.arrow-button {
+  background-color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.arrow-button svg {
+  width: 18px;
+  height: 18px;
+}

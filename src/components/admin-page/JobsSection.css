@@ -1,0 +1,120 @@
+.admin-jobs-section {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.admin-jobs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.admin-jobs-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.admin-jobs-more-options-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.admin-jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-jobs-card {
+  background-color: #e3edf9;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-jobs-logo {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin-right: 15px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.admin-jobs-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+}
+
+.admin-jobs-logo img.admin-jobs-img-error {
+  opacity: 0.5;
+}
+
+.admin-jobs-details {
+  flex: 1;
+}
+
+.admin-jobs-position {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.admin-jobs-company {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 3px 0;
+}
+
+.admin-jobs-applicant {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+
+.admin-jobs-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.admin-jobs-time {
+  font-size: 12px;
+  color: #888;
+}
+
+.admin-jobs-status {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 80px;
+}
+
+@media (max-width: 768px) {
+  .admin-jobs-meta {
+    align-items: flex-start;
+    margin-top: 8px;
+  }
+}

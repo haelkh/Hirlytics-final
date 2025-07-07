@@ -1,0 +1,307 @@
+/* Container */
+.company-details-container {
+  width: 100%;
+  padding: 0 40px;
+  max-width: 1000px; /* Increased from 800px for wider container */
+  margin: 0 auto;
+}
+
+/* Form Section */
+.company-details-form-section {
+  margin-bottom: 32px;
+}
+
+/* Section Title */
+.company-details-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #003b71;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Form Row */
+.company-details-form-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+  justify-content: space-between; /* Added to ensure proper spacing */
+}
+
+/* Form Group */
+.company-details-form-group {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+.company-details-form-group label {
+  display: block;
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 8px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.company-details-form-group input,
+.company-details-form-group select {
+  width: 100%;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #003b71;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.company-details-form-group input:focus,
+.company-details-form-group select:focus {
+  outline: none;
+  border-color: #0066cc;
+}
+
+/* Dropdown Wrapper */
+.company-details-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.company-details-dropdown-wrapper select {
+  appearance: none;
+  padding-right: 30px;
+  background-color: white;
+  width: 100%;
+  height: 56px;
+}
+
+.company-details-dropdown-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Location Grid */
+.company-details-location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.company-details-location-grid.company-details-disabled {
+  opacity: 0.7;
+}
+
+.company-details-form-group.company-details-wide {
+  grid-column: span 2;
+}
+
+/* Checkbox Group
+.company-details-checkbox-group {
+  margin-bottom: 24px;
+  padding-left: 0;
+}
+
+.company-details-checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 0;
+}
+
+.company-details-checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.company-details-checkbox-custom {
+  height: 24px;
+  width: 24px;
+  background-color: #fff;
+  border: 2px solid #003b71;
+  border-radius: 50%;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.company-details-checkbox-icon {
+  color: #003b71;
+  font-size: 14px;
+  visibility: hidden;
+}
+
+.company-details-checkbox-container input:checked ~ .company-details-checkbox-custom {
+  background-color: white;
+  border-color: #003b71;
+}
+
+.company-details-checkbox-container input:checked ~ .company-details-checkbox-custom .company-details-checkbox-icon {
+  visibility: visible;
+}
+
+.company-details-checkbox-label {
+  font-size: 16px;
+  color: #003b71;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1;
+} */
+
+/* Phone Group */
+.company-details-phone-group .company-details-phone-input-container {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Fix country code dropdown */
+.company-details-country-code {
+  min-width: 120px; /* Increased minimum width */
+  width: auto; /* Allow it to grow as needed */
+  flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.company-details-country-code select {
+  width: 100%;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 30px; /* Give space for the dropdown arrow */
+  text-overflow: clip; /* Don't truncate text */
+  white-space: nowrap; /* Keep text on one line */
+  display: block; /* Ensure proper display */
+  overflow: visible; /* Make sure content is visible */
+  appearance: auto; /* Use default browser appearance for better visibility */
+}
+
+/* Make sure the flag and code are visible */
+.company-details-country-code option {
+  padding: 8px;
+  white-space: nowrap;
+}
+
+/* Buttons Container */
+.company-details-button-container {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Next Button */
+.company-details-next-button {
+  width: 100%;
+  background-color: #003b71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.company-details-next-button:hover {
+  background-color: #002a52;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .company-details-container {
+    padding: 0 20px;
+  }
+
+  .company-details-form-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .company-details-form-group input,
+  .company-details-form-group select {
+    height: 48px;
+    padding: 12px;
+  }
+
+  .company-details-button-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .company-details-next-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    height: 52px;
+  }
+  
+  /* Keep phone country code visible on mobile */
+  .company-details-country-code {
+    min-width: 100px;
+  }
+}
+
+/* Radio Button Option */
+.company-details-radio-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.company-details-radio-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.company-details-radio-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.company-details-radio-custom {
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #003b71;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.company-details-radio-checkmark {
+  color: #003b71;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.company-details-radio-label {
+  font-size: 16px;
+  color: #003b71;
+  font-weight: 500;
+}

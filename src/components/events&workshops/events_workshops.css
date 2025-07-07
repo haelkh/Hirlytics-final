@@ -1,0 +1,185 @@
+/* Main container styles */
+.ew-container {
+  font-family: Arial, sans-serif;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header styles */
+.ew-header {
+  background-color: #003366;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.ew-header h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.ew-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Main content styles */
+.ew-main-content {
+  padding: 20px;
+}
+
+.ew-section-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Events grid */
+.ew-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 992px) {
+  .ew-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .ew-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Event card styles */
+.ew-card {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  position: relative;
+}
+
+.ew-image {
+  position: relative;
+  height: 150px;
+}
+
+.ew-placeholder-image {
+  background-color: #c0c0c0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ew-mountain-icon {
+  width: 40px;
+  height: 30px;
+  background-color: white;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+}
+
+.ew-bookmark-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ew-content {
+  padding: 15px;
+  position: relative;
+}
+
+.ew-tag {
+  background-color: #ffd700;
+  color: #333;
+  font-size: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.ew-date-badge {
+  position: absolute;
+  top: -30px;
+  left: 15px;
+  background-color: white;
+  border-radius: 4px;
+  padding: 5px 10px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ew-month {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.ew-day {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.ew-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ew-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.ew-location {
+  font-weight: bold;
+}
+
+.ew-datetime {
+  font-size: 11px;
+}
+
+.ew-countdown {
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+}
+
+.ew-countdown::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ffd700;
+  margin-right: 5px;
+}

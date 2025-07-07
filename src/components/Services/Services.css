@@ -1,0 +1,382 @@
+:root {
+  font-family: 'poppins', sans-serif;
+}
+
+/* Page Banner */
+.page-banner {
+  background-color: #003b88;
+  color: white;
+  text-align: center;
+  padding: 40px 0;
+  margin-top: 80px; 
+}
+
+.page-banner h1 {
+  font-size: 36px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* Specialties Section */
+.specialties-section {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 60px;
+  align-items: center;
+}
+
+.specialties-content {
+  flex: 1;
+}
+
+.specialties-image-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.specialties-image {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.text-highlight {
+  color: #003366;
+  font-weight: bold;
+}
+
+.specialties-intro {
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.specialties-list {
+  padding: 0;
+}
+
+.specialties-list li {
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.specialties-name {
+  font-weight: bold;
+  color: rgb(69, 67, 67);
+}
+
+/* Benefits Section */
+.benefits-container {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.benefits-image-container {
+  flex: 1;
+}
+
+.benefits-image {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.benefits-content {
+  flex: 1;
+}
+
+.benefits-content h2 {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.benefits-intro {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  font-size: 16px;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.benefit-item {
+  display: flex;
+  margin-bottom: 20px;
+  align-items: flex-start;
+  font-family: 'poppins';
+}
+
+.checkmark-icon {
+  background-color: #e6f7e6;
+  color: #00a651;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  margin-top: 2px;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.benefit-title {
+  color: #666;
+  font-weight: 500;
+  font-family: 'poppins';
+}
+
+.benefits-conclusion {
+  color: #666;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Professionals Section */
+.professionals-container {
+  display: flex;
+  gap: 20px; 
+  align-items: flex-start; 
+}
+
+.professionals-content {
+  flex: 1; 
+  min-width: 300px; 
+}
+
+.professionals-image-container {
+  flex-shrink: 0; 
+  width: 40%; 
+}
+
+.professionals-image {
+  width: 100%; 
+  height: auto;
+}
+
+/* Process steps */
+.process-steps {
+  padding-left: 20px;
+}
+
+.process-steps li {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.step-title {
+  font-weight: 600;
+  color: #555;
+}
+
+/* FAQ Section */
+.faq-section {
+  padding: 60px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.faq-title {
+  font-size: 36px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.faq-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.faq-item {
+  border-radius: 8px;
+  background-color: #f8f9fc;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.faq-item.open {
+  background-color: #e6f0ff;
+}
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+}
+
+.faq-number {
+  font-size: 18px;
+  font-weight: 600;
+  color: #003b88;
+  margin-right: 16px;
+  min-width: 32px;
+}
+
+.faq-question h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  flex-grow: 1;
+  color: #333;
+}
+
+.faq-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.faq-item.open .faq-toggle {
+  background-color: #003b88;
+  color: white;
+}
+
+.plus-icon, .close-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.faq-answer {
+  padding: 0 24px 20px 72px;
+  color: #555;
+  line-height: 1.6;
+  display: none;
+}
+
+.faq-item.open .faq-answer {
+  display: block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .specialties-section {
+    flex-direction: column;
+  }
+  
+  .benefits-container {
+    flex-direction: column;
+  }
+
+  .benefits-image-container {
+    margin-bottom: 30px;
+  }
+  
+  .professionals-container {
+    flex-direction: column; 
+  }
+
+  .professionals-content {
+    min-width: 100%; 
+  }
+
+  .professionals-image-container {
+    width: 100%; 
+    margin-bottom: 20px; 
+  }
+
+  .professionals-image {
+    width: 100%; 
+    height: auto; 
+  }
+  
+  /* FAQ responsive styling */
+  .faq-section {
+    padding: 40px 16px;
+  }
+  
+  .faq-title {
+    font-size: 28px;
+  }
+  
+  .faq-subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+  
+  .faq-question {
+    padding: 16px;
+  }
+  
+  .faq-number {
+    min-width: 24px;
+    margin-right: 12px;
+    font-size: 16px;
+  }
+  
+  .faq-question h3 {
+    font-size: 14px;
+  }
+  
+  .faq-answer {
+    padding: 0 16px 16px 52px;
+    font-size: 14px;
+  }
+  
+  .faq-toggle {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Tablet/Medium screens */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .page-container {
+    padding: 30px 16px;
+  }
+  
+  .specialties-section {
+    gap: 30px;
+  }
+  
+  .benefits-container {
+    gap: 30px;
+  }
+  
+  .professionals-container {
+    gap: 15px;
+  }
+  
+  .faq-section {
+    padding: 50px 16px;
+  }
+}

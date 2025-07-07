@@ -1,0 +1,154 @@
+/* Base container styles */
+.eventContainer {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header styles */
+.eventHeader {
+  width: 100%;
+  background-color: white;
+  padding: 16px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.eventHeader h1 {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 16px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #292929;
+}
+
+/* Form container styles */
+.form-container {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  width: 100%;
+}
+
+/* Form group styles */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #292929;
+  font-size: 14px;
+}
+
+/* Input styles */
+input,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #292929;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #a0a0a0;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+/* Date and time container */
+.date-time-container {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.date-time-group {
+  flex: 1;
+}
+
+/* Input with icon styles */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.input-with-icon input {
+  border: none;
+  padding-left: 40px;
+}
+
+.calendar-icon,
+.clock-icon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
+
+/* Date and time input styling */
+.date-input,
+.time-input {
+  width: 100%;
+  cursor: pointer;
+}
+
+/* Style the calendar and time picker arrow */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+/* Button styles */
+.post-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.post-button:hover {
+  background-color: #002855;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .date-time-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

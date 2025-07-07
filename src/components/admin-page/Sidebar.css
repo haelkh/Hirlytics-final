@@ -1,0 +1,41 @@
+.admin-sidebar {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 220px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.admin-sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #333;
+}
+
+.admin-sidebar-item:hover {
+  background-color: #f0f6ff;
+}
+
+.admin-sidebar-active {
+  background-color: #f0f6ff;
+  color: #0052cc;
+}
+
+.admin-sidebar-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.admin-sidebar-label {
+  font-size: 14px;
+  font-weight: 500;
+}

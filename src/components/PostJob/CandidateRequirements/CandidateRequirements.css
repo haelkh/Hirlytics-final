@@ -1,0 +1,218 @@
+/* Container */
+.candidate-requirements {
+  width: 100%;
+  padding: 0 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Form Section */
+.candidate-form-section {
+  margin-bottom: 32px;
+}
+
+/* Section Title */
+.candidate-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #003b71;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* Form Group */
+.candidate-form-group {
+  width: 100%;
+  text-align: left;
+}
+
+.candidate-form-group label {
+  display: block;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.candidate-form-group input{
+  width: 92.3%;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #003b71;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.candidate-form-group select {
+  width: 95%;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #003b71;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.candidate-form-group input:focus,
+.candidate-form-group select:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+}
+
+/* Form Row */
+.candidate-form-row {
+  display: flex;
+  flex-direction: row; /* Horizontal layout for radio buttons */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Radio Group */
+/* Radio Group */
+/* Radio Group */
+.candidate-radio-group {
+  display: flex;
+  align-items: center; /* Align radio button and label horizontally */
+  gap: 16px; /* Adds spacing between the radio buttons */
+}
+
+.candidate-radio-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px; /* Adds spacing between the radio button and label */
+}
+
+.candidate-radio-custom {
+  height: 20px;
+  width: 20px;
+  border: 2px solid #003b71;
+  border-radius: 50%; /* Makes it a circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.candidate-radio-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.candidate-radio-container input:checked ~ .candidate-radio-custom {
+  background-color: white; /* Background color changes when checked */
+  border-color: #003b71; /* Border color changes when checked */
+}
+
+.candidate-radio-checkmark {
+  color: #003b71; /* Checkmark color */
+  font-size: 20px; /* Adjust checkmark size */
+  font-weight: bold;
+  display: none; /* Hide checkmark by default */
+}
+
+.candidate-radio-container input:checked ~ .candidate-radio-custom .candidate-radio-checkmark {
+  display: block; /* Show checkmark when checked */
+}
+
+.candidate-radio-label {
+  font-size: 16px;
+  color: #003b71;
+  font-weight: 500;
+}
+
+/* Buttons Container */
+.candidate-requirements-button-container {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Previous Button */
+.candidate-previous-button {
+  width: 50%;
+  background-color: #f0f0f0;
+  color: #003b71;
+  border: 1px solid #003b71;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.candidate-previous-button:hover {
+  background-color: #003b71;
+  color: white;
+}
+
+/* Next Button */
+.candidate-next-button {
+  width: 50%;
+  background-color: #003b71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.candidate-next-button:hover {
+  background-color: #002a52;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .candidate-requirements {
+    padding: 0 20px;
+  }
+
+  .candidate-form-row {
+    flex-direction: column; /* Stack radio buttons vertically on small screens */
+    gap: 12px;
+  }
+
+  .candidate-form-group input,
+  .candidate-form-group select {
+    height: 48px;
+    padding: 12px;
+  }
+
+  .candidate-requirements-button-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .candidate-previous-button,
+  .candidate-next-button {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    height: 52px;
+  }
+}

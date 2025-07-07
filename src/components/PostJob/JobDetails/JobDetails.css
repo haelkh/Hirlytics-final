@@ -1,0 +1,210 @@
+/* Global Container */
+.job-details-container {
+    width: 100%;
+    padding: 0 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Form Sections */
+  .job-details-form-section {
+    margin-bottom: 32px;
+  }
+  
+  .job-details-section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #003b71;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  
+  /* Form Rows */
+  .job-details-form-row {
+    display: flex;
+    gap: 50px;
+    margin-bottom: 24px;
+  }
+  
+  /* Stack checkboxes vertically */
+  .job-details-radio-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  /* Form Groups (Inputs, Labels, Selects) */
+  .job-details-form-group {
+    width: 100%;
+    text-align: left;
+  }
+  
+  .job-details-form-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .job-details-form-group input,
+  .job-details-form-group select {
+    width: 95%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #003b71;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .job-details-form-group input:focus,
+  .job-details-form-group select:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+  }
+  
+  /* Checkboxes and Radio Buttons */
+  .job-details-checkbox-group,
+  .job-details-radio-group {
+    display: block;
+  }
+  
+  .job-details-checkbox-container,
+  .job-details-radio-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 8px;
+  }
+  
+  .job-details-checkbox-custom,
+  .job-details-radio-custom {
+    height: 20px;
+    width: 20px;
+    border: 2px solid #003b71;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .job-details-checkbox-container input,
+  .job-details-radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  .job-details-checkbox-container input:checked ~ .job-details-checkbox-custom,
+  .job-details-radio-container input:checked ~ .job-details-radio-custom {
+    background-color: white;
+    border-color: #003b71;
+  }
+  
+  .job-details-checkbox-checkmark,
+  .job-details-radio-checkmark {
+    color: #0066cc;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  .job-details-checkbox-label,
+  .job-details-radio-label {
+    font-size: 16px;
+    color: #003b71;
+    font-weight: 500;
+  }
+  
+  /* Buttons Container */
+  .job-details-button-container {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  /* Previous Button */
+  .job-details-previous-button {
+    width: 50%;
+    background-color: #f0f0f0;
+    color: #003b71;
+    border: 1px solid #003b71;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .job-details-previous-button:hover {
+    background-color: #003b71;
+    color: white;
+  }
+  
+  /* Next Button */
+  .job-details-next-button {
+    width: 50%;
+    background-color: #003b71;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: none;
+    letter-spacing: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .job-details-next-button:hover {
+    background-color: #002a52;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .job-details-container {
+      padding: 0 20px;
+    }
+  
+    .job-details-form-row {
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    .job-details-form-group input,
+    .job-details-form-group select {
+      height: 48px;
+      padding: 12px;
+    }
+  
+    .job-details-button-container {
+      flex-direction: column;
+      gap: 12px;
+    }
+  
+    .job-details-previous-button,
+    .job-details-next-button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      height: 52px;
+    }
+  }
