@@ -97,17 +97,136 @@ const PostJobSteps: React.FC = () => {
     setJobPostingData((prevData) => ({ ...prevData, ...updatedData }));
   };
 
+  const validateStep = (): boolean => {
+    switch (currentStep) {
+      case 1: // Company Details
+        if (
+          !jobPostingData.companyName ||
+          !jobPostingData.companySize ||
+          !jobPostingData.yourName ||
+          !jobPostingData.phoneNumber ||
+          !jobPostingData.phoneCountryCode ||
+          !jobPostingData.companyCity ||
+          !jobPostingData.companyState ||
+          !jobPostingData.companyCountry ||
+          !jobPostingData.companyAddress
+        ) {
+          alert("Please fill in all Company Details.");
+          return false;
+        }
+        break;
+      case 2: // Job Details
+        if (
+          !jobPostingData.jobTitle ||
+          !jobPostingData.jobType ||
+          !jobPostingData.jobLocation ||
+          !jobPostingData.salaryMin ||
+          !jobPostingData.salaryMax ||
+          !jobPostingData.paymentTerm ||
+          !jobPostingData.experienceRequired
+        ) {
+          alert("Please fill in all Job Details.");
+          return false;
+        }
+        break;
+      case 3: // Candidate Requirements
+        if (
+          !jobPostingData.numberOfHires ||
+          !jobPostingData.hireUrgency ||
+          !jobPostingData.availabilityNeeded ||
+          !jobPostingData.companyWebsite
+        ) {
+          alert("Please fill in all Candidate Requirements.");
+          return false;
+        }
+        break;
+      case 4: // Job Description
+        if (!jobPostingData.jobDescription) {
+          alert("Please fill in the Job Description.");
+          return false;
+        }
+        break;
+      default:
+        break;
+    }
+    return true;
+  };
+
   const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
+    if (validateStep()) {
+      setCurrentStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handlePreviousStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
-  const handlePostJob = () => {
+  const handlePostJob = async () => {
+    if (!validateStep()) {
+      return;
+    }
     console.log("Job Posted:", jobPostingData);
-    alert("Job Posted Successfully!");
+
+    try {
+      const response = await fetch(
+        "http://localhost/Hirlytics-final/src/api/postJob.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(jobPostingData),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Job Posted Successfully!");
+        // Optionally, reset the form or redirect
+        setJobPostingData({
+          companyName: "",
+          companySize: "",
+          yourName: "",
+          phoneNumber: "",
+          phoneCountryCode: "+1",
+          companyCity: "",
+          companyState: "",
+          companyCountry: "USA",
+          companyAddress: "",
+          sameAsCompanyLocation: false,
+          jobCity: "",
+          jobState: "",
+          jobCountry: "USA",
+          jobAddress: "",
+          jobTitle: "",
+          jobType: "",
+          jobLocation: "",
+          salaryMin: "",
+          salaryMax: "",
+          paymentTerm: "",
+          additionalCompensation: [],
+          benefits: [],
+          experienceRequired: "",
+          numberOfHires: "",
+          hireUrgency: "",
+          availabilityNeeded: "",
+          companyWebsite: "",
+          fullyRemote: false,
+          jobDescription: "",
+          seeVideoInterviews: false,
+          videoCalling: false,
+          email: false,
+        });
+        setCurrentStep(1); // Go back to the first step
+      } else {
+        alert("Failed to post job: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error posting job:", error);
+      alert("An error occurred while posting the job.");
+    }
   };
 
   const steps = [
