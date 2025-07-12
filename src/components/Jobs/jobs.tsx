@@ -62,8 +62,8 @@ const JobsPage: React.FC = () => {
       }
 
       const url = sortParam
-        ? `http://localhost/Hirlytics/Hirlytics/copy/src/api/listJobs.php?sort=${sortParam}`
-        : "http://localhost/Hirlytics/Hirlytics/copy/src/api/listJobs.php";
+        ? `http://localhost/Hirlytics-final/src/api/listJobs.php?sort=${sortParam}`
+        : "http://localhost/Hirlytics-final/src/api/listJobs.php";
 
       const response = await fetch(url);
 
@@ -176,7 +176,7 @@ const JobsPage: React.FC = () => {
 
     // If it's a relative path, assume it's relative to a base URL for assets
     // You can adjust this base URL according to your server setup
-    const baseAssetUrl = "http://localhost/Hirlytics/Hirlytics/copy/assets/";
+    const baseAssetUrl = "http://localhost/Hirlytics-final/assets/";
     return `${baseAssetUrl}${logoPath.replace(/^\//, "")}`;
   };
 
