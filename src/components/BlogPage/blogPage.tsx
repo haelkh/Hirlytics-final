@@ -26,7 +26,7 @@ const BlogPage: React.FC = () => {
       try {
         // Use a relative URL to avoid hardcoding paths
         const response = await fetch(
-          `http://localhost/Hirlytics/Hirlytics/copy/src/api/getUserBlogs.php`
+          `http://localhost/Hirlytics-final/src/api/getUserBlogs.php`
         );
 
         if (!response.ok) {

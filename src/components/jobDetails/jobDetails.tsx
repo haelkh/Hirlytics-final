@@ -45,7 +45,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobId }) => {
 
         // Fetch all jobs or specific job
         const response = await fetch(
-          "http://localhost/Hirlytics/Hirlytics/copy/src/api/listJobs.php"
+          "http://localhost/Hirlytics-final/src/api/listJobs.php"
         );
         const data = await response.json();
 
