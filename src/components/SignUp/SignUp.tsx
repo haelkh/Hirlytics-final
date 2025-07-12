@@ -23,7 +23,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleAuth }) => {
 
     try {
       const response = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/signup.php",
+        "http://localhost/Hirlytics-final/src/api/signup.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -40,6 +40,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleAuth }) => {
 
       if (data.status === "success") {
         console.log("Registration success:", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         window.location.reload(); // Or redirect to a dashboard
       } else {
         setError(data.message || "Registration failed");
@@ -60,7 +61,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleAuth }) => {
 
     try {
       const res = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/signin.php",
+        "http://localhost/Hirlytics-final/src/api/signin.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -73,6 +74,7 @@ const SignUp: React.FC<SignUpProps> = ({ toggleAuth }) => {
 
       if (data.status === "success") {
         console.log("Google signup success:", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         window.location.reload(); // Or redirect to a dashboard
       } else {
         setError(data.message || "Google signup failed");

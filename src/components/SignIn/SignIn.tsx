@@ -19,7 +19,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
 
     try {
       const response = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/signin.php",
+        "http://localhost/Hirlytics-final/src/api/signin.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -49,6 +49,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
       if (data.status === "success") {
         // Handle successful login
         console.log("Login success:", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         window.location.reload(); // Or redirect to a dashboard
       } else {
         setError(data.message || "Login failed");
@@ -69,7 +70,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
 
     try {
       const res = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/signin.php",
+        "http://localhost/Hirlytics-final/src/api/signin.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,6 +99,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
 
       if (data.status === "success") {
         console.log("Google login success:", data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
         window.location.reload(); // Or redirect to a dashboard
       } else {
         setError(data.message || "Google login failed");
