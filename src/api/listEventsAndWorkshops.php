@@ -1,10 +1,12 @@
 <?php
+
 declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
+
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Methods: GET, OPTIONS");
 header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 
@@ -28,7 +30,6 @@ try {
         ]
     );
 
-    // Base query
     $query = "
         SELECT 
             EventID as id,
@@ -40,44 +41,46 @@ try {
             EndTime as endTime,
             MeetingLink as meetingLink,
             HostedBy as host,
+            ImagePath as imagePath,
             CreatedAt as createdAt
         FROM Events
+        WHERE StartDate >= CURDATE()
     ";
-    
+
     $params = [];
     $conditions = [];
 
-    // Filter by type if provided
     if (isset($_GET['type']) && in_array(strtolower($_GET['type']), ['event', 'workshop'])) {
         $type = strtolower($_GET['type']);
-        $conditions[] = $type === 'workshop' 
-            ? "Title LIKE '%workshop%'" 
+        $conditions[] = $type === 'workshop'
+            ? "Title LIKE '%workshop%'"
             : "Title NOT LIKE '%workshop%'";
     }
 
-    // Apply conditions
     if (!empty($conditions)) {
-        $query .= " WHERE " . implode(" AND ", $conditions);
+        $query .= " AND " . implode(" AND ", $conditions);
     }
 
-    // Default sorting
     $query .= " ORDER BY StartDate ASC, StartTime ASC";
 
-    // Execute query
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
     $results = $stmt->fetchAll();
 
-    // Format response
-    $response = array_map(function($item) {
+    $response = array_map(function ($item) {
+        $imageUrl = $item['imagePath']
+            ? 'http://localhost/Hirlytics-final/src/api/uploads/' . $item['imagePath']
+            : null;
+
         return [
             'id' => (int)$item['id'],
             'title' => $item['title'],
             'type' => stripos($item['title'], 'workshop') !== false ? 'workshop' : 'event',
-            'start' => $item['startDate'] . 'T' . $item['startTime'],
-            'end' => $item['endDate'] . 'T' . $item['endTime'],
+            'start' => $item['startDate'] . ' ' . $item['startTime'],
+            'end' => $item['endDate'] . ' ' . $item['endTime'],
             'host' => $item['host'],
-            'meetingLink' => $item['meetingLink']
+            'meetingLink' => $item['meetingLink'],
+            'imageUrl' => $imageUrl
         ];
     }, $results);
 
@@ -88,7 +91,6 @@ try {
         'count' => count($response),
         'timestamp' => date('c')
     ]);
-
 } catch (PDOException $e) {
     error_log('Database Error: ' . $e->getMessage());
     http_response_code(500);
@@ -97,5 +99,12 @@ try {
         'message' => 'Database operation failed',
         'errorCode' => 'DB_ERROR'
     ]);
+} catch (Throwable $e) {
+    error_log('System Error: ' . $e->getMessage());
+    http_response_code(500);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'An unexpected error occurred',
+        'errorCode' => 'SYSTEM_ERROR'
+    ]);
 }
-?>

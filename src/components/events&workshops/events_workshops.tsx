@@ -1,4 +1,3 @@
-import type React from "react";
 import { useState, useEffect } from "react";
 import "./events_workshops.css";
 import { Bookmark } from "lucide-react";
@@ -11,6 +10,8 @@ interface EventCardProps {
   isVirtual: boolean;
   eventDate: string;
   daysToGo: number;
+  imageUrl: string | null;
+  type: string;
 }
 
 const EventCard: React.FC<EventCardProps> = ({
@@ -20,19 +21,34 @@ const EventCard: React.FC<EventCardProps> = ({
   isVirtual,
   eventDate,
   daysToGo,
+  imageUrl,
+  type,
 }) => {
   return (
     <div className="ew-card">
       <div className="ew-image">
-        <div className="ew-placeholder-image">
-          <div className="ew-mountain-icon"></div>
-        </div>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={title}
+            className="ew-event-image"
+            onError={(e) => {
+              (e.target as HTMLImageElement).style.display = "none";
+            }}
+          />
+        ) : (
+          <div className="ew-placeholder-image">
+            <div className="ew-mountain-icon"></div>
+          </div>
+        )}
         <button className="ew-bookmark-button">
           <Bookmark size={16} />
         </button>
       </div>
       <div className="ew-content">
-        <div className="ew-tag">Technology & Innovation</div>
+        <div className="ew-tag">
+          {type === "workshop" ? "Workshop" : "Event"}
+        </div>
         <div className="ew-date-badge">
           <div className="ew-month">{date}</div>
           <div className="ew-day">{day}</div>
@@ -43,7 +59,9 @@ const EventCard: React.FC<EventCardProps> = ({
             {isVirtual ? "Virtual" : "In-person"}
           </div>
           <div className="ew-datetime">{eventDate}</div>
-          <div className="ew-countdown">{daysToGo} days to go</div>
+          <div className="ew-countdown">
+            {daysToGo > 0 ? `${daysToGo} days to go` : "Today"}
+          </div>
         </div>
       </div>
     </div>
@@ -58,6 +76,7 @@ interface ApiEvent {
   host: string;
   meetingLink: string;
   type: string;
+  imageUrl: string | null;
 }
 
 const EventsWorkshops: React.FC = () => {
@@ -71,6 +90,10 @@ const EventsWorkshops: React.FC = () => {
         const response = await fetch(
           "http://localhost/Hirlytics-final/src/api/listEventsAndWorkshops.php"
         );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
         const data = await response.json();
 
@@ -95,9 +118,10 @@ const EventsWorkshops: React.FC = () => {
   const transformEventData = (apiEvent: ApiEvent): EventCardProps => {
     const startDate = new Date(apiEvent.start);
     const today = new Date();
-    const daysToGo = Math.ceil(
-      (startDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    today.setHours(0, 0, 0, 0);
+
+    const timeDiff = startDate.getTime() - today.getTime();
+    const daysToGo = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
     return {
       id: apiEvent.id,
@@ -115,15 +139,25 @@ const EventsWorkshops: React.FC = () => {
         minute: "2-digit",
       }),
       daysToGo: daysToGo > 0 ? daysToGo : 0,
+      imageUrl: apiEvent.imageUrl,
+      type: apiEvent.type,
     };
   };
 
   if (loading) {
-    return <div className="ew-container">Loading events...</div>;
+    return (
+      <div className="ew-container">
+        <div className="ew-loading">Loading events...</div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="ew-container">Error: {error}</div>;
+    return (
+      <div className="ew-container">
+        <div className="ew-error">Error: {error}</div>
+      </div>
+    );
   }
 
   return (
@@ -136,11 +170,15 @@ const EventsWorkshops: React.FC = () => {
       <main className="ew-main-content">
         <h2 className="ew-section-title">Interested Events</h2>
 
-        <div className="ew-grid">
-          {events.map((event) => (
-            <EventCard key={event.id} {...transformEventData(event)} />
-          ))}
-        </div>
+        {events.length === 0 ? (
+          <div className="ew-no-events">No upcoming events found</div>
+        ) : (
+          <div className="ew-grid">
+            {events.map((event) => (
+              <EventCard key={event.id} {...transformEventData(event)} />
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

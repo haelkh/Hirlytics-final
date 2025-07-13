@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
@@ -14,7 +15,6 @@ const DB_USER = 'root';
 const DB_PASS = '';
 
 try {
-    // Validate ID parameter
     if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
         http_response_code(400);
         echo json_encode([
@@ -36,7 +36,6 @@ try {
         ]
     );
 
-    // Get event details
     $stmt = $pdo->prepare("
         SELECT 
             EventID as id,
@@ -48,6 +47,7 @@ try {
             EndTime as endTime,
             MeetingLink as meetingLink,
             HostedBy as host,
+            ImagePath as imagePath,
             CreatedAt as createdAt
         FROM Events 
         WHERE EventID = ?
@@ -65,13 +65,17 @@ try {
         exit;
     }
 
-    // Format dates
+    // Format response
     $event['startDateTime'] = $event['startDate'] . 'T' . $event['startTime'];
     $event['endDateTime'] = $event['endDate'] . 'T' . $event['endTime'];
     $event['type'] = stripos($event['title'], 'workshop') !== false ? 'workshop' : 'event';
 
-    // Remove separate date/time fields
-    unset($event['startDate'], $event['startTime'], $event['endDate'], $event['endTime']);
+    if ($event['imagePath']) {
+        $event['imageUrl'] = 'http://localhost:5173/uploads/' . basename($event['imagePath']);
+    } else {
+        $event['imageUrl'] = null;
+    }
+    unset($event['imagePath'], $event['startDate'], $event['startTime'], $event['endDate'], $event['endTime']);
 
     http_response_code(200);
     echo json_encode([
@@ -79,7 +83,6 @@ try {
         'data' => $event,
         'timestamp' => date('c')
     ]);
-
 } catch (PDOException $e) {
     error_log('Database Error: ' . $e->getMessage());
     http_response_code(500);
@@ -89,4 +92,3 @@ try {
         'errorCode' => 'DB_ERROR'
     ]);
 }
-?>

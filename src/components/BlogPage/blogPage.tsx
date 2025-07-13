@@ -18,7 +18,10 @@ interface BlogResponse {
   data: BlogPost[];
   count: number;
   message?: string;
+  timestamp?: string;
 }
+
+const API_BASE_URL = "http://localhost/Hirlytics-final"; // Update this based on your environment
 
 const BlogPage: React.FC = (): ReactNode => {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -31,28 +34,40 @@ const BlogPage: React.FC = (): ReactNode => {
     const fetchBlogs = async () => {
       try {
         const response = await fetch(
-          "http://localhost/Hirlytics-final/src/api/getUserBlogs.php"
+          `${API_BASE_URL}/src/api/getUserBlogs.php`
         );
 
         if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+          throw new Error(`Server responded with status: ${response.status}`);
         }
 
-        const data: BlogResponse = await response.json();
+        let data: BlogResponse;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error("Failed to parse server response");
+        }
 
-        if (data.status === "success") {
+        if (data.status === "success" && Array.isArray(data.data)) {
           const formattedBlogs = data.data.map((blog) => ({
             ...blog,
             createdAt: formatDate(blog.createdAt),
-            imageUrl: blog.imageUrl ?? "/images/default-blog.jpg",
+            imageUrl:
+              blog.imageUrl ?? `${API_BASE_URL}/images/default-blog.jpg`,
           }));
           setBlogs(formattedBlogs);
+          setError(null);
         } else {
-          throw new Error(data.message ?? "Failed to fetch blogs");
+          throw new Error(
+            data.message ?? "Failed to fetch blogs: Invalid response format"
+          );
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
+        const errorMessage =
+          err instanceof Error ? err.message : "An unexpected error occurred";
+        setError(errorMessage);
         console.error("Error fetching blogs:", err);
+        setBlogs([]); // Reset blogs on error
       } finally {
         setLoading(false);
       }
@@ -104,7 +119,7 @@ const BlogPage: React.FC = (): ReactNode => {
     post: BlogPost,
     layout: "horizontal" | "vertical" = "vertical"
   ) => {
-    const imageSrc = post.imageUrl || "/images/default-blog.jpg";
+    const imageSrc = post.imageUrl || `${API_BASE_URL}/images/default-blog.jpg`;
 
     return (
       <div className={`post-card ${layout}`} key={post.id}>
@@ -113,7 +128,9 @@ const BlogPage: React.FC = (): ReactNode => {
             src={imageSrc}
             alt={post.title}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = "/images/default-blog.jpg";
+              (
+                e.target as HTMLImageElement
+              ).src = `${API_BASE_URL}/images/default-blog.jpg`;
             }}
           />
         </div>

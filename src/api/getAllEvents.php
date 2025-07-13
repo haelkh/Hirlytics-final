@@ -1,23 +1,20 @@
 <?php
-// Strict error reporting
+
 declare(strict_types=1);
 error_reporting(E_ALL);
 ini_set('display_errors', '0');
 
-// Headers
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json");
 header("X-Content-Type-Options: nosniff");
 
-// Database configuration
 const DB_HOST = 'localhost';
 const DB_NAME = 'hirlytics';
 const DB_USER = 'root';
 const DB_PASS = '';
 
 try {
-    // Establish database connection
     $pdo = new PDO(
         'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
         DB_USER,
@@ -29,7 +26,6 @@ try {
         ]
     );
 
-    // Execute query
     $stmt = $pdo->query("
         SELECT 
             EventID as id,
@@ -39,14 +35,24 @@ try {
             CONCAT(EndDate, ' ', EndTime) as endDateTime,
             MeetingLink as meetingLink,
             HostedBy as host,
+            ImagePath as imagePath,
             CreatedAt as createdAt
         FROM Events 
         ORDER BY StartDate ASC, StartTime ASC
     ");
-    
+
     $events = $stmt->fetchAll();
 
-    // Successful response
+    // Convert image paths to full URLs
+    foreach ($events as &$event) {
+        if ($event['imagePath']) {
+            $event['imageUrl'] = 'http://localhost:5173/uploads/' . basename($event['imagePath']);
+        } else {
+            $event['imageUrl'] = null;
+        }
+        unset($event['imagePath']);
+    }
+
     http_response_code(200);
     echo json_encode([
         'status' => 'success',
@@ -54,9 +60,7 @@ try {
         'count' => count($events),
         'timestamp' => date('c')
     ]);
-
 } catch (PDOException $e) {
-    // Database error
     error_log('Database Error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
@@ -65,7 +69,6 @@ try {
         'errorCode' => 'DB_ERROR'
     ]);
 } catch (Throwable $e) {
-    // General error
     error_log('System Error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
@@ -74,4 +77,3 @@ try {
         'errorCode' => 'SYSTEM_ERROR'
     ]);
 }
-?>

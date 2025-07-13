@@ -1,79 +1,62 @@
 <?php
-// create_event.php
 
-// ==================== CONFIGURATION ====================
-ini_set('display_errors', 1); // Enable for debugging
+declare(strict_types=1);
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
-header('Content-Type: application/json');
 
-// ==================== CORS HEADERS ====================
+// Headers
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
-header("Vary: Origin");
 header("Content-Type: application/json");
 
-// Handle OPTIONS request for CORS preflight
+// Handle OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
     exit();
 }
 
-// ==================== DATABASE CONFIG ====================
-$config = [
-    'host' => 'localhost',
-    'dbname' => 'hirlytics',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8mb4'
-];
+// Database configuration
+const DB_HOST = 'localhost';
+const DB_NAME = 'hirlytics';
+const DB_USER = 'root';
+const DB_PASS = '';
 
-// ==================== INPUT VALIDATION ====================
-$requiredFields = [
-    'eventTitle' => ['type' => 'string', 'max' => 255],
-    'eventDescription' => ['type' => 'string', 'max' => 65535],
-    'startDate' => ['type' => 'date'],
-    'startTime' => ['type' => 'time'],
-    'endDate' => ['type' => 'date'],
-    'endTime' => ['type' => 'time']
-];
+// File upload configuration
+const MAX_FILE_SIZE = 5242880; // 5MB in bytes
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
+$uploadDir = __DIR__ . '/uploads/';
 
-$optionalFields = [
-    'meetingLink' => ['type' => 'url', 'max' => 500],
-    'hostName' => ['type' => 'string', 'max' => 255]
-];
-
-// ==================== MAIN EXECUTION ====================
 try {
     // Validate request method
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         throw new Exception('Only POST requests are allowed', 405);
     }
 
-    // Get raw POST data
-    $jsonInput = file_get_contents('php://input');
-    
-    if (empty($jsonInput)) {
-        throw new Exception('No input data received', 400);
+    // Check if content type is multipart/form-data
+    if (strpos($_SERVER['CONTENT_TYPE'], 'multipart/form-data') === false) {
+        throw new Exception('Content-Type must be multipart/form-data', 400);
     }
 
-    $data = json_decode($jsonInput, true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception('Invalid JSON data: ' . json_last_error_msg(), 400);
-    }
+    // Get form data
+    $data = $_POST;
+    $file = $_FILES['image'] ?? null;
 
-    // Validate required fields
+    // Required fields validation
+    $requiredFields = [
+        'eventTitle' => ['type' => 'string', 'max' => 255],
+        'eventDescription' => ['type' => 'string', 'max' => 65535],
+        'startDate' => ['type' => 'date'],
+        'startTime' => ['type' => 'time'],
+        'endDate' => ['type' => 'date'],
+        'endTime' => ['type' => 'time']
+    ];
+
     $errors = [];
     foreach ($requiredFields as $field => $rules) {
-        if (!isset($data[$field])) {
+        if (!isset($data[$field]) || $data[$field] === '') {
             $errors[] = "Field '$field' is required";
-            continue;
-        }
-
-        // Empty check for required fields
-        if ($data[$field] === '') {
-            $errors[] = "Field '$field' cannot be empty";
             continue;
         }
 
@@ -90,13 +73,8 @@ try {
                 }
                 break;
             case 'time':
-                if (!DateTime::createFromFormat('H:i:s', $data[$field])) {
-                    $errors[] = "Field '$field' must be a valid time (HH:MM:SS)";
-                }
-                break;
-            case 'url':
-                if (!empty($data[$field]) && !filter_var($data[$field], FILTER_VALIDATE_URL)) {
-                    $errors[] = "Field '$field' must be a valid URL";
+                if (!DateTime::createFromFormat('H:i', $data[$field])) {
+                    $errors[] = "Field '$field' must be a valid time (HH:MM)";
                 }
                 break;
         }
@@ -107,93 +85,103 @@ try {
         }
     }
 
-    // Validate optional fields
-    foreach ($optionalFields as $field => $rules) {
-        if (!isset($data[$field]) || $data[$field] === '') {
-            $data[$field] = null;
-            continue;
+    // Handle file upload
+    $imagePath = null;
+    if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            throw new Exception("File upload error: {$file['error']}", 400);
         }
 
-        // Type validation
-        switch ($rules['type']) {
-            case 'string':
-                if (!is_string($data[$field])) {
-                    $errors[] = "Field '$field' must be a string";
-                }
-                break;
-            case 'url':
-                if (!empty($data[$field]) && !filter_var($data[$field], FILTER_VALIDATE_URL)) {
-                    $errors[] = "Field '$field' must be a valid URL";
-                }
-                break;
+        if ($file['size'] > MAX_FILE_SIZE) {
+            throw new Exception('File size exceeds 5MB limit', 400);
         }
 
-        // Length validation
-        if (isset($rules['max']) && strlen($data[$field]) > $rules['max']) {
-            $errors[] = "Field '$field' exceeds maximum length of {$rules['max']} characters";
+        $fileInfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $fileInfo->file($file['tmp_name']);
+        if (!in_array($mimeType, ALLOWED_TYPES)) {
+            throw new Exception('Only JPG, PNG, and GIF images are allowed', 400);
         }
+
+        // Create upload directory if needed
+        if (!file_exists($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                throw new Exception('Failed to create upload directory', 500);
+            }
+        }
+
+        // Generate unique filename
+        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = uniqid('event_', true) . '.' . $extension;
+        $destination = $uploadDir . $filename;
+
+        // Move uploaded file
+        if (!move_uploaded_file($file['tmp_name'], $destination)) {
+            throw new Exception('Failed to save uploaded file', 500);
+        }
+
+        $imagePath = $filename;
     }
 
-    if (!empty($errors)) {
-        throw new Exception(implode(', ', $errors), 400);
-    }
-
-    // Validate date/time logic
+    // Validate date/time
     $startDateTime = new DateTime($data['startDate'] . ' ' . $data['startTime']);
     $endDateTime = new DateTime($data['endDate'] . ' ' . $data['endTime']);
-
     if ($endDateTime <= $startDateTime) {
         throw new Exception('End date/time must be after start date/time', 400);
     }
 
-    // ==================== DATABASE OPERATION ====================
-    $dsn = "mysql:host={$config['host']};dbname={$config['dbname']};charset={$config['charset']}";
-    $options = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-    ];
+    // Check for any validation errors
+    if (!empty($errors)) {
+        throw new Exception(implode(', ', $errors), 400);
+    }
 
-    $pdo = new PDO($dsn, $config['username'], $config['password'], $options);
+    // Database connection
+    $pdo = new PDO(
+        'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+        DB_USER,
+        DB_PASS,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]
+    );
 
-    $stmt = $pdo->prepare("
-        INSERT INTO Events 
-        (Title, Description, StartDate, StartTime, EndDate, EndTime, MeetingLink, HostedBy) 
-        VALUES (:title, :description, :startDate, :startTime, :endDate, :endTime, :meetingLink, :hostedBy)
-    ");
+    // Insert event into database
+    $stmt = $pdo->prepare(
+        "INSERT INTO Events 
+        (Title, Description, StartDate, StartTime, EndDate, EndTime, MeetingLink, HostedBy, ImagePath) 
+        VALUES (:title, :description, :startDate, :startTime, :endDate, :endTime, :meetingLink, :hostedBy, :imagePath)"
+    );
 
     $stmt->execute([
         ':title' => $data['eventTitle'],
         ':description' => $data['eventDescription'],
         ':startDate' => $data['startDate'],
-        ':startTime' => $data['startTime'],
+        ':startTime' => $data['startTime'] . ':00',
         ':endDate' => $data['endDate'],
-        ':endTime' => $data['endTime'],
+        ':endTime' => $data['endTime'] . ':00',
         ':meetingLink' => $data['meetingLink'] ?? null,
-        ':hostedBy' => $data['hostName'] ?? null
+        ':hostedBy' => $data['hostName'] ?? null,
+        ':imagePath' => $imagePath
     ]);
 
-    $eventId = $pdo->lastInsertId();
-
-    // ==================== SUCCESS RESPONSE ====================
+    // Success response
     http_response_code(201);
     echo json_encode([
         'success' => true,
         'message' => 'Event created successfully',
-        'eventId' => $eventId
+        'eventId' => $pdo->lastInsertId(),
+        'imageUrl' => $imagePath ? 'http://localhost/Hirlytics-final/src/api/uploads/' . $imagePath : null
     ]);
-
 } catch (PDOException $e) {
-    error_log('Database error: ' . $e->getMessage());
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Database error occurred',
+        'message' => 'Database error',
         'error' => $e->getMessage()
     ]);
 } catch (Exception $e) {
-    $statusCode = $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 400;
-    http_response_code($statusCode);
+    $code = $e->getCode() >= 400 && $e->getCode() < 600 ? $e->getCode() : 400;
+    http_response_code($code);
     echo json_encode([
         'success' => false,
         'message' => $e->getMessage()
