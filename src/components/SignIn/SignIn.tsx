@@ -27,7 +27,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
           credentials: "include",
         }
       );
-
+     
       if (!response.ok) {
         const errorText = await response.text();
         console.error("API Error:", response.status, errorText);
@@ -45,7 +45,7 @@ const SignIn: React.FC<SignInProps> = ({ toggleAuth }) => {
       }
 
       const data = await response.json();
-
+      
       if (data.status === "success") {
         // Handle successful login
         console.log("Login success:", data.user);

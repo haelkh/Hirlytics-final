@@ -66,22 +66,13 @@ const JobsPage: React.FC = () => {
         : "http://localhost/Hirlytics-final/src/api/listJobs.php";
 
       const response = await fetch(url);
-
-      // Check for non-JSON responses
-      const contentType = response.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const textResponse = await response.text();
-        console.error("Server returned non-JSON response:", textResponse);
-        throw new Error(
-          "Server returned non-JSON response. Check server logs."
-        );
-      }
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(
+          data.message || `HTTP error! Status: ${response.status}`
+        );
       }
-
-      const data = await response.json();
 
       if (data.status === "success") {
         setTotalJobs(data.total_jobs);

@@ -1,32 +1,44 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Disable error display in production
+error_reporting(0);
+ini_set('display_errors', 0);
 
+// Function to return JSON error response
+function sendJsonError($message, $code = 500)
+{
+    http_response_code($code);
+    echo json_encode([
+        "status" => "error",
+        "message" => $message
+    ]);
+    exit;
+}
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "hirlytics";
-
-header("Access-Control-Allow-Origin: http://localhost:5173");
+// Set headers
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Content-Type: application/json");
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Database configuration
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "hirlytics";
 
-if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode([
-        "status" => "error",
-        "message" => "Connection failed: " . $conn->connect_error
-    ]);
-    exit;
+// Create connection
+try {
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        sendJsonError("Database connection failed: " . $conn->connect_error);
+    }
+} catch (Exception $e) {
+    sendJsonError("Database connection failed");
 }
 
 // SQL with JOIN
@@ -50,8 +62,7 @@ $sql = "SELECT
         JOIN 
             company c ON jb.company_id = c.CompanyID
         JOIN
-            country co ON jb.country_id = co.CountryID"
-            ;
+            country co ON jb.country_id = co.CountryID";
 
 // Optional sorting
 if (isset($_GET['sort'])) {
@@ -68,42 +79,40 @@ if (isset($_GET['sort'])) {
     }
 }
 
-$result = $conn->query($sql);
+try {
+    $result = $conn->query($sql);
 
-if (!$result) {
-    http_response_code(500);
+    if (!$result) {
+        sendJsonError("Query failed: " . $conn->error);
+    }
+
+    $jobs = [];
+    while ($row = $result->fetch_assoc()) {
+        $jobs[] = [
+            "job_id" => $row["job_id"],
+            "job_title" => $row["JobTitle"],
+            "job_type" => $row["JobType"],
+            "expiry_date" => $row["expiry_date"],
+            "status" => $row["status"],
+            "description" => $row["description"],
+            "date_posted" => $row["date_posted"],
+            "country_id" => $row["country_id"],
+            "company_image" => $row["company_image"],
+            "country_name" => $row["country_name"],
+            "skills" => $row["skills"],
+            "responsibility" => $row["responsibility"],
+            "qualification" => $row["qualification"],
+            "experience" => $row["experience"]
+        ];
+    }
+
     echo json_encode([
-        "status" => "error",
-        "message" => "Query error: " . $conn->error
+        "status" => "success",
+        "total_jobs" => count($jobs),
+        "jobs" => $jobs
     ]);
-    exit;
+} catch (Exception $e) {
+    sendJsonError("An error occurred while fetching jobs");
+} finally {
+    $conn->close();
 }
-
-$jobs = [];
-
-while ($row = $result->fetch_assoc()) {
-    $jobs[] = [
-        "job_id" => $row["job_id"],
-        "job_title" => $row["JobTitle"],
-        "job_type" => $row["JobType"],
-        "expiry_date" => $row["expiry_date"],
-        "status" => $row["status"],
-        "description" => $row["description"],
-        "date_posted" => $row["date_posted"],
-        "country_id" => $row["country_id"],
-        "company_image" => $row["company_image"],
-        "country_name" => $row["country_name"],
-        "skills" => $row["skills"],
-        "responsibility" => $row["responsibility"],
-        "qualification" => $row["qualification"],
-        "experience" => $row["experience"]
-    ];
-}
-
-echo json_encode([
-    "status" => "success",
-    "total_jobs" => count($jobs),
-    "jobs" => $jobs
-]);
-
-$conn->close();
