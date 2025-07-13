@@ -1,18 +1,19 @@
-import React, { useState } from "react";
-import { FileText, Tag } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { FileText, Tag, Image as ImageIcon } from "lucide-react";
 import "./adminBlog.css";
 
 interface BlogFormData {
   title: string;
   body: string;
   genre: string;
+  image: File | null;
 }
 
-interface BlogPayload {
-  user_id: number;
-  title: string;
-  body: string;
-  genre: string;
+interface BlogResponse {
+  status: string;
+  message: string;
+  blogId?: number;
+  imageUrl?: string | null;
 }
 
 const AdminAddBlog = () => {
@@ -20,12 +21,11 @@ const AdminAddBlog = () => {
     title: "",
     body: "",
     genre: "",
+    image: null,
   });
 
-  const getCurrentAdminId = (): number => {
-    return 1; // Replace with actual logic to get admin ID
-  };
-
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,16 +43,51 @@ const AdminAddBlog = () => {
     "Other",
   ];
 
+  const getCurrentAdminId = (): number => {
+    return 1; // Replace with actual logic to get admin ID
+  };
+
   const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      
+      // Validate file type
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+      if (!validTypes.includes(file.type)) {
+        setErrors((prev) => ({ ...prev, image: 'Only JPG, PNG, and GIF images are allowed' }));
+        return;
+      }
+      
+      // Validate file size (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors((prev) => ({ ...prev, image: 'File size exceeds 5MB limit' }));
+        return;
+      }
+      
+      setFormData((prev) => ({ ...prev, image: file }));
+      setErrors((prev) => ({ ...prev, image: '' }));
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
   };
 
   const validateForm = (): boolean => {
@@ -80,39 +115,26 @@ const AdminAddBlog = () => {
     setIsSubmitting(true);
 
     try {
-      const blogPayload: BlogPayload = {
-        user_id: getCurrentAdminId(),
-        title: formData.title.trim(),
-        body: formData.body.trim(),
-        genre: formData.genre,
-      };
-
-      console.log(
-        "Sending request to:",
-        "http://localhost/Web_Hirlytics/Hirlytics/src/api/addNewBlog.php"
-      );
-      console.log("Request payload:", blogPayload);
+      const formDataToSend = new FormData();
+      formDataToSend.append('user_id', getCurrentAdminId().toString());
+      formDataToSend.append('title', formData.title.trim());
+      formDataToSend.append('body', formData.body.trim());
+      formDataToSend.append('genre', formData.genre);
+      
+      if (formData.image) {
+        formDataToSend.append('image', formData.image);
+      }
 
       const response = await fetch(
-        "http://localhost/Web_Hirlytics/Hirlytics/src/api/addNewBlog.php",
+        "http://localhost/Hirlytics-final/src/api/addNewBlog.php",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           credentials: "include",
-          body: JSON.stringify(blogPayload),
+          body: formDataToSend,
         }
       );
-
-      console.log("Response status:", response.status);
-      console.log(
-        "Response headers:",
-        Object.fromEntries(response.headers.entries())
-      );
-
-      const result = await response.json();
-      console.log("Response data:", result);
+      
+      const result: BlogResponse = await response.json();
 
       if (!response.ok) {
         throw new Error(
@@ -121,14 +143,15 @@ const AdminAddBlog = () => {
       }
 
       if (result.status === "success") {
-        setFormData({ title: "", body: "", genre: "" });
+        setFormData({ title: "", body: "", genre: "", image: null });
+        setPreviewImage(null);
         alert("Blog created successfully!");
       } else {
         throw new Error(result.message || "Failed to create blog");
       }
     } catch (error) {
       console.error("Error creating blog:", error);
-      alert(`Error creating blog: `);
+      alert(`Error creating blog: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -142,6 +165,54 @@ const AdminAddBlog = () => {
 
       <div className="unique-adminBlogFormContainer">
         <div className="unique-adminBlogForm">
+          <div className="unique-adminBlogFormGroup">
+            <label className="unique-adminBlogLabel">Blog Image</label>
+            <div className="unique-adminBlogImageUploadContainer">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/jpeg, image/png, image/gif"
+                style={{ display: 'none' }}
+              />
+              
+              {previewImage ? (
+                <div className="unique-adminBlogImagePreviewContainer">
+                  <img 
+                    src={previewImage} 
+                    alt="Preview" 
+                    className="unique-adminBlogImagePreview"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreviewImage(null);
+                      setFormData(prev => ({ ...prev, image: null }));
+                      if (fileInputRef.current) {
+                        fileInputRef.current.value = '';
+                      }
+                    }}
+                    className="unique-adminBlogRemoveImageButton"
+                  >
+                    Remove Image
+                  </button>
+                </div>
+              ) : (
+                <div 
+                  className="unique-adminBlogImageUploadArea"
+                  onClick={triggerFileInput}
+                >
+                  <ImageIcon size={40} className="unique-adminBlogImageUploadIcon" />
+                  <p>Click to upload an image (JPEG, PNG, GIF)</p>
+                  <p>Max size: 5MB</p>
+                </div>
+              )}
+            </div>
+            {errors.image && (
+              <span className="unique-adminBlogErrorText">{errors.image}</span>
+            )}
+          </div>
+
           <div className="unique-adminBlogFormGroup">
             <label
               htmlFor="unique-adminBlogTitle"

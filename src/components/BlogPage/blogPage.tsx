@@ -1,44 +1,54 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, ReactNode } from "react";
 import "./blogPage.css";
 
 interface BlogPost {
   id: number;
+  userId: number;
   title: string;
   summary: string;
   content: string;
   genre: string;
-  authorId: number;
-  image?: string;
+  imageUrl: string | null;
+  createdAt: string;
   author?: string;
-  date?: string;
 }
 
-const BlogPage: React.FC = () => {
+interface BlogResponse {
+  status: string;
+  data: BlogPost[];
+  count: number;
+  message?: string;
+}
+
+const BlogPage: React.FC = (): ReactNode => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [activeTab, setActiveTab] = useState("recent");
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch blogs from the API
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        // Use a relative URL to avoid hardcoding paths
         const response = await fetch(
-          `http://localhost/Hirlytics-final/src/api/getUserBlogs.php`
+          "http://localhost/Hirlytics-final/src/api/getUserBlogs.php"
         );
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
 
-        const data = await response.json();
+        const data: BlogResponse = await response.json();
 
         if (data.status === "success") {
-          setBlogs(data.data);
+          const formattedBlogs = data.data.map((blog) => ({
+            ...blog,
+            createdAt: formatDate(blog.createdAt),
+            imageUrl: blog.imageUrl ?? "/images/default-blog.jpg",
+          }));
+          setBlogs(formattedBlogs);
         } else {
-          throw new Error(data.message || "Failed to fetch blogs");
+          throw new Error(data.message ?? "Failed to fetch blogs");
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -51,7 +61,15 @@ const BlogPage: React.FC = () => {
     fetchBlogs();
   }, []);
 
-  // Filter blogs based on search keyword
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   const filteredBlogs = useMemo(() => {
     if (!searchKeyword.trim()) return blogs;
 
@@ -60,18 +78,16 @@ const BlogPage: React.FC = () => {
       (blog) =>
         blog.title.toLowerCase().includes(keyword) ||
         blog.summary.toLowerCase().includes(keyword) ||
-        blog.content.toLowerCase().includes(keyword)
+        blog.content.toLowerCase().includes(keyword) ||
+        blog.genre.toLowerCase().includes(keyword)
     );
   }, [blogs, searchKeyword]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // The filtering happens automatically through the useMemo hook above
-    console.log("Searching for:", searchKeyword);
   };
 
   const getGenreAsTags = (genre: string) => {
-    // Split the genre string into an array if it contains commas
     return genre ? genre.split(",").map((g) => g.trim()) : ["General"];
   };
 
@@ -88,22 +104,25 @@ const BlogPage: React.FC = () => {
     post: BlogPost,
     layout: "horizontal" | "vertical" = "vertical"
   ) => {
+    const imageSrc = post.imageUrl || "/images/default-blog.jpg";
+
     return (
       <div className={`post-card ${layout}`} key={post.id}>
         <div className="post-image">
           <img
-            src={post.image || "/images/default-blog.jpg"}
+            src={imageSrc}
             alt={post.title}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "/images/default-blog.jpg";
+            }}
           />
         </div>
         <div className="post-content">
           <div className="post-meta">
             <span className="post-author">
-              {post.author || `Author #${post.authorId}`}
+              {post.author || `User #${post.userId}`}
             </span>
-            <span className="post-date">
-              • {post.date || new Date().toLocaleDateString()}
-            </span>
+            <span className="post-date">• {post.createdAt}</span>
           </div>
           <h3 className="post-title">
             {post.title}
@@ -121,18 +140,16 @@ const BlogPage: React.FC = () => {
   const renderFeaturedPosts = () => {
     const featuredBlogs = filteredBlogs.slice(0, 4);
 
-    // If there are no blogs, show a message
     if (featuredBlogs.length === 0) {
       return (
         <div className="loading-message">No blogs available to display</div>
       );
     }
 
-    // If there are fewer than 4 blogs, display what we have in a simplified layout
     if (featuredBlogs.length < 4) {
       return (
         <div className="all-posts-grid">
-          {featuredBlogs.map((post) => (
+          {featuredBlogs.map((post: BlogPost) => (
             <div className="post-grid-item" key={post.id}>
               {renderPostCard(post)}
             </div>
@@ -141,7 +158,6 @@ const BlogPage: React.FC = () => {
       );
     }
 
-    // If we have at least 4 blogs, display the full featured layout
     return (
       <div className="featured-posts-grid">
         <div className="featured-column-left">
@@ -175,7 +191,7 @@ const BlogPage: React.FC = () => {
   const renderAllPosts = () => {
     return (
       <div className="all-posts-grid">
-        {filteredBlogs.map((post) => (
+        {filteredBlogs.map((post: BlogPost) => (
           <div className="post-grid-item" key={post.id}>
             {renderPostCard(post)}
           </div>

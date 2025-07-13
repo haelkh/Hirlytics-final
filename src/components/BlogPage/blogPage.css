@@ -432,3 +432,32 @@ body {
   color: #6b7280;
   border: 1px solid #e5e7eb;
 }
+/* Add these new styles at the end of the file */
+
+.loading-message,
+.error-message,
+.no-blogs-message {
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem auto;
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+.loading-message {
+  background-color: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.error-message {
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.no-blogs-message {
+  background-color: #f5f5f5;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}

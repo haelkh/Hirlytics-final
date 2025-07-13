@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Content-Type: application/json");
@@ -14,8 +14,6 @@ const DB_USER = 'root';
 const DB_PASS = '';
 
 try {
-
-
     // Connect to database
     $pdo = new PDO(
         'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
@@ -23,7 +21,8 @@ try {
         DB_PASS,
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
         ]
     );
 
@@ -31,15 +30,28 @@ try {
     $stmt = $pdo->prepare("
         SELECT 
             BlogID as id,
+            BlogPublisherID as userId,
             Title as title,
             BriefBody as summary,
             Body as content,
-            Genre as genre
+            Genre as genre,
+            ImagePath as imagePath,
+            CreatedAt as createdAt
         FROM blog
         ORDER BY BlogID DESC
     ");
     $stmt->execute();
     $blogs = $stmt->fetchAll();
+
+    // Convert image paths to URLs
+    foreach ($blogs as &$blog) {
+        if ($blog['imagePath']) {
+            $blog['imageUrl'] = 'http://localhost:5173' . $blog['imagePath'];
+        } else {
+            $blog['imageUrl'] = null;
+        }
+        unset($blog['imagePath']);
+    }
 
     http_response_code(200);
     echo json_encode([
