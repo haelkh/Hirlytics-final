@@ -41,40 +41,31 @@ try {
     sendJsonError("Database connection failed");
 }
 
-// SQL with JOIN
+// SQL to match table structure
 $sql = "SELECT 
-            jb.ID as job_id,
-            jb.JobTitle,
-            jb.JobType,
-            jb.expiry_date,
-            jb.status,
-            jb.description,
-            jb.date_posted,
-            jb.country_id,
-            jb.skills,
-            jb.responsibility,
-            jb.qualification,
-            jb.experience,
-            c.companyImage AS company_image,
-            co.countryName AS country_name
+            ID,
+            image,
+            JobTitle,
+            JobType,
+            expiry_date,
+            status,
+            description,
+            date_posted,
+            country_id
         FROM 
-            job_board jb
-        JOIN 
-            company c ON jb.company_id = c.CompanyID
-        JOIN
-            country co ON jb.country_id = co.CountryID";
+            job_board";
 
 // Optional sorting
 if (isset($_GET['sort'])) {
     switch ($_GET['sort']) {
         case 'latest':
-            $sql .= " ORDER BY jb.date_posted DESC";
+            $sql .= " ORDER BY date_posted DESC";
             break;
         case 'oldest':
-            $sql .= " ORDER BY jb.date_posted ASC";
+            $sql .= " ORDER BY date_posted ASC";
             break;
         case 'title':
-            $sql .= " ORDER BY jb.JobTitle ASC";
+            $sql .= " ORDER BY JobTitle ASC";
             break;
     }
 }
@@ -89,20 +80,15 @@ try {
     $jobs = [];
     while ($row = $result->fetch_assoc()) {
         $jobs[] = [
-            "job_id" => $row["job_id"],
-            "job_title" => $row["JobTitle"],
-            "job_type" => $row["JobType"],
+            "ID" => $row["ID"],
+            "image" => $row["image"],
+            "JobTitle" => $row["JobTitle"],
+            "JobType" => $row["JobType"],
             "expiry_date" => $row["expiry_date"],
             "status" => $row["status"],
             "description" => $row["description"],
             "date_posted" => $row["date_posted"],
-            "country_id" => $row["country_id"],
-            "company_image" => $row["company_image"],
-            "country_name" => $row["country_name"],
-            "skills" => $row["skills"],
-            "responsibility" => $row["responsibility"],
-            "qualification" => $row["qualification"],
-            "experience" => $row["experience"]
+            "country_id" => $row["country_id"]
         ];
     }
 

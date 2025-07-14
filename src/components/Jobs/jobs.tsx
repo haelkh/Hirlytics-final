@@ -3,17 +3,15 @@ import "./jobs.css";
 
 // Job type definition from API
 interface ApiJob {
-  job_id: number;
-  job_title: string;
-  job_type: string;
+  ID: number;
+  image: string | null;
+  JobTitle: string;
+  JobType: string;
   expiry_date: string;
   status: string;
   description: string;
   date_posted: string;
   country_id: string | number;
-  company_image: string | null;
-  company_name?: string;
-  country_name?: string;
 }
 
 // Component Job type
@@ -108,15 +106,15 @@ const JobsPage: React.FC = (): ReactNode => {
           }
 
           return {
-            id: job.job_id,
-            title: job.job_title,
-            company: job.company_name || "Company Name",
-            location: job.country_name || "Remote",
-            jobType: job.job_type,
+            id: job.ID,
+            title: job.JobTitle,
+            company: "N/A", // No company name in new API
+            location: job.country_id ? `Country #${job.country_id}` : "Remote",
+            jobType: job.JobType,
             salary: "$Not specified",
             postedDate: postedDateText,
             postedDateRaw: job.date_posted,
-            logo: job.company_image ? handleLogoPath(job.company_image) : null,
+            logo: job.image ? handleLogoPath(job.image) : null,
             isNew,
           };
         });
