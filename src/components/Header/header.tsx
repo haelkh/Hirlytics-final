@@ -129,7 +129,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`header${scrolled ? " scrolled" : ""}`} ref={headerRef}>
+    <header className={`headere${scrolled ? " scrolled" : ""}`} ref={headerRef}>
       <div className="header-container">
         <div className="logo-container">
           <h1 className="logo">
