@@ -1,10 +1,11 @@
 // Header.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, Search, ChevronDown, X } from "lucide-react";
 import "./Header.css";
 
 const Header: React.FC = () => {
+  const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -18,6 +19,19 @@ const Header: React.FC = () => {
   const headerRef = useRef<HTMLElement>(null);
 
   const placeholders = ["Search for services...", "Looking for solutions?"];
+
+  // Check if current path matches the link
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  // Check if dropdown item is active
+  const isDropdownActive = () => {
+    return (
+      location.pathname === "/privacy-policy" ||
+      location.pathname === "/contact-us"
+    );
+  };
 
   // Handle window resize
   useEffect(() => {
@@ -115,7 +129,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`headere ${scrolled ? "scrolled" : ""}`} ref={headerRef}>
+    <header className={`header${scrolled ? " scrolled" : ""}`} ref={headerRef}>
       <div className="header-container">
         <div className="logo-container">
           <h1 className="logo">
@@ -123,26 +137,28 @@ const Header: React.FC = () => {
           </h1>
         </div>
 
-        <nav className={`nav-links ${mobileMenuOpen ? "active" : ""}`}>
+        <nav className={`nav-links${mobileMenuOpen ? " active" : ""}`}>
           <ul>
-            <li className="active">
+            <li className={isActive("/") ? "active" : ""}>
               <Link to="/" onClick={handleLinkClick}>
                 Home
               </Link>
             </li>
-            <li>
+            <li className={isActive("/about-us") ? "active" : ""}>
               <Link to="/about-us" onClick={handleLinkClick}>
                 About
               </Link>
             </li>
-            <li>
+            <li className={isActive("/Services") ? "active" : ""}>
               <Link to="/Services" onClick={handleLinkClick}>
                 Services
               </Link>
             </li>
             <li
               ref={dropdownRef}
-              className={`dropdown-nav-item ${isOpen ? "active" : ""}`}
+              className={`dropdown-nav-item${isOpen ? " active" : ""} ${
+                isDropdownActive() ? "active" : ""
+              }`}
             >
               <a
                 href="#more"
@@ -151,26 +167,30 @@ const Header: React.FC = () => {
               >
                 More{" "}
                 <ChevronDown
-                  className={`dropdown-icon ${isOpen ? "open" : ""}`}
+                  className={`dropdown-icon${isOpen ? " open" : ""}`}
                   size={16}
                 />
               </a>
               <div
-                className={`dropdown-menu ${isOpen ? "show" : ""} ${
+                className={`dropdown-menu${isOpen ? " show" : ""} ${
                   scrolled ? "scrolled" : ""
                 }`}
               >
                 <div className="dropdown-content">
-                  <a
-                    href="/privacy-policy"
-                    className="dropdown-item"
+                  <Link
+                    to="/privacy-policy"
+                    className={`dropdown-item${
+                      isActive("/privacy-policy") ? " active" : ""
+                    }`}
                     onClick={handleLinkClick}
                   >
                     <span className="dropdown-item-text">Privacy Policy</span>
-                  </a>
+                  </Link>
                   <Link
                     to="/contact-us"
-                    className="dropdown-item"
+                    className={`dropdown-item${
+                      isActive("/contact-us") ? " active" : ""
+                    }`}
                     onClick={handleLinkClick}
                   >
                     <span className="dropdown-item-text">Contact Us</span>
@@ -186,7 +206,7 @@ const Header: React.FC = () => {
           style={{ display: "flex", alignItems: "center" }}
         >
           <div
-            className={`search-bar ${isFocused ? "focused" : ""}`}
+            className={`search-bar${isFocused ? " focused" : ""}`}
             onClick={handleSearchBarClick}
             ref={searchBarRef}
           >

@@ -99,6 +99,7 @@
   opacity: 0;
   animation: subtitleFadeIn 1s ease-out forwards;
   animation-delay: 0.5s;
+  color: white;
 }
 
 @keyframes subtitleFadeIn {
@@ -1184,4 +1185,8 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
+}
+.no-hover:hover {
+  color: white;
+  background-color: transparent;
 }

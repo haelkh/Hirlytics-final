@@ -127,7 +127,7 @@ const Home = (): React.JSX.Element => {
                 </div>
               )}
 
-              {/* Right: Apply for Job / Hire Talent */}
+              {/* updated Right: Apply for Job / Hire Talent */}
               <div
                 className={`col-md-${isLoggedIn ? "12" : "6"} d-flex ${
                   isLoggedIn ? "justify-content-center" : "justify-content-end"
@@ -136,7 +136,7 @@ const Home = (): React.JSX.Element => {
                 <div className="btn-group switch-buttons">
                   <button
                     className={`btn btn-outline-light ${
-                      activeSwitch === "apply" ? "active" : ""
+                      activeSwitch === "apply" ? "active" : "no-hover"
                     }`}
                     onClick={() => handleSwitchClick("apply")}
                   >
@@ -144,7 +144,7 @@ const Home = (): React.JSX.Element => {
                   </button>
                   <button
                     className={`btn btn-outline-light ${
-                      activeSwitch === "hire" ? "active" : ""
+                      activeSwitch === "hire" ? "active" : "no-hover"
                     }`}
                     onClick={() => handleSwitchClick("hire")}
                   >

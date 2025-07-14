@@ -38,24 +38,23 @@ const Footer: React.FC = () => {
             </a>
           </div>
         </div>
-
         <div className="footer-center">
           <nav className="footer-links">
             <ul>
               <li>
-                <a href="#">About Us</a>
+                <Link to="/about-us">About Us</Link>
               </li>
               <li>
                 <Link to="/contact-us">Contact Us</Link>
               </li>
               <li>
-                <a href="#">Book a free appointment</a>
+                <Link to="/appointments">Book a free appointment</Link>
               </li>
               <li>
-                <a href="#">FAQ</a>
+                <Link to="/Services">FAQ</Link>
               </li>
               <li>
-                <a href="#">Services</a>
+                <Link to="/Services">Services</Link>
               </li>
             </ul>
           </nav>

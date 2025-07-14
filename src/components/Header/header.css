@@ -92,10 +92,10 @@
 
 .nav-links li.active a {
   color: #0062cc;
+  font-weight: 600;
 }
 
-.nav-links li.active::after,
-.nav-links li:hover::after {
+.nav-links li.active::after {
   content: "";
   position: absolute;
   bottom: -5px;
@@ -103,8 +103,7 @@
   width: 100%;
   height: 2px;
   background-color: #0062cc;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transform: scaleX(1);
   transform-origin: center;
 }
 
