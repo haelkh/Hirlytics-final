@@ -1,7 +1,7 @@
 <?php
-// Disable error display in production
-error_reporting(0);
-ini_set('display_errors', 0);
+// Enable error display for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Function to return JSON error response
 function sendJsonError($message, $code = 500)

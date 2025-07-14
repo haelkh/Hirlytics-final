@@ -44,7 +44,6 @@ try {
             ImagePath as imagePath,
             CreatedAt as createdAt
         FROM Events
-        WHERE StartDate >= CURDATE()
     ";
 
     $params = [];
