@@ -1,7 +1,7 @@
 // Header.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, Search, ChevronDown, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import "./Header.css";
 
 const Header: React.FC = () => {
@@ -10,12 +10,10 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const searchBarRef = useRef<HTMLDivElement>(null);
-  const dropdownRef = useRef<HTMLLIElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
   const placeholders = ["Search for services...", "Looking for solutions?"];
@@ -26,12 +24,6 @@ const Header: React.FC = () => {
   };
 
   // Check if dropdown item is active
-  const isDropdownActive = () => {
-    return (
-      location.pathname === "/privacy-policy" ||
-      location.pathname === "/contact-us"
-    );
-  };
 
   // Handle window resize
   useEffect(() => {
@@ -97,31 +89,11 @@ const Header: React.FC = () => {
   };
 
   // Handle dropdown click
-  const toggleDropdown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
 
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   // Close dropdown and mobile menu when a link is clicked
   const handleLinkClick = () => {
-    setIsOpen(false);
     if (windowWidth <= 768) {
       setMobileMenuOpen(false);
       document.body.classList.remove("menu-open");
@@ -165,49 +137,10 @@ const Header: React.FC = () => {
                 Jobs
               </Link>
             </li>
-            <li
-              ref={dropdownRef}
-              className={`dropdown-nav-item${isOpen ? " active" : ""} ${
-                isDropdownActive() ? "active" : ""
-              }`}
-            >
-              <a
-                href="#more"
-                className="dropdown-trigger"
-                onClick={toggleDropdown}
-              >
-                More{" "}
-                <ChevronDown
-                  className={`dropdown-icon${isOpen ? " open" : ""}`}
-                  size={16}
-                />
-              </a>
-              <div
-                className={`dropdown-menu${isOpen ? " show" : ""} ${
-                  scrolled ? "scrolled" : ""
-                }`}
-              >
-                <div className="dropdown-content">
-                  <Link
-                    to="/privacy-policy"
-                    className={`dropdown-item${
-                      isActive("/privacy-policy") ? " active" : ""
-                    }`}
-                    onClick={handleLinkClick}
-                  >
-                    <span className="dropdown-item-text">Privacy Policy</span>
-                  </Link>
-                  <Link
-                    to="/contact-us"
-                    className={`dropdown-item${
-                      isActive("/contact-us") ? " active" : ""
-                    }`}
-                    onClick={handleLinkClick}
-                  >
-                    <span className="dropdown-item-text">Contact Us</span>
-                  </Link>
-                </div>
-              </div>
+            <li className={isActive("/events&workshops") ? "active" : ""}>
+              <Link to="/events&workshops" onClick={handleLinkClick}>
+                Events
+              </Link>
             </li>
           </ul>
         </nav>
