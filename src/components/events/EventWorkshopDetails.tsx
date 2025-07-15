@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./events.css";
 import Header from "../Header/header";
@@ -22,22 +22,25 @@ const EventWorkshopDetails: React.FC = () => {
   const [event, setEvent] = useState<EventDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [registered, setRegistered] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
         setLoading(true);
-        // Replace with your actual API endpoint
-        const response = await fetch(
-          `http://localhost/Hirlytics-final/src/api/getEventWorkshopDetails.php?id=${id}`
-        );
+        console.log(`Fetching event details for ID: ${id}`);
+
+        // API endpoint
+        const apiUrl = `http://localhost/Hirlytics-final/src/api/getEventWorkshopDetails.php?id=${id}`;
+        console.log(`API URL: ${apiUrl}`);
+
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
+        console.log("API Response:", data);
 
         if (data.status === "success") {
           setEvent(data.data);
@@ -45,6 +48,7 @@ const EventWorkshopDetails: React.FC = () => {
           throw new Error(data.message || "Failed to fetch event details");
         }
       } catch (err) {
+        console.error("Error fetching event details:", err);
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
         );
@@ -55,31 +59,39 @@ const EventWorkshopDetails: React.FC = () => {
 
     if (id) {
       fetchEventDetails();
+    } else {
+      console.error("No event ID provided in URL parameters");
+      setError("No event ID provided");
+      setLoading(false);
     }
   }, [id]);
 
-  const handleRegister = (e: FormEvent) => {
-    e.preventDefault();
-    // Handle registration logic here
-    setRegistered(true);
-  };
-
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    if (!dateString) return "Date not available";
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "Invalid date";
+    }
   };
 
   return (
     <div className="app-container">
       <Header />
-
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <div className="event-detail-container">
         {loading ? (
           <div className="event-loading">
@@ -190,55 +202,6 @@ const EventWorkshopDetails: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              <div className="event-sidebar">
-                <div className="event-registration-card">
-                  <h3>Register for this {event.type}</h3>
-                  {registered ? (
-                    <div className="registration-success">
-                      <div className="success-icon">✓</div>
-                      <h4>Registration Successful!</h4>
-                      <p>
-                        You have successfully registered for this {event.type}.
-                      </p>
-                      <p>
-                        We'll send you a confirmation email with all the
-                        details.
-                      </p>
-                    </div>
-                  ) : (
-                    <form
-                      onSubmit={handleRegister}
-                      className="registration-form"
-                    >
-                      <div className="form-group">
-                        <label htmlFor="name">Full Name</label>
-                        <input
-                          type="text"
-                          id="name"
-                          placeholder="Enter your full name"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input
-                          type="email"
-                          id="email"
-                          placeholder="Enter your email"
-                          required
-                        />
-                      </div>
-                      <button type="submit" className="register-button">
-                        Register Now
-                      </button>
-                      <p className="registration-note">
-                        Registration is free and only takes a minute.
-                      </p>
-                    </form>
-                  )}
                 </div>
               </div>
             </div>

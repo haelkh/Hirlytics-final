@@ -17,9 +17,6 @@ if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS
     exit();
 }
 
-// Include database connection
-require_once 'db_connect.php';
-
 // Check if ID parameter is provided
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo json_encode([
@@ -31,33 +28,62 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 
 $id = intval($_GET['id']);
 
+const DB_HOST = 'localhost';
+const DB_NAME = 'hirlytics';
+const DB_USER = 'root';
+const DB_PASS = '';
+
 try {
-    // Check if connection is established
-    if ($conn === null) {
-        throw new Exception("Database connection failed");
-    }
+    $pdo = new PDO(
+        'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4',
+        DB_USER,
+        DB_PASS,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]
+    );
 
     // Prepare SQL statement to fetch event details
-    $stmt = $conn->prepare("
+    $stmt = $pdo->prepare("
         SELECT 
-            id, 
-            title, 
-            description, 
-            start, 
-            end, 
-            host, 
-            meetingLink, 
-            type, 
-            imageUrl
-        FROM events 
-        WHERE id = :id
+            EventID as id,
+            Title as title,
+            Description as description,
+            StartDate as startDate,
+            StartTime as startTime,
+            EndDate as endDate,
+            EndTime as endTime,
+            MeetingLink as meetingLink,
+            HostedBy as host,
+            ImagePath as imagePath,
+            CreatedAt as createdAt
+        FROM Events 
+        WHERE EventID = :id
     ");
 
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $event = $stmt->fetch(PDO::FETCH_ASSOC);
+        $item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Format the response to match the structure used in listEventsAndWorkshops.php
+        $imageUrl = $item['imagePath']
+            ? 'http://localhost/Hirlytics-final/src/api/uploads/' . $item['imagePath']
+            : null;
+
+        $event = [
+            'id' => (int)$item['id'],
+            'title' => $item['title'],
+            'description' => $item['description'],
+            'type' => stripos($item['title'], 'workshop') !== false ? 'workshop' : 'event',
+            'start' => $item['startDate'] . ' ' . $item['startTime'],
+            'end' => $item['endDate'] . ' ' . $item['endTime'],
+            'host' => $item['host'],
+            'meetingLink' => $item['meetingLink'],
+            'imageUrl' => $imageUrl
+        ];
 
         // Format the response
         echo json_encode([
