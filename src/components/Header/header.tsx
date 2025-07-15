@@ -126,6 +126,7 @@ const Header: React.FC = () => {
       setMobileMenuOpen(false);
       document.body.classList.remove("menu-open");
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (

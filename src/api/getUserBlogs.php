@@ -4,6 +4,7 @@ declare(strict_types=1);
 header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json");
 header("X-Content-Type-Options: nosniff");
 
@@ -30,31 +31,16 @@ try {
         ]
     );
 
-    // Check if required columns exist
-    $columnsQuery = $pdo->query("SHOW COLUMNS FROM blog");
-    $columns = $columnsQuery->fetchAll(PDO::FETCH_COLUMN);
-
-    // Build the SELECT query based on existing columns
+    // Select fields based on the actual database structure
     $selectFields = [
-        'BlogID as id',
-        'BlogPublisherID as userId',
-        'Title as title',
-        'BriefBody as summary',
-        'Body as content',
-        'Genre as genre'
+        'BlogID',
+        'BlogPublisherID',
+        'Title',
+        'Body',
+        'Genre',
+        'BriefBody',
+        'ImagePath'
     ];
-
-    if (in_array('ImagePath', $columns)) {
-        $selectFields[] = 'ImagePath as imagePath';
-    } else {
-        $selectFields[] = 'NULL as imagePath';
-    }
-
-    if (in_array('CreatedAt', $columns)) {
-        $selectFields[] = 'CreatedAt as createdAt';
-    } else {
-        $selectFields[] = 'NOW() as createdAt';
-    }
 
     $query = "SELECT " . implode(', ', $selectFields) . " FROM blog ORDER BY BlogID DESC";
 
@@ -63,21 +49,19 @@ try {
     $stmt->execute();
     $blogs = $stmt->fetchAll();
 
-    // Convert image paths to URLs and ensure all required fields exist
+    // Process blog data
     foreach ($blogs as &$blog) {
         // Handle image URL
-        if (!empty($blog['imagePath'])) {
-            $blog['imageUrl'] = 'http://localhost/Hirlytics-final/src/api/uploads/' . basename($blog['imagePath']);
+        if (!empty($blog['ImagePath'])) {
+            $blog['ImageUrl'] = 'http://localhost/Hirlytics-final/src/api/uploads/' . basename($blog['ImagePath']);
         } else {
-            $blog['imageUrl'] = null;
+            $blog['ImageUrl'] = null;
         }
-        unset($blog['imagePath']);
 
-        // Ensure all required fields have at least empty values
-        $blog['summary'] = $blog['summary'] ?? '';
-        $blog['content'] = $blog['content'] ?? '';
-        $blog['genre'] = $blog['genre'] ?? 'General';
-        $blog['createdAt'] = $blog['createdAt'] ?? date('Y-m-d H:i:s');
+        // Ensure all fields have at least empty values
+        $blog['BriefBody'] = $blog['BriefBody'] ?? '';
+        $blog['Body'] = $blog['Body'] ?? '';
+        $blog['Genre'] = $blog['Genre'] ?? 'General';
     }
 
     http_response_code(200);

@@ -5,14 +5,14 @@ import Header from "../Header/header";
 import Footer from "../Footer/Footer";
 
 interface BlogPost {
-  id: number;
-  userId: number;
-  title: string;
-  summary: string;
-  content: string;
-  genre: string;
-  imageUrl: string | null;
-  createdAt: string;
+  BlogID: number;
+  BlogPublisherID: number;
+  Title: string;
+  BriefBody: string;
+  Body: string;
+  Genre: string;
+  ImagePath: string;
+  ImageUrl: string | null;
   author?: string;
 }
 
@@ -55,9 +55,8 @@ const BlogPage: React.FC = (): ReactNode => {
         if (data.status === "success" && Array.isArray(data.data)) {
           const formattedBlogs = data.data.map((blog) => ({
             ...blog,
-            createdAt: formatDate(blog.createdAt),
-            imageUrl:
-              blog.imageUrl ?? `${API_BASE_URL}/images/default-blog.jpg`,
+            ImageUrl:
+              blog.ImageUrl ?? `${API_BASE_URL}/images/default-blog.jpg`,
           }));
           setBlogs(formattedBlogs);
           setError(null);
@@ -80,25 +79,16 @@ const BlogPage: React.FC = (): ReactNode => {
     fetchBlogs();
   }, []);
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
-
   const filteredBlogs = useMemo(() => {
     if (!searchKeyword.trim()) return blogs;
 
     const keyword = searchKeyword.toLowerCase();
     return blogs.filter(
       (blog) =>
-        blog.title.toLowerCase().includes(keyword) ||
-        blog.summary.toLowerCase().includes(keyword) ||
-        blog.content.toLowerCase().includes(keyword) ||
-        blog.genre.toLowerCase().includes(keyword)
+        blog.Title.toLowerCase().includes(keyword) ||
+        blog.BriefBody.toLowerCase().includes(keyword) ||
+        blog.Body.toLowerCase().includes(keyword) ||
+        blog.Genre.toLowerCase().includes(keyword)
     );
   }, [blogs, searchKeyword]);
 
@@ -127,18 +117,18 @@ const BlogPage: React.FC = (): ReactNode => {
     post: BlogPost,
     layout: "horizontal" | "vertical" = "vertical"
   ) => {
-    const imageSrc = post.imageUrl || `${API_BASE_URL}/images/default-blog.jpg`;
+    const imageSrc = post.ImageUrl || `${API_BASE_URL}/images/default-blog.jpg`;
 
     return (
       <div
         className={`post-card ${layout}`}
-        key={post.id}
-        onClick={() => handleBlogClick(post.id)}
+        key={post.BlogID}
+        onClick={() => handleBlogClick(post.BlogID)}
       >
         <div className="post-image">
           <img
             src={imageSrc}
-            alt={post.title}
+            alt={post.Title}
             onError={(e) => {
               (
                 e.target as HTMLImageElement
@@ -149,17 +139,16 @@ const BlogPage: React.FC = (): ReactNode => {
         <div className="post-content">
           <div className="post-meta">
             <span className="post-author">
-              {post.author || `User #${post.userId}`}
+              {post.author || `User #${post.BlogPublisherID}`}
             </span>
-            <span className="post-date">• {post.createdAt}</span>
           </div>
           <h3 className="post-title">
-            {post.title}
+            {post.Title}
             <span className="arrow-icon">↗</span>
           </h3>
-          <p className="post-excerpt">{post.summary}</p>
+          <p className="post-excerpt">{post.BriefBody}</p>
           <div className="post-categories">
-            {renderCategoryTags(post.genre || "General")}
+            {renderCategoryTags(post.Genre || "General")}
           </div>
         </div>
       </div>
@@ -179,7 +168,7 @@ const BlogPage: React.FC = (): ReactNode => {
       return (
         <div className="all-posts-grid">
           {featuredBlogs.map((post: BlogPost) => (
-            <div className="post-grid-item" key={post.id}>
+            <div className="post-grid-item" key={post.BlogID}>
               {renderPostCard(post)}
             </div>
           ))}
@@ -193,7 +182,7 @@ const BlogPage: React.FC = (): ReactNode => {
           {renderPostCard(featuredBlogs[0], "horizontal")}
           <div
             className="climate-special-card"
-            onClick={() => handleBlogClick(featuredBlogs[0].id)}
+            onClick={() => handleBlogClick(featuredBlogs[0].BlogID)}
           >
             <div className="climate-content">
               <div className="record-dot"></div>
@@ -224,7 +213,7 @@ const BlogPage: React.FC = (): ReactNode => {
     return (
       <div className="all-posts-grid">
         {filteredBlogs.map((post: BlogPost) => (
-          <div className="post-grid-item" key={post.id}>
+          <div className="post-grid-item" key={post.BlogID}>
             {renderPostCard(post)}
           </div>
         ))}

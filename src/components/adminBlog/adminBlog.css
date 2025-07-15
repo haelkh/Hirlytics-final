@@ -11,15 +11,51 @@
   background-color: white;
   padding: 16px 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .unique-adminBlogHeader h1 {
   max-width: 1024px;
-  margin: 0 auto;
+  margin: 0 auto 0 16px;
   padding: 0 16px;
   font-size: 24px;
   font-weight: bold;
   color: #292929;
+}
+
+.unique-adminBlogAddButton,
+.unique-adminBlogCancelButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 16px;
+  border: none;
+}
+
+.unique-adminBlogAddButton {
+  background-color: #003366;
+  color: white;
+}
+
+.unique-adminBlogAddButton:hover {
+  background-color: #002855;
+}
+
+.unique-adminBlogCancelButton {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.unique-adminBlogCancelButton:hover {
+  background-color: #e0e0e0;
 }
 
 .unique-adminBlogFormContainer {
@@ -146,30 +182,6 @@
   opacity: 0.7;
 }
 
-@media (max-width: 768px) {
-  .unique-adminBlogFormContainer {
-    padding: 16px;
-  }
-
-  .unique-adminBlogForm {
-    padding: 24px 16px;
-  }
-
-  .unique-adminBlogHeader h1 {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .unique-adminBlogForm {
-    padding: 16px;
-  }
-
-  .unique-adminBlogSubmitButton {
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-}
 /* Image Upload Styles */
 .unique-adminBlogImageUploadContainer {
   margin-bottom: 20px;
@@ -222,4 +234,237 @@
 
 .unique-adminBlogRemoveImageButton:hover {
   background-color: #cc0000;
+}
+
+/* Blog List Styles */
+.unique-adminBlogListContainer {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  width: 100%;
+}
+
+.unique-adminBlogSearchContainer {
+  margin-bottom: 24px;
+}
+
+.unique-adminBlogSearchBox {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 8px;
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.unique-adminBlogSearchIcon {
+  color: #666;
+  margin-right: 12px;
+}
+
+.unique-adminBlogSearchInput {
+  flex: 1;
+  padding: 14px 0;
+  border: none;
+  font-size: 14px;
+  color: #292929;
+}
+
+.unique-adminBlogSearchInput:focus {
+  outline: none;
+}
+
+.unique-adminBlogList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.unique-adminBlogCard {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.unique-adminBlogCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.unique-adminBlogCardImageContainer {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f1f1f1;
+}
+
+.unique-adminBlogCardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unique-adminBlogCardNoImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.unique-adminBlogCardContent {
+  padding: 16px;
+  flex: 1;
+}
+
+.unique-adminBlogCardTitle {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #292929;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unique-adminBlogCardMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.unique-adminBlogCardGenre {
+  font-size: 12px;
+  color: #003366;
+  background-color: #e3edf9;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.unique-adminBlogCardDate {
+  font-size: 12px;
+  color: #666;
+}
+
+.unique-adminBlogCardSummary {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.unique-adminBlogCardActions {
+  display: flex;
+  padding: 16px;
+  border-top: 1px solid #f1f1f1;
+  gap: 8px;
+}
+
+.unique-adminBlogCardEditButton,
+.unique-adminBlogCardDeleteButton {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.unique-adminBlogCardEditButton {
+  background-color: #e3edf9;
+  color: #003366;
+}
+
+.unique-adminBlogCardEditButton:hover {
+  background-color: #cde0f7;
+}
+
+.unique-adminBlogCardDeleteButton {
+  background-color: #ffeeee;
+  color: #cc0000;
+}
+
+.unique-adminBlogCardDeleteButton:hover {
+  background-color: #ffdddd;
+}
+
+.unique-adminBlogEmpty {
+  text-align: center;
+  padding: 48px 0;
+  color: #666;
+}
+
+.unique-adminBlogLoading {
+  text-align: center;
+  padding: 48px 0;
+  color: #666;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .unique-adminBlogFormContainer,
+  .unique-adminBlogListContainer {
+    padding: 16px;
+  }
+
+  .unique-adminBlogForm {
+    padding: 24px 16px;
+  }
+
+  .unique-adminBlogHeader h1 {
+    font-size: 20px;
+  }
+
+  .unique-adminBlogList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .unique-adminBlogForm {
+    padding: 16px;
+  }
+
+  .unique-adminBlogSubmitButton {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .unique-adminBlogHeader {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .unique-adminBlogHeader h1 {
+    margin: 0;
+    padding: 0;
+  }
+
+  .unique-adminBlogAddButton,
+  .unique-adminBlogCancelButton {
+    margin-right: 0;
+    width: 100%;
+    justify-content: center;
+  }
 }

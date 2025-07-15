@@ -5,15 +5,15 @@ import Footer from "../Footer/Footer";
 import "./BlogDetail.css";
 
 interface BlogPost {
-  id: number;
-  userId: number;
-  title: string;
-  summary: string;
-  content: string;
-  genre: string;
-  imageUrl: string | null;
-  createdAt: string;
-  author?: string;
+  BlogID: number;
+  BlogPublisherID: number;
+  Title: string;
+  BriefBody: string;
+  Body: string;
+  Genre: string;
+  ImagePath: string | null;
+  ImageUrl: string | null;
+  // No direct createdAt field in the API response
 }
 
 const API_BASE_URL = "http://localhost/Hirlytics-final";
@@ -42,31 +42,20 @@ const BlogDetail: React.FC = () => {
 
         if (data.status === "success" && Array.isArray(data.data)) {
           const blogId = parseInt(id || "0", 10);
-          const foundBlog = data.data.find((b: BlogPost) => b.id === blogId);
+          const foundBlog = data.data.find(
+            (b: BlogPost) => b.BlogID === blogId
+          );
 
           if (foundBlog) {
-            // Format the date
-            const formattedBlog = {
-              ...foundBlog,
-              createdAt: formatDate(foundBlog.createdAt),
-              imageUrl:
-                foundBlog.imageUrl ?? `${API_BASE_URL}/images/default-blog.jpg`,
-            };
-
-            setBlog(formattedBlog);
+            setBlog(foundBlog);
 
             // Find related posts with the same genre
             const related = data.data
               .filter(
-                (b: BlogPost) => b.id !== blogId && b.genre === foundBlog.genre
+                (b: BlogPost) =>
+                  b.BlogID !== blogId && b.Genre === foundBlog.Genre
               )
-              .slice(0, 3)
-              .map((b: BlogPost) => ({
-                ...b,
-                createdAt: formatDate(b.createdAt),
-                imageUrl:
-                  b.imageUrl ?? `${API_BASE_URL}/images/default-blog.jpg`,
-              }));
+              .slice(0, 3);
 
             setRelatedPosts(related);
           } else {
@@ -87,15 +76,6 @@ const BlogDetail: React.FC = () => {
 
     fetchBlogDetails();
   }, [id]);
-
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
 
   const getGenreAsTags = (genre: string) => {
     return genre ? genre.split(",").map((g) => g.trim()) : ["General"];
@@ -165,20 +145,20 @@ const BlogDetail: React.FC = () => {
             </button>
             <div className="blog-meta">
               <div className="blog-categories">
-                {renderCategoryTags(blog.genre || "General")}
+                {renderCategoryTags(blog.Genre || "General")}
               </div>
-              <h1 className="blog-title">{blog.title}</h1>
+              <h1 className="blog-title">{blog.Title}</h1>
               <div className="blog-info">
-                <span className="blog-date">{blog.createdAt}</span>
+                {/* No direct createdAt field in the API response */}
               </div>
             </div>
           </div>
 
-          {blog.imageUrl && (
+          {blog.ImageUrl && (
             <div className="blog-hero-image">
               <img
-                src={blog.imageUrl}
-                alt={blog.title}
+                src={blog.ImageUrl}
+                alt={blog.Title}
                 onError={(e) => {
                   (
                     e.target as HTMLImageElement
@@ -190,11 +170,11 @@ const BlogDetail: React.FC = () => {
 
           <div className="blog-content">
             <div className="blog-summary">
-              <p>{blog.summary}</p>
+              <p>{blog.BriefBody}</p>
             </div>
             <div
               className="blog-body"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
+              dangerouslySetInnerHTML={{ __html: blog.Body }}
             />
           </div>
 
@@ -204,17 +184,17 @@ const BlogDetail: React.FC = () => {
               <div className="related-posts-grid">
                 {relatedPosts.map((post) => (
                   <div
-                    key={post.id}
+                    key={post.BlogID}
                     className="related-post-card"
-                    onClick={() => handleRelatedPostClick(post.id)}
+                    onClick={() => handleRelatedPostClick(post.BlogID)}
                   >
                     <div className="related-post-image">
                       <img
                         src={
-                          post.imageUrl ||
+                          post.ImageUrl ||
                           `${API_BASE_URL}/images/default-blog.jpg`
                         }
-                        alt={post.title}
+                        alt={post.Title}
                         onError={(e) => {
                           (
                             e.target as HTMLImageElement
@@ -223,12 +203,10 @@ const BlogDetail: React.FC = () => {
                       />
                     </div>
                     <div className="related-post-content">
-                      <h3>{post.title}</h3>
-                      <p>{post.summary}</p>
+                      <h3>{post.Title}</h3>
+                      <p>{post.BriefBody}</p>
                       <div className="related-post-meta">
-                        <span className="related-post-date">
-                          {post.createdAt}
-                        </span>
+                        {/* No direct createdAt field in the API response */}
                       </div>
                     </div>
                   </div>
