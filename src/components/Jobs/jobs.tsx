@@ -232,8 +232,8 @@ const JobsPage: React.FC = (): ReactNode => {
     setSelectedJob(null);
   };
 
-  const handleApplyToJob = (jobId: number) => {
-    navigate(`/apply-job?id=${jobId}`);
+  const handleApplyToJob = () => {
+    navigate(`/apply-to-a-job`);
   };
 
   return (
@@ -649,7 +649,7 @@ const JobsPage: React.FC = (): ReactNode => {
               <div className="jobs-details-actions">
                 <button
                   className="jobs-details-apply-button"
-                  onClick={() => handleApplyToJob(selectedJob.id)}
+                  onClick={() => handleApplyToJob()}
                 >
                   Apply Now
                 </button>
