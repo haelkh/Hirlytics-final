@@ -52,7 +52,7 @@
 
 /* Main content styles */
 .ew-main-content {
-  padding: 0 20px 50px ;
+  padding: 0 20px 50px;
 }
 
 /* Filters */
@@ -113,6 +113,7 @@
   text-decoration: none;
   color: inherit;
   display: block;
+  cursor: pointer;
 }
 
 .ew-card {

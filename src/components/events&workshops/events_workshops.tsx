@@ -3,7 +3,7 @@ import "./events_workshops.css";
 import { Bookmark, Calendar, MapPin, Clock } from "lucide-react";
 import Header from "../Header/header";
 import Footer from "../Footer/Footer";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface EventCardProps {
   id: number;
@@ -28,8 +28,23 @@ const EventCard: React.FC<EventCardProps> = ({
   imageUrl,
   type,
 }) => {
+  const navigate = useNavigate();
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent default only if clicking on the bookmark button
+    if ((e.target as HTMLElement).closest(".ew-bookmark-button")) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Bookmark clicked");
+      return;
+    }
+
+    // Navigate to event details page
+    navigate(`/event-details/${id}`);
+  };
+
   return (
-    <Link to={`/event-details/${id}`} className="ew-card-link">
+    <div className="ew-card-link" onClick={handleCardClick}>
       <div className="ew-card">
         <div className="ew-image">
           {imageUrl ? (
@@ -75,7 +90,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
@@ -108,6 +123,7 @@ const EventsWorkshops: React.FC = () => {
         }
 
         const data = await response.json();
+        console.log("Events data:", data);
 
         if (data.status === "success") {
           setEvents(data.data);
@@ -115,6 +131,7 @@ const EventsWorkshops: React.FC = () => {
           throw new Error(data.message || "Failed to fetch events");
         }
       } catch (err) {
+        console.error("Error fetching events:", err);
         setError(
           err instanceof Error ? err.message : "An unknown error occurred"
         );
@@ -164,7 +181,11 @@ const EventsWorkshops: React.FC = () => {
   return (
     <div className="app-container">
       <Header />
-      <br /><br /><br /><br /><br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <div className="ew-container">
         <div className="ew-hero-section">
           <div className="ew-hero-content">

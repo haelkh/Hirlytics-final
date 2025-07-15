@@ -21,6 +21,7 @@ import JobsPage from "./components/Jobs/jobs";
 import AdminAddBlog from "./components/adminBlog/AdminAddBlog";
 
 function App() {
+  console.log("App component rendered");
   return (
     <Router>
       <Routes>
