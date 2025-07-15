@@ -1,4 +1,7 @@
 import React, { useState, useEffect, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../Header/header";
+import Footer from "../Footer/Footer";
 import "./jobs.css";
 
 // Job type definition from API
@@ -23,17 +26,21 @@ interface Job {
   jobType: string;
   salary: string;
   postedDate: string;
-  postedDateRaw: string; // Added to allow accurate date filtering
+  postedDateRaw: string;
   logo: string | null;
   isNew: boolean;
+  description: string;
 }
 
 const JobsPage: React.FC = (): ReactNode => {
+  const navigate = useNavigate();
   const [sortBy, setSortBy] = useState<string>("relevance");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalJobs, setTotalJobs] = useState<number>(0);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [showJobDetails, setShowJobDetails] = useState<boolean>(false);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
@@ -116,6 +123,7 @@ const JobsPage: React.FC = (): ReactNode => {
             postedDateRaw: job.date_posted,
             logo: job.image ? handleLogoPath(job.image) : null,
             isNew,
+            description: job.description,
           };
         });
 
@@ -213,154 +221,136 @@ const JobsPage: React.FC = (): ReactNode => {
     setSelectedDateFilter(dateFilter);
   };
 
+  const handleViewDetails = (job: Job) => {
+    setSelectedJob(job);
+    setShowJobDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setShowJobDetails(false);
+    setSelectedJob(null);
+  };
+
+  const handleApplyToJob = (jobId: number) => {
+    navigate(`/apply-job?id=${jobId}`);
+  };
+
   return (
-    <div className="jobs-container">
-      <header className="jobs-header">
-        <h1>Jobs</h1>
-      </header>
+    <>
+      <Header />
+      <br />  
+      <div className="jobs-container">
+        <header className="jobs-header">
+          <h1>Jobs</h1>
+        </header>
 
-      <div className="jobs-content-container">
-        <aside className="jobs-sidebar">
-          <div className="jobs-search-section">
-            <h3>Search Jobs</h3>
-            <input
-              type="text"
-              placeholder="Job title or keyword"
-              className="jobs-search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          {uniqueLocations.length > 0 && (
-            <div className="jobs-filter-section">
-              <h3>Location</h3>
-              <div className="jobs-filter-options">
-                {uniqueLocations.map((location) => (
-                  <div className="jobs-filter-option" key={location.name}>
-                    <input
-                      type="checkbox"
-                      checked={selectedLocations.includes(location.name)}
-                      onChange={() => handleLocationChange(location.name)}
-                    />
-                    <label>{location.name}</label>
-                    <span className="jobs-count">({location.count})</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {uniqueJobTypes.length > 0 && (
-            <div className="jobs-filter-section">
-              <h3>Job Type</h3>
-              <div className="jobs-filter-options">
-                {uniqueJobTypes.map((jobType) => (
-                  <div className="jobs-filter-option" key={jobType.type}>
-                    <input
-                      type="checkbox"
-                      checked={selectedJobTypes.includes(jobType.type)}
-                      onChange={() => handleJobTypeChange(jobType.type)}
-                    />
-                    <label>{jobType.type}</label>
-                    <span className="jobs-count">({jobType.count})</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="jobs-filter-section">
-            <h3>Date Posted</h3>
-            <div className="jobs-filter-options">
-              {["all", "24h", "week", "month"].map((filter) => (
-                <div className="jobs-filter-option" key={filter}>
-                  <input
-                    type="radio"
-                    name="date-filter"
-                    checked={selectedDateFilter === filter}
-                    onChange={() => handleDateFilterChange(filter)}
-                  />
-                  <label>
-                    {filter === "all"
-                      ? "All Time"
-                      : filter === "24h"
-                      ? "Last 24 Hours"
-                      : filter === "week"
-                      ? "Last 7 Days"
-                      : "Last 30 Days"}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {(selectedLocations.length > 0 ||
-            selectedJobTypes.length > 0 ||
-            selectedDateFilter !== "all" ||
-            searchTerm) && (
-            <div className="jobs-filter-actions">
-              <button
-                className="jobs-filter-clear-button"
-                onClick={() => {
-                  setSelectedLocations([]);
-                  setSelectedJobTypes([]);
-                  setSelectedDateFilter("all");
-                  setSearchTerm("");
-                }}
-              >
-                Clear All Filters
-              </button>
-            </div>
-          )}
-        </aside>
-
-        <main className="jobs-main-content">
-          <div className="jobs-results-header">
-            <p>
-              Showing {filteredJobs.length} of {totalJobs} results
-            </p>
-            <div className="jobs-sort-dropdown">
-              <label htmlFor="jobs-sort">Sort by:</label>
-              <select
-                id="jobs-sort"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="relevance">Relevance</option>
-                <option value="date">Date</option>
-                <option value="title">Title</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="jobs-listing">
-            {loading ? (
-              <div className="jobs-loading-container">
-                <div className="jobs-loading-spinner"></div>
-                <p>Loading jobs...</p>
-              </div>
-            ) : error ? (
-              <div className="jobs-error-container">
-                <div className="jobs-error-icon">⚠</div>
-                <p>{error}</p>
-                <button
-                  className="jobs-retry-button"
-                  onClick={() => {
-                    setError(null);
-                    setLoading(true);
-                    fetchJobs();
-                  }}
-                >
-                  Try Again
+        <div className="jobs-content-container">
+          <aside className="jobs-sidebar">
+            <div className="jobs-search-section">
+              <h3>Search Jobs</h3>
+              <div className="jobs-search-input-container">
+                <input
+                  type="text"
+                  placeholder="Job title or keyword"
+                  className="jobs-search-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className="jobs-search-button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="18"
+                    height="18"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
                 </button>
               </div>
-            ) : filteredJobs.length === 0 ? (
-              <div className="jobs-empty-container">
-                <div className="jobs-empty-icon">🔍</div>
-                <p>No jobs found matching your filters</p>
+            </div>
+
+            {uniqueLocations.length > 0 && (
+              <div className="jobs-filter-section">
+                <h3>Location</h3>
+                <div className="jobs-filter-options">
+                  {uniqueLocations.map((location) => (
+                    <div className="jobs-filter-option" key={location.name}>
+                      <input
+                        type="checkbox"
+                        id={`location-${location.name}`}
+                        checked={selectedLocations.includes(location.name)}
+                        onChange={() => handleLocationChange(location.name)}
+                      />
+                      <label htmlFor={`location-${location.name}`}>
+                        {location.name}
+                      </label>
+                      <span className="jobs-count">({location.count})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {uniqueJobTypes.length > 0 && (
+              <div className="jobs-filter-section">
+                <h3>Job Type</h3>
+                <div className="jobs-filter-options">
+                  {uniqueJobTypes.map((jobType) => (
+                    <div className="jobs-filter-option" key={jobType.type}>
+                      <input
+                        type="checkbox"
+                        id={`jobtype-${jobType.type}`}
+                        checked={selectedJobTypes.includes(jobType.type)}
+                        onChange={() => handleJobTypeChange(jobType.type)}
+                      />
+                      <label htmlFor={`jobtype-${jobType.type}`}>
+                        {jobType.type}
+                      </label>
+                      <span className="jobs-count">({jobType.count})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="jobs-filter-section">
+              <h3>Date Posted</h3>
+              <div className="jobs-filter-options">
+                {[
+                  { value: "all", label: "All Time" },
+                  { value: "24h", label: "Last 24 Hours" },
+                  { value: "week", label: "Last 7 Days" },
+                  { value: "month", label: "Last 30 Days" },
+                ].map((filter) => (
+                  <div className="jobs-filter-option" key={filter.value}>
+                    <input
+                      type="radio"
+                      id={`date-${filter.value}`}
+                      name="date-filter"
+                      checked={selectedDateFilter === filter.value}
+                      onChange={() => handleDateFilterChange(filter.value)}
+                    />
+                    <label htmlFor={`date-${filter.value}`}>
+                      {filter.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {(selectedLocations.length > 0 ||
+              selectedJobTypes.length > 0 ||
+              selectedDateFilter !== "all" ||
+              searchTerm) && (
+              <div className="jobs-filter-actions">
                 <button
-                  className="jobs-retry-button"
+                  className="jobs-filter-clear-button"
                   onClick={() => {
                     setSelectedLocations([]);
                     setSelectedJobTypes([]);
@@ -368,55 +358,307 @@ const JobsPage: React.FC = (): ReactNode => {
                     setSearchTerm("");
                   }}
                 >
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
-            ) : (
-              filteredJobs.map((job) => (
-                <div className="jobs-card" key={job.id}>
-                  {job.isNew && <div className="jobs-job-tag">NEW</div>}
-                  <div className="jobs-job-header">
-                    <div className="jobs-logo-container">
-                      {job.logo ? (
-                        <img
-                          src={job.logo}
-                          alt={`${job.company} logo`}
-                          className="jobs-company-logo"
-                          onError={(
-                            e: React.SyntheticEvent<HTMLImageElement, Event>
-                          ) => {
-                            const target = e.currentTarget;
-                            target.onerror = null;
-                            target.src =
-                              "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-pZAPlX36YfbgxDvay2MQ63Dm9k80Gy.png";
-                          }}
-                        />
-                      ) : (
-                        <div className="jobs-company-placeholder">
-                          {job.company.charAt(0)}
-                        </div>
-                      )}
-                    </div>
-                    <div className="jobs-job-title-container">
-                      <h2 className="jobs-job-title">{job.title}</h2>
-                      <p className="jobs-company-name">{job.company}</p>
-                    </div>
-                  </div>
-                  <div className="jobs-job-details">
-                    <div className="jobs-detail-item">{job.location}</div>
-                    <div className="jobs-detail-item">{job.jobType}</div>
-                    <div className="jobs-detail-item">{job.postedDate}</div>
-                  </div>
-                  <div className="jobs-job-actions">
-                    <button className="jobs-apply-button">View Details</button>
-                  </div>
-                </div>
-              ))
             )}
+          </aside>
+
+          <main className="jobs-main-content">
+            <div className="jobs-results-header">
+              <p>
+                Showing{" "}
+                <span className="jobs-highlight">{filteredJobs.length}</span> of{" "}
+                <span className="jobs-highlight">{totalJobs}</span> results
+              </p>
+              <div className="jobs-sort-dropdown">
+                <label htmlFor="jobs-sort">Sort by:</label>
+                <select
+                  id="jobs-sort"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="relevance">Relevance</option>
+                  <option value="date">Date</option>
+                  <option value="title">Title</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="jobs-listing">
+              {loading ? (
+                <div className="jobs-loading-container">
+                  <div className="jobs-loading-spinner"></div>
+                  <p>Loading jobs...</p>
+                </div>
+              ) : error ? (
+                <div className="jobs-error-container">
+                  <div className="jobs-error-icon">⚠</div>
+                  <p>{error}</p>
+                  <button
+                    className="jobs-retry-button"
+                    onClick={() => {
+                      setError(null);
+                      setLoading(true);
+                      fetchJobs();
+                    }}
+                  >
+                    Try Again
+                  </button>
+                </div>
+              ) : filteredJobs.length === 0 ? (
+                <div className="jobs-empty-container">
+                  <div className="jobs-empty-icon">🔍</div>
+                  <p>No jobs found matching your filters</p>
+                  <button
+                    className="jobs-retry-button"
+                    onClick={() => {
+                      setSelectedLocations([]);
+                      setSelectedJobTypes([]);
+                      setSelectedDateFilter("all");
+                      setSearchTerm("");
+                    }}
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              ) : (
+                filteredJobs.map((job) => (
+                  <div className="jobs-card" key={job.id}>
+                    {job.isNew && <div className="jobs-job-tag">NEW</div>}
+                    <div className="jobs-job-header">
+                      <div className="jobs-logo-container">
+                        {job.logo ? (
+                          <img
+                            src={job.logo}
+                            alt={`${job.company} logo`}
+                            className="jobs-company-logo"
+                            onError={(
+                              e: React.SyntheticEvent<HTMLImageElement, Event>
+                            ) => {
+                              const target = e.currentTarget;
+                              target.onerror = null;
+                              target.src =
+                                "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-pZAPlX36YfbgxDvay2MQ63Dm9k80Gy.png";
+                            }}
+                          />
+                        ) : (
+                          <div className="jobs-company-placeholder">
+                            {job.company.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <div className="jobs-job-title-container">
+                        <h2 className="jobs-job-title">{job.title}</h2>
+                        <p className="jobs-company-name">
+                          {job.company !== "N/A" ? job.company : ""}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="jobs-job-details">
+                      <div className="jobs-detail-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        {job.location}
+                      </div>
+                      <div className="jobs-detail-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect
+                            x="2"
+                            y="7"
+                            width="20"
+                            height="14"
+                            rx="2"
+                            ry="2"
+                          ></rect>
+                          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        {job.jobType}
+                      </div>
+                      <div className="jobs-detail-item">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        {job.postedDate}
+                      </div>
+                    </div>
+                    <div className="jobs-job-actions">
+                      <button
+                        className="jobs-view-button"
+                        onClick={() => handleViewDetails(job)}
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </main>
+        </div>
+
+        {showJobDetails && selectedJob && (
+          <div className="jobs-details-modal">
+            <div className="jobs-details-modal-content">
+              <button
+                className="jobs-details-close"
+                onClick={handleCloseDetails}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+
+              <div className="jobs-details-header">
+                <div className="jobs-details-logo-container">
+                  {selectedJob.logo ? (
+                    <img
+                      src={selectedJob.logo}
+                      alt={`${selectedJob.company} logo`}
+                      className="jobs-details-company-logo"
+                    />
+                  ) : (
+                    <div className="jobs-details-company-placeholder">
+                      {selectedJob.company.charAt(0)}
+                    </div>
+                  )}
+                </div>
+                <div className="jobs-details-title-container">
+                  <h2 className="jobs-details-title">{selectedJob.title}</h2>
+                  {selectedJob.company !== "N/A" && (
+                    <p className="jobs-details-company">
+                      {selectedJob.company}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="jobs-details-meta">
+                <div className="jobs-details-meta-item">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span>{selectedJob.location}</span>
+                </div>
+                <div className="jobs-details-meta-item">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect
+                      x="2"
+                      y="7"
+                      width="20"
+                      height="14"
+                      rx="2"
+                      ry="2"
+                    ></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                  </svg>
+                  <span>{selectedJob.jobType}</span>
+                </div>
+                <div className="jobs-details-meta-item">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>Posted {selectedJob.postedDate}</span>
+                </div>
+              </div>
+
+              <div className="jobs-details-section">
+                <h3 className="jobs-details-section-title">Job Description</h3>
+                <div className="jobs-details-description">
+                  {selectedJob.description}
+                </div>
+              </div>
+
+              <div className="jobs-details-actions">
+                <button
+                  className="jobs-details-apply-button"
+                  onClick={() => handleApplyToJob(selectedJob.id)}
+                >
+                  Apply Now
+                </button>
+              </div>
+            </div>
           </div>
-        </main>
+        )}
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 
