@@ -41,31 +41,34 @@ try {
     sendJsonError("Database connection failed");
 }
 
-// SQL to match table structure
+// SQL to match table structure with JOIN to get country names
 $sql = "SELECT 
-            ID,
-            image,
-            JobTitle,
-            JobType,
-            expiry_date,
-            status,
-            description,
-            date_posted,
-            country_id
+            j.ID,
+            j.image,
+            j.JobTitle,
+            j.JobType,
+            j.expiry_date,
+            j.status,
+            j.description,
+            j.date_posted,
+            j.country_id,
+            c.CountryName
         FROM 
-            job_board";
+            job_board j
+        LEFT JOIN
+            country c ON j.country_id = c.CountryID";
 
 // Optional sorting
 if (isset($_GET['sort'])) {
     switch ($_GET['sort']) {
         case 'latest':
-            $sql .= " ORDER BY date_posted DESC";
+            $sql .= " ORDER BY j.date_posted DESC";
             break;
         case 'oldest':
-            $sql .= " ORDER BY date_posted ASC";
+            $sql .= " ORDER BY j.date_posted ASC";
             break;
         case 'title':
-            $sql .= " ORDER BY JobTitle ASC";
+            $sql .= " ORDER BY j.JobTitle ASC";
             break;
     }
 }
@@ -88,7 +91,8 @@ try {
             "status" => $row["status"],
             "description" => $row["description"],
             "date_posted" => $row["date_posted"],
-            "country_id" => $row["country_id"]
+            "country_id" => $row["country_id"],
+            "CountryName" => $row["CountryName"] ?? "Unknown"
         ];
     }
 

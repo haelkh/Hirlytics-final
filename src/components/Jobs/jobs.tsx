@@ -15,6 +15,7 @@ interface ApiJob {
   description: string;
   date_posted: string;
   country_id: string | number;
+  CountryName: string;
 }
 
 // Component Job type
@@ -116,7 +117,7 @@ const JobsPage: React.FC = (): ReactNode => {
             id: job.ID,
             title: job.JobTitle,
             company: "N/A", // No company name in new API
-            location: job.country_id ? `Country #${job.country_id}` : "Remote",
+            location: job.CountryName || "Unknown",
             jobType: job.JobType,
             salary: "$Not specified",
             postedDate: postedDateText,
@@ -238,7 +239,7 @@ const JobsPage: React.FC = (): ReactNode => {
   return (
     <>
       <Header />
-      <br />  
+      <br />
       <div className="jobs-container">
         <header className="jobs-header">
           <h1>Jobs</h1>

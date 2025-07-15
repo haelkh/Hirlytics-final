@@ -11,6 +11,7 @@ interface Job {
   description: string;
   date_posted: string;
   country_id: string;
+  CountryName: string;
   company_image: string;
   country_name: string;
   skills: string;
@@ -152,9 +153,10 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobId }) => {
                 id="job-location-container"
               >
                 <i className="icon-clock" id="job-location-icon"></i>
-                <span id="job-location">{job.country_name}</span>
+                <span id="job-location">
+                  {job.CountryName || job.country_name || "Unknown"}
+                </span>
               </div>
-              
             </div>
           </div>
 
@@ -364,7 +366,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ jobId }) => {
                     className="overview-value jd-detail-value"
                     id="job-loc-value"
                   >
-                    {job.country_name}
+                    {job.CountryName || job.country_name || "Unknown"}
                   </div>
                 </div>
               </li>

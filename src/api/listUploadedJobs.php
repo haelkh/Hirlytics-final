@@ -26,20 +26,23 @@ if ($conn->connect_error) {
     ]));
 }
 
-// SQL query to get jobs from latest to oldest
+// SQL query to get jobs from latest to oldest with country names
 $sql = "SELECT 
-            ID as job_id,
-            JobTitle,
-            JobType,
-            expiry_date,
-            status,
-            description,
-            date_posted,
-            country_id
+            j.ID as job_id,
+            j.JobTitle,
+            j.JobType,
+            j.expiry_date,
+            j.status,
+            j.description,
+            j.date_posted,
+            j.country_id,
+            c.CountryName
         FROM 
-            job_board
+            job_board j
+        LEFT JOIN
+            country c ON j.country_id = c.CountryID
         ORDER BY 
-            date_posted DESC";
+            j.date_posted DESC";
 
 $result = $conn->query($sql);
 
@@ -56,7 +59,8 @@ if ($result->num_rows > 0) {
             "status" => $row["status"],
             "description" => $row["description"],
             "date_posted" => $row["date_posted"],
-            "country_id" => $row["country_id"]
+            "country_id" => $row["country_id"],
+            "CountryName" => $row["CountryName"] ?? "Unknown"
         ];
     }
 }
