@@ -33,6 +33,7 @@ function App() {
         <Route path="/blog-detail/:id" element={<BlogDetail />} />
         <Route path="/apply-to-a-job" element={<JobApplicationForm />} />
         <Route path="/events" element={<EventWorkshopDetails />} />
+        <Route path="/event-details/:id" element={<EventWorkshopDetails />} />
         <Route path="/appointments" element={<Appointments />} />
         <Route path="/AdminPage" element={<Dashboard />} />
         <Route path="/AdminPage/Manage/users" element={<AdminDashboard />} />

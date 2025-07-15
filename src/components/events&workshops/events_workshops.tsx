@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import "./events_workshops.css";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Calendar, MapPin, Clock } from "lucide-react";
+import Header from "../Header/header";
+import Footer from "../Footer/Footer";
+import { Link } from "react-router-dom";
 
 interface EventCardProps {
   id: number;
@@ -15,6 +18,7 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({
+  id,
   date,
   day,
   title,
@@ -25,46 +29,53 @@ const EventCard: React.FC<EventCardProps> = ({
   type,
 }) => {
   return (
-    <div className="ew-card">
-      <div className="ew-image">
-        {imageUrl ? (
-          <img
-            src={imageUrl}
-            alt={title}
-            className="ew-event-image"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
-          />
-        ) : (
-          <div className="ew-placeholder-image">
-            <div className="ew-mountain-icon"></div>
+    <Link to={`/event-details/${id}`} className="ew-card-link">
+      <div className="ew-card">
+        <div className="ew-image">
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={title}
+              className="ew-event-image"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <div className="ew-placeholder-image">
+              <div className="ew-mountain-icon"></div>
+            </div>
+          )}
+          <button className="ew-bookmark-button">
+            <Bookmark size={16} />
+          </button>
+        </div>
+        <div className="ew-content">
+          <div className="ew-tag">
+            {type === "workshop" ? "Workshop" : "Event"}
           </div>
-        )}
-        <button className="ew-bookmark-button">
-          <Bookmark size={16} />
-        </button>
+          <div className="ew-date-badge">
+            <div className="ew-month">{date}</div>
+            <div className="ew-day">{day}</div>
+          </div>
+          <h3 className="ew-title">{title}</h3>
+          <div className="ew-details">
+            <div className="ew-location">
+              <MapPin size={14} />
+              {isVirtual ? "Virtual" : "In-person"}
+            </div>
+            <div className="ew-datetime">
+              <Clock size={14} />
+              {eventDate}
+            </div>
+            <div className="ew-countdown">
+              <Calendar size={14} />
+              {daysToGo > 0 ? `${daysToGo} days to go` : "Today"}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="ew-content">
-        <div className="ew-tag">
-          {type === "workshop" ? "Workshop" : "Event"}
-        </div>
-        <div className="ew-date-badge">
-          <div className="ew-month">{date}</div>
-          <div className="ew-day">{day}</div>
-        </div>
-        <h3 className="ew-title">{title}</h3>
-        <div className="ew-details">
-          <div className="ew-location">
-            {isVirtual ? "Virtual" : "In-person"}
-          </div>
-          <div className="ew-datetime">{eventDate}</div>
-          <div className="ew-countdown">
-            {daysToGo > 0 ? `${daysToGo} days to go` : "Today"}
-          </div>
-        </div>
-      </div>
-    </div>
+    </Link>
   );
 };
 
@@ -83,6 +94,7 @@ const EventsWorkshops: React.FC = () => {
   const [events, setEvents] = useState<ApiEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -144,42 +156,87 @@ const EventsWorkshops: React.FC = () => {
     };
   };
 
-  if (loading) {
-    return (
-      <div className="ew-container">
-        <div className="ew-loading">Loading events...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="ew-container">
-        <div className="ew-error">Error: {error}</div>
-      </div>
-    );
-  }
+  const filteredEvents =
+    activeFilter === "all"
+      ? events
+      : events.filter((event) => event.type === activeFilter);
 
   return (
-    <div className="ew-container">
-      <header className="ew-header">
-        <h1>Events & Workshops</h1>
-        <p>Interested Events page</p>
-      </header>
-
-      <main className="ew-main-content">
-        <h2 className="ew-section-title">Interested Events</h2>
-
-        {events.length === 0 ? (
-          <div className="ew-no-events">No upcoming events found</div>
-        ) : (
-          <div className="ew-grid">
-            {events.map((event) => (
-              <EventCard key={event.id} {...transformEventData(event)} />
-            ))}
+    <div className="app-container">
+      <Header />
+      <br /><br /><br /><br /><br />
+      <div className="ew-container">
+        <div className="ew-hero-section">
+          <div className="ew-hero-content">
+            <h1>Events & Workshops</h1>
           </div>
-        )}
-      </main>
+        </div>
+
+        <main className="ew-main-content">
+          <div className="ew-filters">
+            <button
+              className={`ew-filter-btn ${
+                activeFilter === "all" ? "active" : ""
+              }`}
+              onClick={() => setActiveFilter("all")}
+            >
+              All
+            </button>
+            <button
+              className={`ew-filter-btn ${
+                activeFilter === "event" ? "active" : ""
+              }`}
+              onClick={() => setActiveFilter("event")}
+            >
+              Events
+            </button>
+            <button
+              className={`ew-filter-btn ${
+                activeFilter === "workshop" ? "active" : ""
+              }`}
+              onClick={() => setActiveFilter("workshop")}
+            >
+              Workshops
+            </button>
+          </div>
+
+          {loading ? (
+            <div className="ew-loading">
+              <div className="ew-loading-spinner"></div>
+              <p>Loading events...</p>
+            </div>
+          ) : error ? (
+            <div className="ew-error">
+              <p>Error: {error}</p>
+              <button
+                className="ew-retry-btn"
+                onClick={() => window.location.reload()}
+              >
+                Retry
+              </button>
+            </div>
+          ) : filteredEvents.length === 0 ? (
+            <div className="ew-no-events">
+              <div className="ew-empty-state">
+                <Calendar size={48} />
+                <h3>
+                  No {activeFilter !== "all" ? activeFilter + "s" : "events"}{" "}
+                  found
+                </h3>
+                <p>Check back later for upcoming opportunities</p>
+              </div>
+            </div>
+          ) : (
+            <div className="ew-grid">
+              {filteredEvents.map((event) => (
+                <EventCard key={event.id} {...transformEventData(event)} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+
+      <Footer />
     </div>
   );
 };

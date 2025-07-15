@@ -1,170 +1,259 @@
-import React, { useState, FormEvent } from 'react';
-import './events.css';
+import React, { useState, useEffect, FormEvent } from "react";
+import { useParams } from "react-router-dom";
+import "./events.css";
+import Header from "../Header/header";
+import Footer from "../Footer/Footer";
+import { Calendar, Clock, MapPin, User } from "lucide-react";
+
+interface EventDetails {
+  id: number;
+  title: string;
+  description: string;
+  start: string;
+  end: string;
+  host: string;
+  meetingLink: string;
+  type: string;
+  imageUrl: string | null;
+}
 
 const EventWorkshopDetails: React.FC = () => {
-  const [eventTitle, setEventTitle] = useState<string>('');
-  const [eventDescription, setEventDescription] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
-  const [startTime, setStartTime] = useState<string>('12:00 AM');
-  const [endDate, setEndDate] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('12:00 AM');
-  const [meetingLink, setMeetingLink] = useState<string>('');
-  const [hostName, setHostName] = useState<string>('');
+  const { id } = useParams<{ id: string }>();
+  const [event, setEvent] = useState<EventDetails | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [registered, setRegistered] = useState<boolean>(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      try {
+        setLoading(true);
+        // Replace with your actual API endpoint
+        const response = await fetch(
+          `http://localhost/Hirlytics-final/src/api/getEventWorkshopDetails.php?id=${id}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+          setEvent(data.data);
+        } else {
+          throw new Error(data.message || "Failed to fetch event details");
+        }
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "An unknown error occurred"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchEventDetails();
+    }
+  }, [id]);
+
+  const handleRegister = (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log({
-      eventTitle,
-      eventDescription,
-      startDate,
-      startTime,
-      endDate,
-      endTime,
-      meetingLink,
-      hostName
+    // Handle registration logic here
+    setRegistered(true);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
-    <div className="eventContainer">
-      <div className="eventHeader">
-        <h1>Event and workshop Details</h1>
-      </div>
-      
-      <div className="form-container">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="eventTitle">Event Title</label>
-            <input
-              type="text"
-              id="eventTitle"
-              placeholder="Enter event title"
-              value={eventTitle}
-              onChange={(e) => setEventTitle(e.target.value)}
-            />
+    <div className="app-container">
+      <Header />
+
+      <div className="event-detail-container">
+        {loading ? (
+          <div className="event-loading">
+            <div className="event-loading-spinner"></div>
+            <p>Loading event details...</p>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="eventDescription">Event Description</label>
-            <textarea
-              id="eventDescription"
-              placeholder="Write your event description"
-              value={eventDescription}
-              onChange={(e) => setEventDescription(e.target.value)}
-            />
+        ) : error ? (
+          <div className="event-error">
+            <p>Error: {error}</p>
+            <button
+              className="event-retry-btn"
+              onClick={() => window.location.reload()}
+            >
+              Retry
+            </button>
           </div>
-          
-          <div className="form-group">
-            <label>Event Timing</label>
-            <div className="date-time-container">
-              <div className="date-time-group">
-                <label htmlFor="startDate">Start Date</label>
-                <div className="input-with-icon">
-                  <span className="calendar-icon">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12.6667 2.66667H3.33333C2.59695 2.66667 2 3.26362 2 4.00001V13.3333C2 14.0697 2.59695 14.6667 3.33333 14.6667H12.6667C13.403 14.6667 14 14.0697 14 13.3333V4.00001C14 3.26362 13.403 2.66667 12.6667 2.66667Z" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M10.6667 1.33334V4.00001" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M5.33333 1.33334V4.00001" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M2 6.66667H14" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <input
-                    type="date"
-                    id="startDate"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="date-input"
-                  />
-                </div>
-              </div>
-              <div className="date-time-group">
-                <label htmlFor="startTime">Start Time</label>
-                <div className="input-with-icon">
-                  <span className="clock-icon">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="8" cy="8" r="6" stroke="#8E8E93" strokeWidth="1.5"/>
-                      <path d="M8 4.66667V8.00001L10 10" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </span>
-                  <input
-                    type="time"
-                    id="startTime"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="time-input"
-                  />
+        ) : event ? (
+          <>
+            <div
+              className="event-hero"
+              style={{
+                backgroundImage: event.imageUrl
+                  ? `url(${event.imageUrl})`
+                  : "linear-gradient(135deg, #003366 0%, #006898 100%)",
+              }}
+            >
+              <div className="event-overlay">
+                <div className="event-hero-content">
+                  <div className="event-type-badge">
+                    {event.type === "workshop" ? "Workshop" : "Event"}
+                  </div>
+                  <h1>{event.title}</h1>
+                  <div className="event-meta">
+                    <div className="event-meta-item">
+                      <Calendar size={18} />
+                      <span>{formatDate(event.start)}</span>
+                    </div>
+                    <div className="event-meta-item">
+                      <MapPin size={18} />
+                      <span>{event.meetingLink ? "Virtual" : "In-person"}</span>
+                    </div>
+                    <div className="event-meta-item">
+                      <User size={18} />
+                      <span>Hosted by {event.host}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          <div className="date-time-container">
-            <div className="date-time-group">
-              <label htmlFor="endDate">End Date</label>
-              <div className="input-with-icon">
-                <span className="calendar-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12.6667 2.66667H3.33333C2.59695 2.66667 2 3.26362 2 4.00001V13.3333C2 14.0697 2.59695 14.6667 3.33333 14.6667H12.6667C13.403 14.6667 14 14.0697 14 13.3333V4.00001C14 3.26362 13.403 2.66667 12.6667 2.66667Z" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M10.6667 1.33334V4.00001" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M5.33333 1.33334V4.00001" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 6.66667H14" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-                <input
-                  type="date"
-                  id="endDate"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="date-input"
-                />
+
+            <div className="event-content">
+              <div className="event-description">
+                <h2>About this {event.type}</h2>
+                <p>{event.description || "No description available."}</p>
+
+                <div className="event-details-section">
+                  <h3>Details</h3>
+                  <div className="event-details-grid">
+                    <div className="event-detail-item">
+                      <Clock size={20} />
+                      <div>
+                        <h4>Duration</h4>
+                        <p>
+                          {new Date(event.start).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                          {" to "}
+                          {new Date(event.end).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="event-detail-item">
+                      <MapPin size={20} />
+                      <div>
+                        <h4>Location</h4>
+                        <p>
+                          {event.meetingLink ? "Virtual (Online)" : "In-person"}
+                        </p>
+                        {event.meetingLink && (
+                          <a
+                            href={event.meetingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="meeting-link"
+                          >
+                            Join Meeting
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="event-detail-item">
+                      <User size={20} />
+                      <div>
+                        <h4>Host</h4>
+                        <p>{event.host}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="event-sidebar">
+                <div className="event-registration-card">
+                  <h3>Register for this {event.type}</h3>
+                  {registered ? (
+                    <div className="registration-success">
+                      <div className="success-icon">✓</div>
+                      <h4>Registration Successful!</h4>
+                      <p>
+                        You have successfully registered for this {event.type}.
+                      </p>
+                      <p>
+                        We'll send you a confirmation email with all the
+                        details.
+                      </p>
+                    </div>
+                  ) : (
+                    <form
+                      onSubmit={handleRegister}
+                      className="registration-form"
+                    >
+                      <div className="form-group">
+                        <label htmlFor="name">Full Name</label>
+                        <input
+                          type="text"
+                          id="name"
+                          placeholder="Enter your full name"
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="email">Email Address</label>
+                        <input
+                          type="email"
+                          id="email"
+                          placeholder="Enter your email"
+                          required
+                        />
+                      </div>
+                      <button type="submit" className="register-button">
+                        Register Now
+                      </button>
+                      <p className="registration-note">
+                        Registration is free and only takes a minute.
+                      </p>
+                    </form>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="date-time-group">
-              <label htmlFor="endTime">End Time</label>
-              <div className="input-with-icon">
-                <span className="clock-icon">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="8" cy="8" r="6" stroke="#8E8E93" strokeWidth="1.5"/>
-                    <path d="M8 4.66667V8.00001L10 10" stroke="#8E8E93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-                <input
-                  type="time"
-                  id="endTime"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="time-input"
-                />
-              </div>
-            </div>
+          </>
+        ) : (
+          <div className="event-not-found">
+            <h2>Event Not Found</h2>
+            <p>
+              The event you're looking for doesn't exist or has been removed.
+            </p>
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="link">link</label>
-            <input
-              type="text"
-              id="link"
-              placeholder="meeting link"
-              value={meetingLink}
-              onChange={(e) => setMeetingLink(e.target.value)}
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="hostedBy">Hosted By</label>
-            <input
-              type="text"
-              id="hostedBy"
-              placeholder="Enter host name"
-              value={hostName}
-              onChange={(e) => setHostName(e.target.value)}
-            />
-          </div>
-          
-          <button type="submit" className="post-button">post</button>
-        </form>
+        )}
       </div>
+
+      <Footer />
     </div>
   );
 };
