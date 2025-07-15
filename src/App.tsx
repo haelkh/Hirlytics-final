@@ -7,6 +7,7 @@ import HistorySection from "./components/about-us/About_US";
 import PostJobSteps from "./components/PostJob/PostJobSteps/PostJobSteps";
 
 import BlogPage from "./components/BlogPage/blogPage";
+import BlogDetail from "./components/BlogDetail/BlogDetail";
 import JobApplicationForm from "./components/ApplyToAJob/applyToAJob";
 import EventWorkshopDetails from "./components/events/EventWorkshopDetails";
 import Appointments from "./components/appointments/application";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/Services" element={<ServicesPage />} />
         <Route path="/post-a-job" element={<PostJobSteps />} />
         <Route path="/blog-page" element={<BlogPage />} />
+        <Route path="/blog-detail/:id" element={<BlogDetail />} />
         <Route path="/apply-to-a-job" element={<JobApplicationForm />} />
         <Route path="/events" element={<EventWorkshopDetails />} />
         <Route path="/appointments" element={<Appointments />} />

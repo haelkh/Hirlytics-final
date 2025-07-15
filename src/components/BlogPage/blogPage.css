@@ -235,12 +235,32 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(0, 51, 102, 0.1);
+  cursor: pointer;
+  position: relative;
+}
+
+.post-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  box-shadow: 0 0 0 0 rgba(0, 98, 204, 0.3);
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 
 .post-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 51, 102, 0.1);
   border-color: var(--aqua);
+}
+
+.post-card:hover::after {
+  box-shadow: 0 0 0 4px rgba(0, 98, 204, 0.3);
+  opacity: 1;
 }
 
 .post-card.horizontal {
@@ -485,9 +505,27 @@ body {
   box-shadow: 0 4px 12px rgba(0, 51, 102, 0.15);
 }
 
+.climate-special-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  box-shadow: 0 0 0 0 rgba(0, 98, 204, 0.3);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
 .climate-special-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 51, 102, 0.25);
+}
+
+.climate-special-card:hover::after {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.3);
+  opacity: 1;
 }
 
 .climate-special-card::before {

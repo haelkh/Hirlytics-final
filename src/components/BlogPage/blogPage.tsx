@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import "./blogPage.css";
 import Header from "../Header/header";
 import Footer from "../Footer/Footer";
@@ -26,6 +27,7 @@ interface BlogResponse {
 const API_BASE_URL = "http://localhost/Hirlytics-final"; // Update this based on your environment
 
 const BlogPage: React.FC = (): ReactNode => {
+  const navigate = useNavigate();
   const [searchKeyword, setSearchKeyword] = useState("");
   const [activeTab, setActiveTab] = useState("recent");
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -117,6 +119,10 @@ const BlogPage: React.FC = (): ReactNode => {
     ));
   };
 
+  const handleBlogClick = (blogId: number) => {
+    navigate(`/blog-detail/${blogId}`);
+  };
+
   const renderPostCard = (
     post: BlogPost,
     layout: "horizontal" | "vertical" = "vertical"
@@ -124,7 +130,11 @@ const BlogPage: React.FC = (): ReactNode => {
     const imageSrc = post.imageUrl || `${API_BASE_URL}/images/default-blog.jpg`;
 
     return (
-      <div className={`post-card ${layout}`} key={post.id}>
+      <div
+        className={`post-card ${layout}`}
+        key={post.id}
+        onClick={() => handleBlogClick(post.id)}
+      >
         <div className="post-image">
           <img
             src={imageSrc}
@@ -181,7 +191,10 @@ const BlogPage: React.FC = (): ReactNode => {
       <div className="featured-posts-grid">
         <div className="featured-column-left">
           {renderPostCard(featuredBlogs[0], "horizontal")}
-          <div className="climate-special-card">
+          <div
+            className="climate-special-card"
+            onClick={() => handleBlogClick(featuredBlogs[0].id)}
+          >
             <div className="climate-content">
               <div className="record-dot"></div>
               <h2>
