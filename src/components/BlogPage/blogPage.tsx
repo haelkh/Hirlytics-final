@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, ReactNode } from "react";
 import "./blogPage.css";
+import Header from "../Header/header";
+import Footer from "../Footer/Footer";
 
 interface BlogPost {
   id: number;
@@ -218,62 +220,66 @@ const BlogPage: React.FC = (): ReactNode => {
   };
 
   return (
-    <div className="blog-page">
-      <header className="blog-header">
-        <h1>BLOG</h1>
-      </header>
+    <div className="blog-page-wrapper">
+      <Header />
+      <div className="blog-page">
+        <header className="blog-header">
+          <h1>BLOG</h1>
+        </header>
 
-      <div className="blog-container">
-        <div className="search-bar2">
-          <form onSubmit={handleSearch}>
-            <div className="search-input2">
-              <span className="search-icon2">≡</span>
-              <input
-                type="text"
-                placeholder="Keyword"
-                value={searchKeyword}
-                onChange={(e) => setSearchKeyword(e.target.value)}
-              />
-              <button type="submit" className="search-button2">
-                <span className="search-button-icon2">🔍</span>
-              </button>
-            </div>
-          </form>
-        </div>
+        <div className="blog-container">
+          <div className="search-bar2">
+            <form onSubmit={handleSearch}>
+              <div className="search-input2">
+                <span className="search-icon2">≡</span>
+                <input
+                  type="text"
+                  placeholder="Keyword"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
+                <button type="submit" className="search-button2">
+                  <span className="search-button-icon2">🔍</span>
+                </button>
+              </div>
+            </form>
+          </div>
 
-        <div className="blog-tabs">
-          <button
-            className={activeTab === "recent" ? "active" : ""}
-            onClick={() => setActiveTab("recent")}
-          >
-            Recent blog posts
-          </button>
-          <button
-            className={activeTab === "all" ? "active" : ""}
-            onClick={() => setActiveTab("all")}
-          >
-            All blog posts
-          </button>
-        </div>
+          <div className="blog-tabs">
+            <button
+              className={activeTab === "recent" ? "active" : ""}
+              onClick={() => setActiveTab("recent")}
+            >
+              Recent blog posts
+            </button>
+            <button
+              className={activeTab === "all" ? "active" : ""}
+              onClick={() => setActiveTab("all")}
+            >
+              All blog posts
+            </button>
+          </div>
 
-        <div className="blog-content">
-          {loading ? (
-            <div className="loading-message">Loading blogs...</div>
-          ) : error ? (
-            <div className="error-message">Error: {error}</div>
-          ) : filteredBlogs.length === 0 ? (
-            <div className="no-blogs-message">
-              {searchKeyword.trim()
-                ? `No blogs found matching "${searchKeyword}"`
-                : "No blogs found"}
-            </div>
-          ) : activeTab === "recent" ? (
-            renderFeaturedPosts()
-          ) : (
-            renderAllPosts()
-          )}
+          <div className="blog-content">
+            {loading ? (
+              <div className="loading-message">Loading blogs...</div>
+            ) : error ? (
+              <div className="error-message">Error: {error}</div>
+            ) : filteredBlogs.length === 0 ? (
+              <div className="no-blogs-message">
+                {searchKeyword.trim()
+                  ? `No blogs found matching "${searchKeyword}"`
+                  : "No blogs found"}
+              </div>
+            ) : activeTab === "recent" ? (
+              renderFeaturedPosts()
+            ) : (
+              renderAllPosts()
+            )}
+          </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

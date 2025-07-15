@@ -154,6 +154,11 @@ const Header: React.FC = () => {
                 Services
               </Link>
             </li>
+            <li className={isActive("/blog-page") ? "active" : ""}>
+              <Link to="/blog-page" onClick={handleLinkClick}>
+                Blog
+              </Link>
+            </li>
             <li
               ref={dropdownRef}
               className={`dropdown-nav-item${isOpen ? " active" : ""} ${
