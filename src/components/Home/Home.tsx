@@ -1,9 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+"use client";
+
+import type React from "react";
+import { useEffect, useRef, useState } from "react";
 import Modal from "react-modal";
 import "./home.css";
 import Header from "../Header/header";
 import AOS from "aos";
-import "aos/dist/aos.css"; // Import AOS CSS if not already imported elsewhere
+import "aos/dist/aos.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
@@ -92,14 +95,18 @@ const Home = (): React.JSX.Element => {
 
   return (
     <>
-      <Header />
+      <Header
+        onSignInClick={openSignInModal}
+        onSignUpClick={openSignUpModal}
+        isLoggedIn={isLoggedIn}
+      />
       <br />
       <br />
       <br />
       <br />
       <br />
       <div className="app-container">
-        {/* Hero Section */}
+        {/* Hero Section - Removed auth buttons */}
         <section className="hero-section">
           <div className="container">
             {/* Hero Content */}
@@ -110,29 +117,8 @@ const Home = (): React.JSX.Element => {
               </p>
             </div>
             <div className="row align-items-center py-3">
-              {!isLoggedIn && (
-                <div className="col-md-6 d-flex gap-3">
-                  <button
-                    className="btn btn-light login-button"
-                    onClick={openSignInModal}
-                  >
-                    Login
-                  </button>
-                  <button
-                    className="btn btn-outline-light signup-button"
-                    onClick={openSignUpModal}
-                  >
-                    Sign Up
-                  </button>
-                </div>
-              )}
-
-              {/* updated Right: Apply for Job / Hire Talent */}
-              <div
-                className={`col-md-${isLoggedIn ? "12" : "6"} d-flex ${
-                  isLoggedIn ? "justify-content-center" : "justify-content-end"
-                }`}
-              >
+              {/* Apply for Job / Hire Talent - Now centered */}
+              <div className="col-12 d-flex justify-content-center">
                 <div className="btn-group switch-buttons">
                   <button
                     className={`btn btn-outline-light ${
@@ -259,46 +245,6 @@ const Home = (): React.JSX.Element => {
           </div>
         </div>
 
-        {/* Partners Section */}
-        {/* <section className="partners-section text-center py-5">
-          <h2 className="fw-bold collab" data-aos="fade-up">
-            Who We Work With{" "}
-            <span className="collab2" data-aos="fade-up" data-aos-delay="300">
-              or Proudly Collaborating With
-            </span>
-          </h2>
-          <div className="partners-logos">
-            <div
-              className="partner-logo"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <i className="fab fa-apple fa-3x"></i>
-            </div>
-            <div
-              className="partner-logo"
-              data-aos="fade-up"
-              data-aos-delay="250"
-            >
-              <i className="fab fa-microsoft fa-3x"></i>
-            </div>
-            <div
-              className="partner-logo"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <i className="fab fa-slack fa-3x"></i>
-            </div>
-            <div
-              className="partner-logo"
-              data-aos="fade-up"
-              data-aos-delay="350"
-            >
-              <i className="fab fa-google fa-3x"></i>
-            </div>
-          </div>
-        </section> */}
-
         {/* Connecting Talent Section */}
         <section
           ref={sectionRef}
@@ -310,7 +256,6 @@ const Home = (): React.JSX.Element => {
             <div className="row align-items-center">
               <div className="col-md-6" data-aos="fade-right">
                 <h2 className="fw-bold text-warning">Connecting Talent</h2>
-                <h3 className="fw-bold">Your Partner in Tech Recruitment</h3>
                 <p>
                   Stop searching—Your next superstar is here! At Hirlytics, we
                   specialize in connecting businesses across the MENA region
@@ -470,6 +415,7 @@ const Home = (): React.JSX.Element => {
             </div>
           </div>
         </section>
+
         <section className="dual-path-section py-5">
           <div className="container-fluid px-0">
             <div className="dual-path-container">

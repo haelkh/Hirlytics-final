@@ -1,0 +1,122 @@
+.applications-dashboard-content {
+  padding: 20px;
+  width: 100%;
+}
+
+.applications-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.applications-dashboard-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.applications-dashboard-filters {
+  display: flex;
+  gap: 15px;
+}
+
+.applications-status-filter {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.applications-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.applications-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.applications-table th {
+  background-color: #f8f9fa;
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.applications-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.applications-table tr:last-child td {
+  border-bottom: none;
+}
+
+.applications-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.application-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.applicant-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.applicant-email {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 3px;
+}
+
+.application-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.view-btn {
+  background-color: #0b3b71;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.view-btn:hover {
+  background-color: #0a2f5a;
+}
+
+.status-update-select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  background-color: white;
+}
+
+.no-applications {
+  text-align: center;
+  color: #6c757d;
+  padding: 30px 0;
+}

@@ -1,0 +1,208 @@
+.application-details-content {
+  padding: 20px;
+  width: 100%;
+}
+
+.application-details-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.application-details-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #0b3b71;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: rgba(11, 59, 113, 0.1);
+}
+
+.back-button img {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.application-details-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+}
+
+.application-status-section {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.application-status-section h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.application-current-status {
+  margin-bottom: 20px;
+}
+
+.application-status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.application-status-update h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.status-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.status-btn:hover {
+  opacity: 0.9;
+}
+
+.status-btn.active {
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.status-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-btn.submitted {
+  background-color: #e3edf9;
+  color: #0b3b71;
+}
+
+.status-btn.under-review {
+  background-color: #fff8e6;
+  color: #e5b454;
+}
+
+.status-btn.shortlisted {
+  background-color: #e6f7ee;
+  color: #0d8a3e;
+}
+
+.status-btn.rejected {
+  background-color: #ffe6e6;
+  color: #d32f2f;
+}
+
+.status-btn.hired {
+  background-color: #e6f7ee;
+  color: #0d8a3e;
+}
+
+.application-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.application-section {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.application-section h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.detail-item.full-width {
+  flex-direction: column;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #555;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  color: #333;
+}
+
+.detail-value.description,
+.detail-value.skills {
+  margin-top: 8px;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+.document-link {
+  color: #0b3b71;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #e3edf9;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.document-link:hover {
+  background-color: #d1e1f5;
+}
+
+.application-not-found {
+  text-align: center;
+  padding: 50px 0;
+  font-size: 18px;
+  color: #666;
+}
+
+@media (max-width: 1200px) {
+  .application-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

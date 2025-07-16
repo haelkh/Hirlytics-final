@@ -1,6 +1,6 @@
 /* === ICE & OCEAN THEME === */
 :root {
-  --deep-blue: #003366;
+  --deep-blue: #003399;
   --aqua: #006898;
   --ice: #f0faff;
   --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 50%);
@@ -14,6 +14,7 @@
   padding: 0;
   font-family: "Poppins", sans-serif;
 }
+
 /* Remove or modify this rule in your CSS */
 .why-us-section .card {
   /* Remove background: white !important; */
@@ -22,6 +23,7 @@
   box-shadow: 0 10px 30px rgba(0, 51, 102, 0.1) !important;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
+
 /* Liquid Background */
 .app-container {
   background: var(--ice);
@@ -36,12 +38,7 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.1) 20%,
-    var(--aqua) 50%,
-    rgba(255, 255, 255, 0.1) 80%
-  );
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 20%, var(--aqua) 50%, rgba(255, 255, 255, 0.1) 80%);
   z-index: 0;
   animation: waterFlow 20s linear infinite;
   opacity: 0.1;
@@ -56,14 +53,17 @@
   }
 }
 
-/* Hero Section - Frozen Wave */
+/* Hero Section - FURTHER REDUCED HEIGHT */
 .hero-section {
   position: relative;
-  padding: 8rem 0;
+  padding: 2rem 0; /* Further reduced from 4rem to 2rem */
   background: var(--wave);
   clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%);
   z-index: 1;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: 40vh; /* Further reduced from 60vh to 40vh */
 }
 
 .hero-section::after {
@@ -83,6 +83,7 @@
   text-shadow: 0 0 30px var(--glow);
   position: relative;
   animation: titleFloat 3s ease-in-out infinite;
+  margin-bottom: 0.5rem;
 }
 
 @keyframes titleFloat {
@@ -100,6 +101,7 @@
   animation: subtitleFadeIn 1s ease-out forwards;
   animation-delay: 0.5s;
   color: white;
+  margin-bottom: 1rem;
 }
 
 @keyframes subtitleFadeIn {
@@ -113,8 +115,16 @@
   }
 }
 
-/* Auth Buttons */
-.auth-buttons button {
+/* Switch Buttons - Now centered since auth buttons are removed */
+.switch-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.switch-buttons button {
   background: none;
   border: 2px solid var(--ice);
   color: var(--ice);
@@ -124,23 +134,20 @@
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   backdrop-filter: blur(5px);
+  text-emphasis-color: white;
 }
 
-.auth-buttons button::before {
+.switch-buttons button::before {
   content: "";
   position: absolute;
   top: -150%;
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 20%,
-    var(--aqua) 50%,
-    transparent 80%
-  );
+  background: linear-gradient(45deg, transparent 20%, var(--aqua) 50%, transparent 80%);
   animation: buttonGlow 4s linear infinite;
   opacity: 0.4;
+  
 }
 
 @keyframes buttonGlow {
@@ -149,10 +156,15 @@
   }
 }
 
-.auth-buttons button:hover {
+.switch-buttons button:hover {
   background: rgba(255, 255, 255, 0.15);
   box-shadow: 0 0 30px var(--glow);
   transform: translateY(-3px);
+}
+
+.switch-buttons button.active {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px var(--glow);
 }
 
 /* Video Container */
@@ -170,7 +182,7 @@
   box-shadow: 0 0 0 2px var(--ice), 0 0 0 5px var(--aqua), 0 0 50px var(--glow);
 }
 
-/* Why Us Cards */
+/* Why Us Cards - ALL DARK BLUE TEXT AND BULLETS MOVED DOWN */
 .why-us-section .card {
   background: white !important;
   border: 2px solid var(--aqua) !important;
@@ -179,6 +191,95 @@
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
   opacity: 0;
   transform: translateY(20px);
+  margin-top: -2rem !important; /* Added to decrease space above the cards */
+}
+
+/* Make ALL text in why-us section dark blue */
+.why-us-section,
+.why-us-section *,
+.why-us-section .card,
+.why-us-section .card *,
+.why-us-section h1,
+.why-us-section h2,
+.why-us-section h3,
+.why-us-section h4,
+.why-us-section h5,
+.why-us-section h6,
+.why-us-section p,
+.why-us-section span,
+.why-us-section div,
+.why-us-section li,
+.why-us-section a {
+  color: var(--deep-blue) !important;
+}
+
+/* Specific targeting for blue colored elements */
+.why-us-section .text-primary,
+.why-us-section .text-blue,
+.why-us-section .text-info,
+.why-us-section [class*="blue"],
+.why-us-section [style*="color: blue"],
+.why-us-section [style*="color: #"],
+.why-us-section .carousel-indicator,
+.why-us-section .carousel-control {
+  color: var(--deep-blue) !important;
+}
+
+/* Bullet points styling - moved down more and dark blue */
+.why-us-section .card ul {
+  padding-top: 2rem !important; /* Increased from 1rem to 2rem */
+  margin-top: 2rem !important; /* Increased from 1rem to 2rem */
+  list-style: none !important;
+  padding-left: 0 !important;
+}
+
+.why-us-section .card li {
+  color: var(--deep-blue) !important;
+  margin-bottom: 1rem !important; /* Increased spacing between bullets */
+  padding-left: 2rem !important; /* Increased left padding */
+  position: relative !important;
+}
+
+/* Custom dark blue bullet points */
+.why-us-section .card li::before {
+  content: "•" !important;
+  color: var(--deep-blue) !important;
+  font-weight: bold !important;
+  position: absolute !important;
+  left: 0.5rem !important;
+  font-size: 1.2rem !important;
+}
+
+/* Override any existing bullet styles */
+.why-us-section .card li::marker {
+  color: var(--deep-blue) !important;
+}
+
+/* Move Why Choose Us title to bottom */
+.why-us-section {
+  background-color: #003399;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem 0;
+  display: flex !important;
+  flex-direction: column-reverse !important; /* This reverses the order - title goes to bottom */
+}
+
+/* Additional styling to ensure proper spacing for the title at the bottom */
+.why-us-section h1,
+.why-us-section h2,
+.why-us-section .section-title,
+.why-us-section .title {
+  margin-top: 2rem !important; /* Space above the title when it's at bottom */
+  margin-bottom: 1rem !important; /* Space below the title */
+  order: 2 !important; /* Ensures title stays at bottom */
+  color: var(--deep-blue) !important;
+}
+
+/* Ensure the carousel/cards stay at the top */
+.why-us-carousel,
+.carousel-container {
+  order: 1 !important; /* Ensures carousel stays at top */
 }
 
 .why-us-section .card.aos-animate {
@@ -205,11 +306,10 @@
     font-size: 2.8rem;
     line-height: 1.2;
   }
-
   .hero-section {
-    padding: 6rem 0;
+    padding: 1.5rem 0; /* Further reduced for mobile */
+    min-height: 35vh; /* Further reduced for mobile */
   }
-
   .video-container {
     margin: 0 -15px;
   }
@@ -219,22 +319,20 @@
   .hero-title {
     font-size: 2.2rem;
   }
-
-  .auth-buttons button {
+  .hero-section {
+    min-height: 30vh; /* Even smaller for very small screens */
+  }
+  .switch-buttons button {
     width: 100%;
     margin-bottom: 1rem;
   }
-
-  .switch-buttons button {
-    font-size: 0.9rem;
-    padding: 0.5rem 1rem;
-  }
 }
-/* Partners Section */
+
+/* Partners Section - REDUCED SPACING */
 .partners-section {
   position: relative;
   background: var(--ice);
-  padding: 4rem 0;
+  padding: 2rem 0;
   overflow: hidden;
 }
 
@@ -260,7 +358,7 @@
   position: relative;
   color: var(--deep-blue);
   font-size: 2.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   text-shadow: 2px 2px 4px rgba(0, 51, 102, 0.1);
   z-index: 1;
 }
@@ -286,7 +384,7 @@
   display: block;
   font-size: 1.2rem;
   color: var(--aqua);
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
   font-weight: 400;
   opacity: 0;
   transform: translateY(10px);
@@ -303,7 +401,7 @@
   justify-content: center;
   gap: 3rem;
   flex-wrap: wrap;
-  padding: 3rem 0;
+  padding: 2rem 0;
   position: relative;
   z-index: 1;
 }
@@ -317,8 +415,7 @@
   justify-content: center;
   background: white !important;
   border: 2px solid var(--aqua) !important;
-  box-shadow: 0 5px 15px rgba(0, 51, 102, 0.1),
-    inset 0 0 10px rgba(0, 102, 152, 0.05);
+  box-shadow: 0 5px 15px rgba(0, 51, 102, 0.1), inset 0 0 10px rgba(0, 102, 152, 0.05);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   opacity: 0;
   transform: translateY(20px);
@@ -336,8 +433,7 @@
 
 .partner-logo:hover {
   transform: translateY(-10px) scale(1.05);
-  box-shadow: 0 15px 30px rgba(0, 51, 102, 0.2), 0 0 0 3px var(--aqua),
-    inset 0 0 20px rgba(0, 102, 152, 0.1);
+  box-shadow: 0 15px 30px rgba(0, 51, 102, 0.2), 0 0 0 3px var(--aqua), inset 0 0 20px rgba(0, 102, 152, 0.1);
 }
 
 .partner-logo:hover i {
@@ -351,21 +447,17 @@
   .collab {
     font-size: 2rem;
   }
-
   .collab2 {
     font-size: 1rem;
   }
-
   .partners-logos {
     gap: 2rem;
-    padding: 2rem 0;
+    padding: 1.5rem 0;
   }
-
   .partner-logo {
     width: 90px;
     height: 90px;
   }
-
   .partner-logo i {
     font-size: 2rem !important;
   }
@@ -376,41 +468,39 @@
     flex-direction: column;
     align-items: center;
   }
-
   .partner-logo {
     width: 70px;
     height: 70px;
     border-radius: 15px;
   }
 }
+
 /* Partners Section - Fixes */
 .partners-section {
   position: relative;
   background: var(--ice);
-  padding: 4rem 0;
+  padding: 2rem 0;
   overflow: hidden;
-  z-index: 2; /* Add this */
+  z-index: 2;
 }
 
 .partners-section::before {
-  /* ... keep existing styles ... */
-  z-index: -1; /* Change from 0 to -1 */
+  z-index: -1;
 }
 
 .partners-logos {
-  /* ... keep existing styles ... */
-  z-index: 3; /* Increase z-index */
+  z-index: 3;
 }
 
 .partner-logo {
-  /* ... keep existing styles ... */
-  z-index: 1; /* Add this */
+  z-index: 1;
 }
-/* Connecting Talent Section */
+
+/* Connecting Talent Section - COMBINED TITLE AND REDUCED SPACING */
 .connecting-talent {
   position: relative;
   background: linear-gradient(145deg, var(--deep-blue) 0%, var(--aqua) 100%);
-  padding: 6rem 0;
+  padding: 3rem 0;
   overflow: hidden;
 }
 
@@ -431,6 +521,7 @@
   z-index: 2;
 }
 
+/* COMBINED TITLE */
 .connecting-talent h2.text-warning {
   color: var(--ice) !important;
   font-size: 2.5rem;
@@ -438,12 +529,18 @@
   display: inline-block;
   animation: titleFloat 4s ease-in-out infinite;
   text-shadow: 0 0 15px rgba(0, 247, 255, 0.4);
+  margin-bottom: 0.5rem;
+}
+
+.connecting-talent h2.text-warning::after {
+  content: " - Your Partner in Success";
+  display: inline;
 }
 
 .connecting-talent h3 {
   color: var(--ice);
   font-size: 2.2rem;
-  margin: 1.5rem 0;
+  margin: 0.5rem 0;
   opacity: 0;
   transform: translateX(-30px);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -457,6 +554,7 @@
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+  margin-top: 0.5rem;
 }
 
 .connecting-talent img {
@@ -498,29 +596,27 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .connecting-talent {
-    padding: 4rem 0;
+    padding: 2rem 0;
   }
-
   .connecting-talent h2.text-warning {
     font-size: 2rem;
   }
-
   .connecting-talent h3 {
     font-size: 1.8rem;
   }
-
   .connecting-talent img {
     transform: perspective(1000px) rotateX(-5deg) translateZ(30px);
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
 }
-/* Existing CSS styles from your home.css */
 
+/* Existing CSS styles from your home.css */
 /* Add these new styles for the Why Us carousel section */
 .why-us-section {
   background-color: #003366;
   position: relative;
   overflow: hidden;
+  padding: 2rem 0;
 }
 
 .why-us-carousel {
@@ -560,7 +656,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--deep-blue) !important; /* Changed to dark blue */
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
@@ -568,6 +664,7 @@
 
 .carousel-control:hover {
   background: rgba(255, 255, 255, 0.4);
+  color: var(--deep-blue) !important; /* Ensure dark blue on hover */
 }
 
 .carousel-control.prev {
@@ -586,7 +683,7 @@
 }
 
 .carousel-indicator {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 51, 102, 0.5) !important; /* Changed to dark blue */
   border: none;
   border-radius: 50%;
   width: 12px;
@@ -594,7 +691,7 @@
 }
 
 .carousel-indicator.active {
-  background-color: #fff;
+  background-color: var(--deep-blue) !important; /* Changed to dark blue */
   transform: scale(1.2);
 }
 
@@ -614,20 +711,23 @@
 }
 
 /* Style the middle card differently */
-
 /* Animation delay classes for staggered animations */
 [data-aos-delay="100"] {
   transition-delay: 100ms;
 }
+
 [data-aos-delay="200"] {
   transition-delay: 200ms;
 }
+
 [data-aos-delay="300"] {
   transition-delay: 300ms;
 }
+
 [data-aos-delay="400"] {
   transition-delay: 400ms;
 }
+
 /* Updated CSS for Why Us cards */
 .why-us-section .card {
   border: 2px solid var(--aqua) !important;
@@ -646,7 +746,7 @@
 
 .bg-light {
   background: #f8f9fa !important;
-  color: #003366 !important;
+  color: var(--deep-blue) !important; /* Changed to dark blue */
 }
 
 /* Fade-in animations */
@@ -700,6 +800,7 @@
   background: #f8f9fa !important;
   color: var(--deep-blue) !important;
 }
+
 /* Ensure slides are visible by default */
 .carousel-slide {
   opacity: 1 !important;
@@ -712,6 +813,7 @@
   transform: none !important;
   animation: none !important;
 }
+
 /* Core Carousel Fixes */
 .carousel-container {
   width: 100%;
@@ -749,7 +851,8 @@
   opacity: 1 !important;
   visibility: visible !important;
 }
-/* Dual Path Section Styles - Exact Match */
+
+/* Dual Path Section Styles - ADDED CURSOR POINTER */
 .dual-path-section {
   padding: 0;
   margin: 2rem 0;
@@ -761,19 +864,23 @@
   border-radius: 0;
   overflow: hidden;
   transition: transform 0.3s ease;
+  cursor: pointer;
 }
 
 .path-card:hover {
   transform: translateY(-5px);
+  cursor: pointer;
 }
 
 .job-seeker-card {
-  background: url("/path/to/job-seeker-image.jpg") center/cover no-repeat;
+  background: url("/path/to/job-seeker-image.jpg") center / cover no-repeat;
   border: 2px solid #1a96f8;
+  cursor: pointer;
 }
 
 .employer-card {
-  background: url("/path/to/employer-image.jpg") center/cover no-repeat;
+  background: url("/path/to/employer-image.jpg") center / cover no-repeat;
+  cursor: pointer;
 }
 
 .path-content {
@@ -783,6 +890,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  cursor: pointer;
 }
 
 .overlay-blur {
@@ -813,17 +921,17 @@
 
 /* Override for exact match to image */
 .job-seeker-card {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("/src/assets/jobseeker.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/src/assets/jobseeker.jpg");
   border: 2px solid #1a96f8;
+  cursor: pointer;
 }
 
 .employer-card {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("/src/assets/employer.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/src/assets/employer.jpg");
   border-top: 2px solid #1a96f8;
   border-right: 2px solid #1a96f8;
   border-bottom: 2px solid #1a96f8;
+  cursor: pointer;
 }
 
 /* Responsive fixes */
@@ -831,11 +939,11 @@
   .employer-card {
     border-left: 2px solid #1a96f8;
   }
-
   .path-card {
     margin-bottom: 1rem;
   }
 }
+
 /* Dual path section with hover expand effect */
 .dual-path-section {
   padding: 0;
@@ -854,12 +962,14 @@
   flex: 1;
   transition: flex 0.5s ease;
   overflow: hidden;
+  cursor: pointer;
 }
 
 /* Initial state: both panels at 50% width */
 .job-seeker-panel,
 .employer-panel {
   width: 50%;
+  cursor: pointer;
 }
 
 /* When hovering on job seeker panel: expand to 70%, shrink employer to 30% */
@@ -886,24 +996,25 @@
   position: relative;
   border-radius: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .job-seeker-card {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("/src/assets/Jobseeker.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/src/assets/Jobseeker.jpg");
   background-size: cover;
   background-position: center;
   border: 2px solid #1a96f8;
+  cursor: pointer;
 }
 
 .employer-card {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-    url("/src/assets/JobEmployer.jpg");
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/src/assets/JobEmployer.jpg");
   background-size: cover;
   background-position: center;
   border-top: 2px solid #1a96f8;
   border-right: 2px solid #1a96f8;
   border-bottom: 2px solid #1a96f8;
+  cursor: pointer;
 }
 
 .path-content {
@@ -913,6 +1024,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  cursor: pointer;
 }
 
 .overlay-blur {
@@ -946,16 +1058,13 @@
     flex-direction: column;
     height: auto;
   }
-
   .dual-path-panel {
     width: 100%;
     height: 240px;
   }
-
   .employer-card {
     border-left: 2px solid #1a96f8;
   }
-
   /* Override hover behavior on mobile */
   .dual-path-container:hover .job-seeker-panel,
   .dual-path-container:hover .employer-panel,
@@ -964,10 +1073,11 @@
     flex: 1;
   }
 }
+
 /* Enhanced Testimonial Carousel Styling */
 .testimonial-section {
   background: linear-gradient(to bottom right, #f8f9fa 0%, #eef2f6 100%);
-  padding: 80px 0;
+  padding: 60px 0;
   position: relative;
   overflow: hidden;
 }
@@ -975,7 +1085,7 @@
 .testimonial-section .section-title {
   color: #1a3160;
   font-size: 2.5rem;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   position: relative;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -1025,8 +1135,7 @@
 }
 
 .testimonial-card:not(.active) {
-  transition: opacity 0.4s ease,
-    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .quote-mark {
@@ -1099,14 +1208,12 @@
 
 @media (max-width: 768px) {
   .testimonial-section {
-    padding: 60px 0;
+    padding: 40px 0;
   }
-
   .testimonial-card {
     flex: 0 0 100%;
     margin: 0 0.5rem;
   }
-
   .testimonial-section .section-title {
     font-size: 2rem;
   }
@@ -1186,6 +1293,7 @@
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 .no-hover:hover {
   color: white;
   background-color: transparent;

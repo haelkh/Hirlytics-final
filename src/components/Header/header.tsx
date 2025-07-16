@@ -1,10 +1,22 @@
-// Header.tsx
-import React, { useState, useEffect, useRef } from "react";
+"use client";
+
+import type React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, Search, X } from "lucide-react";
 import "./Header.css";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onSignInClick?: () => void;
+  onSignUpClick?: () => void;
+  isLoggedIn?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({
+  onSignInClick,
+  onSignUpClick,
+  isLoggedIn = false,
+}) => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,19 +30,13 @@ const Header: React.FC = () => {
 
   const placeholders = ["Search for services...", "Looking for solutions?"];
 
-  // Check if current path matches the link
   const isActive = (path: string) => {
     return location.pathname === path;
   };
 
-  // Check if dropdown item is active
-
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-
-      // Close mobile menu on resize to larger screens
       if (window.innerWidth > 768 && mobileMenuOpen) {
         setMobileMenuOpen(false);
         document.body.classList.remove("menu-open");
@@ -38,61 +44,36 @@ const Header: React.FC = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, [mobileMenuOpen]);
 
-  // Scroll handling
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
+      setScrolled(window.scrollY > 10);
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [scrolled]);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  // Toggle mobile menu and prevent body scrolling when menu is open
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
-    if (!mobileMenuOpen) {
-      document.body.classList.add("menu-open");
-    } else {
-      document.body.classList.remove("menu-open");
-    }
+    document.body.classList.toggle("menu-open", !mobileMenuOpen);
   };
 
-  // Rotate through placeholders
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isFocused) {
-        setPlaceholderIndex(
-          (prevIndex) => (prevIndex + 1) % placeholders.length
-        );
+        setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
       }
     }, 3000);
-
     return () => clearInterval(interval);
   }, [isFocused, placeholders.length]);
 
-  // Handle click anywhere in the search bar to focus the input
   const handleSearchBarClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   };
 
-  // Handle dropdown click
-
-  // Close dropdown when clicking outside
-
-  // Close dropdown and mobile menu when a link is clicked
   const handleLinkClick = () => {
     if (windowWidth <= 768) {
       setMobileMenuOpen(false);
@@ -100,14 +81,28 @@ const Header: React.FC = () => {
     }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-
   return (
-    <header className={`headere${scrolled ? " scrolled" : ""}`} ref={headerRef}>
+    <header className={`header${scrolled ? " scrolled" : ""}`} ref={headerRef}>
       <div className="header-container">
-        <div className="logo-container">
-          <h1 className="logo">
-            <img src="/src/assets/logo.png" alt="Hirlytics Logo" />
-          </h1>
+        {/* Logo and Auth Buttons Container */}
+        <div className="header-left-section">
+          <div className="logo-container">
+            <h1 className="logo">
+              <img src="/src/assets/logo.png" alt="Hirlytics Logo" />
+            </h1>
+
+            {/* Auth Buttons - Positioned directly under logo */}
+            {!isLoggedIn && (
+              <div className="auth-buttons-header">
+                <button className="btn-signin" onClick={onSignInClick}>
+                  Login
+                </button>
+                <button className="btn-signup" onClick={onSignUpClick}>
+                  Sign Up
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         <nav className={`nav-links${mobileMenuOpen ? " active" : ""}`}>
@@ -145,10 +140,7 @@ const Header: React.FC = () => {
           </ul>
         </nav>
 
-        <div
-          className="right-section"
-          style={{ display: "flex", alignItems: "center" }}
-        >
+        <div className="right-section">
           <div
             className={`search-bar${isFocused ? " focused" : ""}`}
             onClick={handleSearchBarClick}
@@ -157,7 +149,6 @@ const Header: React.FC = () => {
             <div className="search-icon">
               <Search size={windowWidth <= 480 ? 16 : 18} />
             </div>
-
             <input
               ref={inputRef}
               type="text"
@@ -165,7 +156,6 @@ const Header: React.FC = () => {
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
             />
-
             <button className="search-button">
               <span className="search-text">Search</span>
             </button>

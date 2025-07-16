@@ -20,7 +20,12 @@ const Sidebar = () => {
       label: "Manage Users",
       path: "/AdminPage/Manage/users",
     },
-    { id: 4, icon: manageIcon, label: "Manage Applications", path: "#" },
+    {
+      id: 4,
+      icon: manageIcon,
+      label: "Manage Applications",
+      path: "/AdminPage/Manage/applications",
+    },
     {
       id: 5,
       icon: vectorIcon,
