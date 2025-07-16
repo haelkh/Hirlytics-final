@@ -19,6 +19,7 @@ import EventsWorkshops from "./components/events&workshops/events_workshops";
 import JobDetails from "./components/jobDetails/jobDetails";
 import JobsPage from "./components/Jobs/jobs";
 import AdminAddBlog from "./components/adminBlog/AdminAddBlog";
+import ManageJobs from "./components/admin-page/ManageJobs";
 
 function App() {
   console.log("App component rendered");
@@ -43,6 +44,7 @@ function App() {
           path="/AdminPage/Manage/calendar"
           element={<DashboardCalendar />}
         />
+        <Route path="/AdminPage/Manage/jobs" element={<ManageJobs />} />
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Team" element={<TeamDashboard />} />
         <Route path="/JobDetails" element={<JobDetails />} />

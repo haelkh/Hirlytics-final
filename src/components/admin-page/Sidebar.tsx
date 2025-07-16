@@ -28,8 +28,14 @@ const Sidebar = () => {
       path: "/AdminPage/Manage/calendar",
     },
     { id: 6, icon: jobSeekerIcon, label: "Jobs", path: "/Jobs" },
-    { id: 7, icon: shapeIcon, label: "team", path: "/AdminPage/Manage/team" },
-    { id: 8, icon: logoutIcon, label: "Logout", path: "#" },
+    {
+      id: 7,
+      icon: jobSeekerIcon,
+      label: "Manage Jobs",
+      path: "/AdminPage/Manage/jobs",
+    },
+    { id: 8, icon: shapeIcon, label: "Team", path: "/AdminPage/Manage/team" },
+    { id: 9, icon: logoutIcon, label: "Logout", path: "#" },
   ];
 
   return (
