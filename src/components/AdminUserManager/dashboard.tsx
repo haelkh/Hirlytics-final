@@ -6,16 +6,10 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  LayoutDashboard,
-  LogOut,
   Search,
-  Users,
-  Calendar,
-  FileText,
-  Briefcase,
-  Users2,
 } from "lucide-react";
 import "./dashboard.css";
+import Sidebar from "../admin-page/Sidebar";
 
 interface User {
   id: number;
@@ -83,42 +77,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-container">
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <div className="admin-avatar">
-            <img src="/placeholder.svg?height=32&width=32" alt="Admin" />
-          </div>
-          <div className="admin-name">Admin name</div>
-          <ChevronDown size={16} />
-        </div>
-
-        <nav className="sidebar-nav">
-          <a href="#" className="nav-item active">
-            <LayoutDashboard size={20} /> <span>Dashboard</span>
-          </a>
-          <a href="#" className="nav-item">
-            <FileText size={20} /> <span>Blog Post</span>
-          </a>
-          <a href="#" className="nav-item">
-            <Users size={20} /> <span>Manage Users</span>
-          </a>
-          <a href="#" className="nav-item">
-            <FileText size={20} /> <span>Manage Applications</span>
-          </a>
-          <a href="#" className="nav-item">
-            <Calendar size={20} /> <span>Calendar</span>
-          </a>
-          <a href="#" className="nav-item">
-            <Briefcase size={20} /> <span>Jobs</span>
-          </a>
-          <a href="#" className="nav-item">
-            <Users2 size={20} /> <span>Team</span>
-          </a>
-          <a href="#" className="nav-item logout">
-            <LogOut size={20} /> <span>Logout</span>
-          </a>
-        </nav>
-      </div>
+      <Sidebar />
 
       <div className="main-content">
         <header className="header">

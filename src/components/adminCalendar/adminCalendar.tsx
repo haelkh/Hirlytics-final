@@ -1,17 +1,13 @@
 import React, { useState } from "react";
 import "./adminCalendar.css";
 import {
-  Calendar,
   ChevronLeft,
   ChevronRight,
   Bell,
   ChevronDown,
-  Grid,
-  Users,
-  FileText,
-  Briefcase,
   Plus,
 } from "lucide-react";
+import Sidebar from "../admin-page/Sidebar";
 
 const DashboardCalendar: React.FC = () => {
   const [viewMode, setViewMode] = useState<"Day" | "Week" | "Month">("Month");
@@ -110,36 +106,7 @@ const DashboardCalendar: React.FC = () => {
       </header>
 
       <div className="dashboard-content">
-        <aside className="sidebar">
-          <nav className="sidebar-nav">
-            <ul>
-              <li className="active">
-                <Grid size={16} />
-                <span>Dashboard</span>
-              </li>
-              <li>
-                <FileText size={16} />
-                <span>Blog Post</span>
-              </li>
-              <li>
-                <Users size={16} />
-                <span>Manage Users</span>
-              </li>
-              <li>
-                <Briefcase size={16} />
-                <span>Manage Applications</span>
-              </li>
-              <li>
-                <Calendar size={16} />
-                <span>Calendar</span>
-              </li>
-              <li>
-                <Briefcase size={16} />
-                <span>Jobs</span>
-              </li>
-            </ul>
-          </nav>
-        </aside>
+        <Sidebar />
 
         <main className="main-content">
           <h1 className="page-title">Calender</h1>

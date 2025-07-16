@@ -1,16 +1,8 @@
 import type React from "react";
 import { useState, useEffect, FormEvent } from "react";
 import "./teamDash.css";
-import {
-  LayoutDashboard,
-  FileText,
-  Users,
-  Boxes,
-  Calendar,
-  Settings,
-  LogOut,
-  PlusCircle,
-} from "lucide-react";
+import { PlusCircle } from "lucide-react";
+import Sidebar from "../admin-page/Sidebar";
 
 interface TeamMemberData {
   Id: string;
@@ -89,71 +81,7 @@ const TeamDashboard = () => {
 
   return (
     <div className="team-dash-container">
-      <aside className="team-dash-sidebar">
-        <div className="team-dash-sidebar-header">
-          <div className="team-dash-user-avatar">
-            <img src="/placeholder.svg?height=32&width=32" alt="Admin avatar" />
-          </div>
-          <div className="team-dash-user-name">Admin name</div>
-        </div>
-
-        <div className="team-dash-search-bar">
-          <input type="text" placeholder="Quick search" />
-        </div>
-
-        <nav className="team-dash-sidebar-nav">
-          <ul>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <LayoutDashboard size={20} />
-                <span>Dashboard</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <FileText size={20} />
-                <span>Blog Post</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <Users size={20} />
-                <span>Manage Users</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <Boxes size={20} />
-                <span>Manage Applications</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <Calendar size={20} />
-                <span>Calendar</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <Settings size={20} />
-                <span>Settings</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-item active">
-                <Users size={20} />
-                <span>Team</span>
-              </a>
-            </li>
-            <li>
-              <a href="#" className="team-dash-nav-item">
-                <LogOut size={20} />
-                <span>Logout</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+      <Sidebar />
 
       <main className="team-dash-main-content">
         <header className="team-dash-content-header">

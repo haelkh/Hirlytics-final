@@ -10,6 +10,7 @@ import {
   Search,
 } from "lucide-react";
 import "./adminBlog.css";
+import Sidebar from "../admin-page/Sidebar";
 
 interface BlogFormData {
   title: string;
@@ -316,273 +317,283 @@ const AdminAddBlog = () => {
   );
 
   return (
-    <div className="unique-adminBlogContainer">
-      <div className="unique-adminBlogHeader">
-        <h1>
-          {showAddForm
-            ? editingBlogId
-              ? "Edit Blog Post"
-              : "Add New Blog Post"
-            : "Blog Management"}
-        </h1>
-        {!showAddForm ? (
-          <button
-            className="unique-adminBlogAddButton"
-            onClick={() => setShowAddForm(true)}
-          >
-            <Plus size={18} />
-            Add New Blog
-          </button>
-        ) : (
-          <button className="unique-adminBlogCancelButton" onClick={resetForm}>
-            <X size={18} />
-            Cancel
-          </button>
-        )}
-      </div>
-
-      {showAddForm ? (
-        <div className="unique-adminBlogFormContainer">
-          <div className="unique-adminBlogForm">
-            <div className="unique-adminBlogFormGroup">
-              <label className="unique-adminBlogLabel">Blog Image</label>
-              <div className="unique-adminBlogImageUploadContainer">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleImageChange}
-                  accept="image/jpeg, image/png, image/gif"
-                  style={{ display: "none" }}
-                />
-
-                {previewImage ? (
-                  <div className="unique-adminBlogImagePreviewContainer">
-                    <img
-                      src={previewImage}
-                      alt="Preview"
-                      className="unique-adminBlogImagePreview"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPreviewImage(null);
-                        setFormData((prev) => ({ ...prev, image: null }));
-                        if (fileInputRef.current) {
-                          fileInputRef.current.value = "";
-                        }
-                      }}
-                      className="unique-adminBlogRemoveImageButton"
-                    >
-                      Remove Image
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    className="unique-adminBlogImageUploadArea"
-                    onClick={triggerFileInput}
-                  >
-                    <ImageIcon
-                      size={40}
-                      className="unique-adminBlogImageUploadIcon"
-                    />
-                    <p>Click to upload an image (JPEG, PNG, GIF)</p>
-                    <p>Max size: 5MB</p>
-                  </div>
-                )}
-              </div>
-              {errors.image && (
-                <span className="unique-adminBlogErrorText">
-                  {errors.image}
-                </span>
-              )}
-            </div>
-
-            <div className="unique-adminBlogFormGroup">
-              <label
-                htmlFor="unique-adminBlogTitle"
-                className="unique-adminBlogLabel"
-              >
-                Blog Title *
-              </label>
-              <div className="unique-adminBlogInputWithIcon">
-                <FileText className="unique-adminBlogInputIcon" size={20} />
-                <input
-                  type="text"
-                  id="unique-adminBlogTitle"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="Enter blog title..."
-                  className={`unique-adminBlogInput ${
-                    errors.title ? "unique-adminBlogInputError" : ""
-                  }`}
-                  required
-                />
-              </div>
-              {errors.title && (
-                <span className="unique-adminBlogErrorText">
-                  {errors.title}
-                </span>
-              )}
-            </div>
-
-            <div className="unique-adminBlogFormGroup">
-              <label
-                htmlFor="unique-adminBlogGenre"
-                className="unique-adminBlogLabel"
-              >
-                Genre *
-              </label>
-              <div className="unique-adminBlogInputWithIcon">
-                <Tag className="unique-adminBlogInputIcon" size={20} />
-                <select
-                  id="unique-adminBlogGenre"
-                  name="genre"
-                  value={formData.genre}
-                  onChange={handleInputChange}
-                  className={`unique-adminBlogSelect ${
-                    errors.genre ? "unique-adminBlogInputError" : ""
-                  }`}
-                  required
-                >
-                  <option value="">Select a genre...</option>
-                  {genreOptions.map((genre) => (
-                    <option key={genre} value={genre}>
-                      {genre}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {errors.genre && (
-                <span className="unique-adminBlogErrorText">
-                  {errors.genre}
-                </span>
-              )}
-            </div>
-
-            <div className="unique-adminBlogFormGroup">
-              <label
-                htmlFor="unique-adminBlogContent"
-                className="unique-adminBlogLabel"
-              >
-                Blog Content *
-              </label>
-              <textarea
-                id="unique-adminBlogContent"
-                name="body"
-                value={formData.body}
-                onChange={handleInputChange}
-                placeholder="Write your blog content here..."
-                className={`unique-adminBlogTextarea ${
-                  errors.body ? "unique-adminBlogInputError" : ""
-                }`}
-                rows={12}
-                required
-              />
-              {errors.body && (
-                <span className="unique-adminBlogErrorText">{errors.body}</span>
-              )}
-            </div>
-
+    <div className="admin-container">
+      <Sidebar />
+      <div className="unique-adminBlogContainer">
+        <div className="unique-adminBlogHeader">
+          <h1>
+            {showAddForm
+              ? editingBlogId
+                ? "Edit Blog Post"
+                : "Add New Blog Post"
+              : "Blog Management"}
+          </h1>
+          {!showAddForm ? (
             <button
-              type="button"
-              onClick={handleSubmit}
-              className="unique-adminBlogSubmitButton"
-              disabled={isSubmitting}
+              className="unique-adminBlogAddButton"
+              onClick={() => setShowAddForm(true)}
             >
-              {isSubmitting
-                ? editingBlogId
-                  ? "Updating Blog..."
-                  : "Creating Blog..."
-                : editingBlogId
-                ? "Update Blog Post"
-                : "Create Blog Post"}
+              <Plus size={18} />
+              Add New Blog
             </button>
-          </div>
-        </div>
-      ) : (
-        <div className="unique-adminBlogListContainer">
-          <div className="unique-adminBlogSearchContainer">
-            <div className="unique-adminBlogSearchBox">
-              <Search size={20} className="unique-adminBlogSearchIcon" />
-              <input
-                type="text"
-                placeholder="Search blogs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="unique-adminBlogSearchInput"
-              />
-            </div>
-          </div>
-
-          {loadingBlogs ? (
-            <div className="unique-adminBlogLoading">Loading blogs...</div>
-          ) : filteredBlogs.length > 0 ? (
-            <div className="unique-adminBlogList">
-              {filteredBlogs.map((blog) => (
-                <div key={blog.BlogID} className="unique-adminBlogCard">
-                  <div className="unique-adminBlogCardImageContainer">
-                    {blog.ImageUrl ? (
-                      <img
-                        src={blog.ImageUrl}
-                        alt={blog.Title}
-                        className="unique-adminBlogCardImage"
-                      />
-                    ) : (
-                      <div className="unique-adminBlogCardNoImage">
-                        <ImageIcon size={40} />
-                      </div>
-                    )}
-                  </div>
-                  <div className="unique-adminBlogCardContent">
-                    <h3 className="unique-adminBlogCardTitle">{blog.Title}</h3>
-                    <div className="unique-adminBlogCardMeta">
-                      <span className="unique-adminBlogCardGenre">
-                        {blog.Genre}
-                      </span>
-                      <span className="unique-adminBlogCardDate">
-                        {/* Assuming createdAt is available in the Blog interface */}
-                        {/* If not, you might need to fetch it separately or remove this line */}
-                        {/* For now, keeping it as is, but it might cause an error if not present */}
-                        {/* blog.createdAt ? formatDate(blog.createdAt) : "No date" */}
-                        No date
-                      </span>
-                    </div>
-                    <p className="unique-adminBlogCardSummary">
-                      {blog.BriefBody}
-                    </p>
-                  </div>
-                  <div className="unique-adminBlogCardActions">
-                    <button
-                      className="unique-adminBlogCardEditButton"
-                      onClick={() => handleEdit(blog)}
-                    >
-                      <Edit size={18} />
-                      Edit
-                    </button>
-                    <button
-                      className="unique-adminBlogCardDeleteButton"
-                      onClick={() => handleDelete(blog.BlogID)}
-                    >
-                      <Trash2 size={18} />
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
           ) : (
-            <div className="unique-adminBlogEmpty">
-              <p>
-                No blogs found.{" "}
-                {searchTerm
-                  ? "Try a different search term."
-                  : "Create your first blog post!"}
-              </p>
-            </div>
+            <button
+              className="unique-adminBlogCancelButton"
+              onClick={resetForm}
+            >
+              <X size={18} />
+              Cancel
+            </button>
           )}
         </div>
-      )}
+
+        {showAddForm ? (
+          <div className="unique-adminBlogFormContainer">
+            <div className="unique-adminBlogForm">
+              <div className="unique-adminBlogFormGroup">
+                <label className="unique-adminBlogLabel">Blog Image</label>
+                <div className="unique-adminBlogImageUploadContainer">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleImageChange}
+                    accept="image/jpeg, image/png, image/gif"
+                    style={{ display: "none" }}
+                  />
+
+                  {previewImage ? (
+                    <div className="unique-adminBlogImagePreviewContainer">
+                      <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="unique-adminBlogImagePreview"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewImage(null);
+                          setFormData((prev) => ({ ...prev, image: null }));
+                          if (fileInputRef.current) {
+                            fileInputRef.current.value = "";
+                          }
+                        }}
+                        className="unique-adminBlogRemoveImageButton"
+                      >
+                        Remove Image
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className="unique-adminBlogImageUploadArea"
+                      onClick={triggerFileInput}
+                    >
+                      <ImageIcon
+                        size={40}
+                        className="unique-adminBlogImageUploadIcon"
+                      />
+                      <p>Click to upload an image (JPEG, PNG, GIF)</p>
+                      <p>Max size: 5MB</p>
+                    </div>
+                  )}
+                </div>
+                {errors.image && (
+                  <span className="unique-adminBlogErrorText">
+                    {errors.image}
+                  </span>
+                )}
+              </div>
+
+              <div className="unique-adminBlogFormGroup">
+                <label
+                  htmlFor="unique-adminBlogTitle"
+                  className="unique-adminBlogLabel"
+                >
+                  Blog Title *
+                </label>
+                <div className="unique-adminBlogInputWithIcon">
+                  <FileText className="unique-adminBlogInputIcon" size={20} />
+                  <input
+                    type="text"
+                    id="unique-adminBlogTitle"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder="Enter blog title..."
+                    className={`unique-adminBlogInput ${
+                      errors.title ? "unique-adminBlogInputError" : ""
+                    }`}
+                    required
+                  />
+                </div>
+                {errors.title && (
+                  <span className="unique-adminBlogErrorText">
+                    {errors.title}
+                  </span>
+                )}
+              </div>
+
+              <div className="unique-adminBlogFormGroup">
+                <label
+                  htmlFor="unique-adminBlogGenre"
+                  className="unique-adminBlogLabel"
+                >
+                  Genre *
+                </label>
+                <div className="unique-adminBlogInputWithIcon">
+                  <Tag className="unique-adminBlogInputIcon" size={20} />
+                  <select
+                    id="unique-adminBlogGenre"
+                    name="genre"
+                    value={formData.genre}
+                    onChange={handleInputChange}
+                    className={`unique-adminBlogSelect ${
+                      errors.genre ? "unique-adminBlogInputError" : ""
+                    }`}
+                    required
+                  >
+                    <option value="">Select a genre...</option>
+                    {genreOptions.map((genre) => (
+                      <option key={genre} value={genre}>
+                        {genre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors.genre && (
+                  <span className="unique-adminBlogErrorText">
+                    {errors.genre}
+                  </span>
+                )}
+              </div>
+
+              <div className="unique-adminBlogFormGroup">
+                <label
+                  htmlFor="unique-adminBlogContent"
+                  className="unique-adminBlogLabel"
+                >
+                  Blog Content *
+                </label>
+                <textarea
+                  id="unique-adminBlogContent"
+                  name="body"
+                  value={formData.body}
+                  onChange={handleInputChange}
+                  placeholder="Write your blog content here..."
+                  className={`unique-adminBlogTextarea ${
+                    errors.body ? "unique-adminBlogInputError" : ""
+                  }`}
+                  rows={12}
+                  required
+                />
+                {errors.body && (
+                  <span className="unique-adminBlogErrorText">
+                    {errors.body}
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSubmit}
+                className="unique-adminBlogSubmitButton"
+                disabled={isSubmitting}
+              >
+                {isSubmitting
+                  ? editingBlogId
+                    ? "Updating Blog..."
+                    : "Creating Blog..."
+                  : editingBlogId
+                  ? "Update Blog Post"
+                  : "Create Blog Post"}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="unique-adminBlogListContainer">
+            <div className="unique-adminBlogSearchContainer">
+              <div className="unique-adminBlogSearchBox">
+                <Search size={20} className="unique-adminBlogSearchIcon" />
+                <input
+                  type="text"
+                  placeholder="Search blogs..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="unique-adminBlogSearchInput"
+                />
+              </div>
+            </div>
+
+            {loadingBlogs ? (
+              <div className="unique-adminBlogLoading">Loading blogs...</div>
+            ) : filteredBlogs.length > 0 ? (
+              <div className="unique-adminBlogList">
+                {filteredBlogs.map((blog) => (
+                  <div key={blog.BlogID} className="unique-adminBlogCard">
+                    <div className="unique-adminBlogCardImageContainer">
+                      {blog.ImageUrl ? (
+                        <img
+                          src={blog.ImageUrl}
+                          alt={blog.Title}
+                          className="unique-adminBlogCardImage"
+                        />
+                      ) : (
+                        <div className="unique-adminBlogCardNoImage">
+                          <ImageIcon size={40} />
+                        </div>
+                      )}
+                    </div>
+                    <div className="unique-adminBlogCardContent">
+                      <h3 className="unique-adminBlogCardTitle">
+                        {blog.Title}
+                      </h3>
+                      <div className="unique-adminBlogCardMeta">
+                        <span className="unique-adminBlogCardGenre">
+                          {blog.Genre}
+                        </span>
+                        <span className="unique-adminBlogCardDate">
+                          {/* Assuming createdAt is available in the Blog interface */}
+                          {/* If not, you might need to fetch it separately or remove this line */}
+                          {/* For now, keeping it as is, but it might cause an error if not present */}
+                          {/* blog.createdAt ? formatDate(blog.createdAt) : "No date" */}
+                          No date
+                        </span>
+                      </div>
+                      <p className="unique-adminBlogCardSummary">
+                        {blog.BriefBody}
+                      </p>
+                    </div>
+                    <div className="unique-adminBlogCardActions">
+                      <button
+                        className="unique-adminBlogCardEditButton"
+                        onClick={() => handleEdit(blog)}
+                      >
+                        <Edit size={18} />
+                        Edit
+                      </button>
+                      <button
+                        className="unique-adminBlogCardDeleteButton"
+                        onClick={() => handleDelete(blog.BlogID)}
+                      >
+                        <Trash2 size={18} />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="unique-adminBlogEmpty">
+                <p>
+                  No blogs found.{" "}
+                  {searchTerm
+                    ? "Try a different search term."
+                    : "Create your first blog post!"}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
