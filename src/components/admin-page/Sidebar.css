@@ -1,41 +1,63 @@
+/* Sidebar Container */
 .admin-sidebar {
-  background-color: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  width: 220px;
-  min-width: 220px;
+  background-color: #ffffff;
+  padding: 16px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 240px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
+/* All Menu Items (Base Style) */
 .admin-sidebar-item {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  border-radius: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
-  color: #333;
-}
-
-.admin-sidebar-item:hover {
-  background-color: #f0f6ff;
-}
-
-.admin-sidebar-active {
-  background-color: #f0f6ff;
-  color: #0052cc;
-}
-
-.admin-sidebar-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-}
-
-.admin-sidebar-label {
+  transition: all 0.2s ease;
+  color: #5e6c84; /* Neutral gray for inactive */
+  text-decoration: none;
   font-size: 14px;
   font-weight: 500;
+}
+
+/* Hover State */
+.admin-sidebar-item:hover {
+  background-color: #f8f9fa; /* Very subtle gray */
+}
+
+/* Active State (ONLY highlighted item) */
+.admin-sidebar-active {
+  background-color: #f0f5ff; /* Light blue background */
+  color: #0066ff; /* Vibrant blue text */
+  font-weight: 600;
+}
+
+/* Icons */
+.admin-sidebar-icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+/* Active Icon */
+.admin-sidebar-active .admin-sidebar-icon {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(39%) sepia(98%) saturate(1765%) hue-rotate(202deg) brightness(101%) contrast(101%);
+}
+
+/* Labels */
+.admin-sidebar-label {
+  white-space: nowrap;
+}
+
+/* Focus State */
+.admin-sidebar-item:focus-visible {
+  outline: 2px solid #0066ff;
+  outline-offset: 2px;
 }
