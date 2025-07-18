@@ -52,7 +52,7 @@ const ApplicationsDashboard = () => {
     const fetchApplications = async () => {
       try {
         const response = await fetch(
-          "http://localhost/Hirlytics/Hirlytics/copy/src/api/listApplications.php"
+          "http://localhost/Hirlytics-final/src/api/listApplications.php"
         );
 
         if (!response.ok) {
@@ -91,7 +91,7 @@ const ApplicationsDashboard = () => {
       setStatusUpdateLoading(applicationId);
 
       const response = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/updateApplicationStatus.php",
+        "http://localhost/Hirlytics-final/src/api/updateApplicationStatus.php",
         {
           method: "POST",
           headers: {

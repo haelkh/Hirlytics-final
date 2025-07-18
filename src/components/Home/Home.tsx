@@ -121,7 +121,11 @@ const Home = (): React.JSX.Element => {
               <div className="col-12 d-flex justify-content-center">
                 <div className="btn-group switch-buttons">
                   <button
-                    className={`btn btn-outline-light ${
+                    style={{
+                      color: "white",
+                      border: "1px solid white",
+                    }}
+                    className={`btn btn-outline-light  ${
                       activeSwitch === "apply" ? "active" : "no-hover"
                     }`}
                     onClick={() => handleSwitchClick("apply")}

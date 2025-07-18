@@ -16,6 +16,7 @@ const HistorySection: React.FC<HistorySectionProps> = ({
   return (
     <>
       <Header />
+      <br />
       <div className={styles.spacer} />
       <div className={styles.historyPage}>
         <div className={styles.aboutHeader}>

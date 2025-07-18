@@ -58,7 +58,7 @@ const ApplicationDetails = () => {
     const fetchApplicationDetails = async () => {
       try {
         const response = await fetch(
-          `http://localhost/Hirlytics/Hirlytics/copy/src/api/getApplicationDetails.php?application_id=${id}`
+          `http://localhost/Hirlytics-final/src/api/getApplicationDetails.php?application_id=${id}`
         );
 
         if (!response.ok) {
@@ -97,7 +97,7 @@ const ApplicationDetails = () => {
       setStatusUpdateLoading(true);
 
       const response = await fetch(
-        "http://localhost/Hirlytics/Hirlytics/copy/src/api/updateApplicationStatus.php",
+        "http://localhost/Hirlytics-final/src/api/updateApplicationStatus.php",
         {
           method: "POST",
           headers: {
@@ -206,7 +206,7 @@ const ApplicationDetails = () => {
             ) : application ? (
               <div className="application-details-content">
                 <div className="application-details-header">
-                                    <button 
+                  <button
                     className="back-button"
                     onClick={() => navigate("/AdminPage/Manage/applications")}
                   >
@@ -430,7 +430,7 @@ const ApplicationDetails = () => {
                         <span className="detail-label">CV/Resume:</span>
                         {application.CVUpload ? (
                           <a
-                            href={`http://localhost/Hirlytics/Hirlytics/copy/src/uploads/${application.CVUpload}`}
+                            href={`http://localhost/Hirlytics-final/src/uploads/${application.CVUpload}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="document-link"
