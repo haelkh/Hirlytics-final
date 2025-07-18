@@ -32,7 +32,6 @@ const Sidebar = () => {
       label: "Calendar",
       path: "/AdminPage/Manage/calendar",
     },
-    { id: 6, icon: jobSeekerIcon, label: "Jobs", path: "/Jobs" },
     {
       id: 7,
       icon: jobSeekerIcon,

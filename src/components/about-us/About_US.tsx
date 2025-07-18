@@ -1,53 +1,40 @@
 import React from "react";
-// Import CSS Module
-import styles from "./HistorySection.module.css"; // Ensure this file exists now
+import styles from "./HistorySection.module.css";
 import Header from "../Header/header";
 import Footer from "../Footer/Footer";
 import { Link } from "react-router-dom";
+
 interface HistorySectionProps {
   companyName?: string;
   foundingYear?: number;
-  showVideoPlayer?: boolean;
 }
 
 const HistorySection: React.FC<HistorySectionProps> = ({
   companyName = "Hirlytics",
   foundingYear = 2023,
-  showVideoPlayer = true,
 }) => {
   return (
     <>
       <Header />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      {/* Use styles object for class names */}
-      <div className={styles["history-page"]}>
-        {/* Top blue header */}
-        <div className={styles["about-header"]}>
-          <h1>About us</h1>
+      <div className={styles.spacer} />
+      <div className={styles.historyPage}>
+        <div className={styles.aboutHeader}>
+          <h1>About Us</h1>
         </div>
 
-        {/* Main content section */}
-        <div className={styles["history-section"]}>
-          <div className={styles["history-container"]}>
-            {/* Left sidebar with title */}
-            <div className={styles["history-sidebar"]}>
-              <div className={styles["know-about-us"]}>
-                <div className={styles["blue-line"]}></div>
+        <div className={styles.historySection}>
+          <div className={styles.historyContainer}>
+            <div className={styles.historySidebar}>
+              <div className={styles.knowAboutUs}>
+                <div className={styles.blueLine}></div>
                 <span>KNOW ABOUT US</span>
               </div>
-              <h2 className={styles["history-title"]}>History</h2>
+              <h2 className={styles.historyTitle}>History</h2>
             </div>
 
-            {/* Right content area */}
-            <div className={styles["history-content"]}>
-              <div className={styles["history-text"]}>
-                <p className={styles.Colorhistory}>
-                  {" "}
-                  {/* Use styles.className for valid JS identifiers */}
+            <div className={styles.historyContent}>
+              <div className={styles.historyText}>
+                <p className={styles.colorHistory}>
                   Founded in {foundingYear}, {companyName} emerged in response
                   to the growing need for data-driven, efficient, and inclusive
                   recruitment solutions in the tech industry. Recognizing the
@@ -57,61 +44,36 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                   strategies. Since our inception, we have successfully
                   partnered with numerous forward-thinking organizations and
                   tech professionals, helping them achieve their goals in a
-                  competitive market
+                  competitive market.
                 </p>
               </div>
-
-              {showVideoPlayer && (
-                // Use bracket notation for class names with hyphens or invalid JS chars
-                <div className={styles["video-container"]}>
-                  <img
-                    src="/src/assets/Vid.jpeg"
-                    className={styles["team-image"]}
-                  />
-                  <div className={styles["play-button-wrapper"]}>
-                    <button
-                      className={styles["play-button"]}
-                      aria-label="Play video"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="white"
-                      >
-                        <circle cx="12" cy="12" r="10" fill="currentColor" />
-                        <path fill="#003b88" d="M10 8l6 4-6 4V8z" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
 
-        {/* Mission & Vision Section */}
-        <div className={styles["mission-vision-section"]}>
-          <div className={styles["mission-vision-container"]}>
-            <div className={styles["mission-vision-image"]}>
+        <div className={styles.missionVisionSection}>
+          <div className={styles.missionVisionContainer}>
+            <div className={styles.missionVisionImage}>
               <img
                 src="./src/assets/Rectangle 28.png"
-                className={styles["collaboration-image"]}
+                alt="Team collaboration"
+                className={styles.collaborationImage}
               />
             </div>
-            <div className={styles["mission-vision-content"]}>
-              <h2 className={styles["mission-vision-title"]}>
+            <div className={styles.missionVisionContent}>
+              <h2 className={styles.missionVisionTitle}>
                 Our Mission & Vision
-                <div className={styles["title-underline"]}>
-                  <div className={styles["title-dot"]}></div>
+                <div className={styles.titleUnderline}>
+                  <div className={styles.titleDot}></div>
                 </div>
               </h2>
-              <p className={styles["mission-vision-text"]}>
+              <p className={styles.missionVisionText}>
                 To be the leading tech recruitment partner in the MENA region,
                 fostering a dynamic workforce where innovation thrives,
                 inclusivity is prioritized, and businesses and professionals
-                reach their full potential, we strive to bridge the gap between
+                reach their full potential. We strive to bridge the gap between
                 top tech talent and visionary organizations by delivering
-                tailored, data- driven hiring solutions. We are committed to
+                tailored, data-driven hiring solutions. We are committed to
                 creating lasting professional relationships, empowering
                 individuals in their career journeys, and driving business
                 success through strategic talent acquisition and workforce
@@ -121,19 +83,16 @@ const HistorySection: React.FC<HistorySectionProps> = ({
           </div>
         </div>
 
-        {/* Why Choose Hirlytics Section */}
-        <div className={styles["why-choose-section"]}>
-          <div className={styles["why-choose-container"]}>
-            <h2 className={styles["why-choose-title"]}>
-              Why Choose Hirlytics?
-            </h2>
-            <div className={styles["why-choose-content"]}>
-              <div className={styles["why-choose-text"]}>
+        <div className={styles.whyChooseSection}>
+          <div className={styles.whyChooseContainer}>
+            <h2 className={styles.whyChooseTitle}>Why Choose Hirlytics?</h2>
+            <div className={styles.whyChooseContent}>
+              <div className={styles.whyChooseText}>
                 <h3>
-                  <i>Hirlytics: Your Strategic Partner in Tech Recruitment</i>
+                  <em>Hirlytics: Your Strategic Partner in Tech Recruitment</em>
                 </h3>
                 <p>
-                  <i>
+                  <em>
                     We source, vet, and place tech talent using
                     <span className={styles.highlight}>
                       {" "}
@@ -163,46 +122,43 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                     </span>
                     . Partner with us to transform hiring and build a dynamic
                     workforce.
-                    {/* Example of combining classes */}
                     <span className={`${styles.highlight} ${styles.bold}`}>
                       {" "}
                       Connect today!
                     </span>
-                  </i>
+                  </em>
                 </p>
               </div>
-              <div className={styles["why-choose-image"]}>
+              <div className={styles.whyChooseImage}>
                 <img
                   src="/src/assets/Rectangle 27.png"
-                  className={styles["team-meeting-image"]}
+                  alt="Team meeting"
+                  className={styles.teamMeetingImage}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Meet Our Team Section */}
-        <div className={styles["team-section"]}>
-          <div className={styles["team-container"]}>
-            <h2 className={styles["team-heading"]}>Meet our team</h2>
-            <p className={styles["team-subheading"]}>
+        <div className={styles.teamSection}>
+          <div className={styles.teamContainer}>
+            <h2 className={styles.teamHeading}>Meet Our Team</h2>
+            <p className={styles.teamSubheading}>
               The Faces Behind Our Success Stories
             </p>
 
-            <div className={styles["team-members"]}>
-              {/* Repeat for each team member, applying styles */}
-              <div className={styles["team-member"]}>
-                <div className={styles["member-image-container"]}>
+            <div className={styles.teamMembers}>
+              <div className={styles.teamMember}>
+                <div className={styles.memberImageContainer}>
                   <img
                     src="/src/assets/Abed.png"
-                    className={styles["member-image"]}
+                    alt="Abdul Rahman Al Moghrabi"
+                    className={styles.memberImage}
                   />
                 </div>
-                <h3 className={styles["member-name"]}>
-                  Abdul Rahman Al Moghrabi
-                </h3>
-                <p className={styles["member-title"]}>HR Manager</p>
-                <p className={styles["member-bio"]}>
+                <h3 className={styles.memberName}>Abdul Rahman Al Moghrabi</h3>
+                <p className={styles.memberTitle}>HR Manager</p>
+                <p className={styles.memberBio}>
                   Abdul Rahman Al Moghrabi is a tech recruitment expert with a
                   strong industry network and a passion for innovation. He
                   excels at matching companies with top talent by understanding
@@ -212,18 +168,19 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                 </p>
               </div>
 
-              <div className={styles["team-member"]}>
-                <div className={styles["member-image-container"]}>
+              <div className={styles.teamMember}>
+                <div className={styles.memberImageContainer}>
                   <img
                     src="/src/assets/Fatima.png"
-                    className={styles["member-image"]}
+                    alt="Fatima Al Moghrabi"
+                    className={styles.memberImage}
                   />
                 </div>
-                <h3 className={styles["member-name"]}>Fatima Al Moghrabi</h3>
-                <p className={styles["member-title"]}>
+                <h3 className={styles.memberName}>Fatima Al Moghrabi</h3>
+                <p className={styles.memberTitle}>
                   Talent Acquisition Specialist
                 </p>
-                <p className={styles["member-bio"]}>
+                <p className={styles.memberBio}>
                   Fatima Al Moghrabi is a skilled talent acquisition specialist
                   with expertise in the tech sector. Her strategic mindset and
                   attention to detail help her identify candidates who match
@@ -233,16 +190,17 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                 </p>
               </div>
 
-              <div className={styles["team-member"]}>
-                <div className={styles["member-image-container"]}>
+              <div className={styles.teamMember}>
+                <div className={styles.memberImageContainer}>
                   <img
                     src="/src/assets/Omar.png"
-                    className={styles["member-image"]}
+                    alt="Omar Khalil"
+                    className={styles.memberImage}
                   />
                 </div>
-                <h3 className={styles["member-name"]}>Omar Khalil</h3>
-                <p className={styles["member-title"]}>Recruitment Analyst</p>
-                <p className={styles["member-bio"]}>
+                <h3 className={styles.memberName}>Omar Khalil</h3>
+                <p className={styles.memberTitle}>Recruitment Analyst</p>
+                <p className={styles.memberBio}>
                   Omar Khalil is a data-driven recruitment analyst who leverages
                   analytics to optimize hiring strategies. His expertise in
                   identifying trends enhances the recruitment process, ensuring
@@ -255,64 +213,54 @@ const HistorySection: React.FC<HistorySectionProps> = ({
           </div>
         </div>
 
-        {/* Connect with Hirlytics Section */}
-        <div className={styles["connect-section"]}>
+        <div className={styles.connectSection}>
           <div
-            className={styles["connect-banner"]}
+            className={styles.connectBanner}
             style={{
               backgroundImage:
-                "linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),url('/src/assets/Vid.jpeg')",
+                "linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/src/assets/Vid.jpeg')",
             }}
           >
-            <div className={styles["connect-overlay"]}>
-              <h2 className={styles["connect-heading"]}>
-                Connect with Hirlytics
-              </h2>
-              <div className={styles["connect-buttons"]}>
-                {/* Combine classes using template literals */}
-                {/*updated link to schedule appointments */}
+            <div className={styles.connectOverlay}>
+              <h2 className={styles.connectHeading}>Connect with Hirlytics</h2>
+              <div className={styles.connectButtons}>
                 <Link
                   to="/appointments"
-                  className={`${styles["connect-button"]} ${styles["schedule-button"]}`}
+                  className={`${styles.connectButton} ${styles.scheduleButton}`}
                 >
-                  Schedule an appointment
+                  Schedule an Appointment
                 </Link>
-                {/*updated link to contact us */}
                 <Link
                   to="/contact-us"
-                  className={`${styles["connect-button"]} ${styles["contact-button"]}`}
+                  className={`${styles.connectButton} ${styles.contactButton}`}
                 >
-                  Contact us
+                  Contact Us
                 </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Our Events Section */}
-        <div className={styles["events-section"]}>
-          <div className={styles["events-container"]}>
-            <h2 className={styles["events-heading"]}>Our Events</h2>
-
-            <div className={styles["events-card-container"]}>
-              {/* Repeat for each event card, applying styles */}
-              <div className={styles["event-card"]}>
-                <div className={styles["event-date"]}>
-                  <span className={styles["event-day"]}>13</span>
-                  <span className={styles["event-month"]}>APR</span>
+        <div className={styles.eventsSection}>
+          <div className={styles.eventsContainer}>
+            <h2 className={styles.eventsHeading}>Our Events</h2>
+            <div className={styles.eventsCardContainer}>
+              <div className={styles.eventCard}>
+                <div className={styles.eventDate}>
+                  <span className={styles.eventDay}>13</span>
+                  <span className={styles.eventMonth}>APR</span>
                 </div>
-                <div className={styles["event-details"]}>
-                  <span className={styles["event-label"]}>NEXT EVENTS</span>
-                  <h3 className={styles["event-title"]}>
-                    Create a Proffesional CV
+                <div className={styles.eventDetails}>
+                  <span className={styles.eventLabel}>NEXT EVENTS</span>
+                  <h3 className={styles.eventTitle}>
+                    Create a Professional CV
                   </h3>
                 </div>
-                <div className={styles["event-arrow"]}>
+                <div className={styles.eventArrow}>
                   <button
-                    className={styles["arrow-button"]}
+                    className={styles.arrowButton}
                     aria-label="See event details"
                   >
-                    {/* ... svg ... */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -328,21 +276,20 @@ const HistorySection: React.FC<HistorySectionProps> = ({
                 </div>
               </div>
 
-              <div className={styles["event-card"]}>
-                <div className={styles["event-date"]}>
-                  <span className={styles["event-day"]}>25</span>
-                  <span className={styles["event-month"]}>APR</span>
+              <div className={styles.eventCard}>
+                <div className={styles.eventDate}>
+                  <span className={styles.eventDay}>25</span>
+                  <span className={styles.eventMonth}>APR</span>
                 </div>
-                <div className={styles["event-details"]}>
-                  <span className={styles["event-label"]}>NEXT EVENTS</span>
-                  <h3 className={styles["event-title"]}>Ace Job Interviews</h3>
+                <div className={styles.eventDetails}>
+                  <span className={styles.eventLabel}>NEXT EVENTS</span>
+                  <h3 className={styles.eventTitle}>Ace Job Interviews</h3>
                 </div>
-                <div className={styles["event-arrow"]}>
+                <div className={styles.eventArrow}>
                   <button
-                    className={styles["arrow-button"]}
+                    className={styles.arrowButton}
                     aria-label="See event details"
                   >
-                    {/* ... svg ... */}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -361,7 +308,7 @@ const HistorySection: React.FC<HistorySectionProps> = ({
           </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </>
   );
 };
