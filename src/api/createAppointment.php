@@ -61,6 +61,8 @@ try {
                 }
                 break;
             case 'datetime':
+                // Log the received datetime string for debugging
+                error_log("Received Appointment_DateTime: " . $data[$field]);
                 if (!DateTime::createFromFormat('Y-m-d H:i:s', $data[$field])) {
                     $errors[] = "Field '$field' must be a valid datetime (YYYY-MM-DD HH:MM:SS)";
                 }

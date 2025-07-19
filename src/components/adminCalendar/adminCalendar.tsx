@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./adminCalendar.css";
 import {
   ChevronLeft,
@@ -9,79 +9,168 @@ import {
 } from "lucide-react";
 import Sidebar from "../admin-page/Sidebar";
 
+interface Appointment {
+  Appointment_ID: string;
+  User_ID: string;
+  Appointment_DateTime: string;
+  Appointment_Type: string;
+  Appointment_Status: string;
+  Notes: string;
+}
+
 const DashboardCalendar: React.FC = () => {
   const [viewMode, setViewMode] = useState<"Day" | "Week" | "Month">("Month");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [selectedDayEvents, setSelectedDayEvents] = useState<Appointment[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Calendar data
-  const currentMonth = "October 2019";
-  const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost/Hirlytics-final/src/api/getAppointments.php"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.success) {
+          setAppointments(data.appointments);
+        } else {
+          console.error("Failed to fetch appointments:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
 
-  // Generate calendar grid data
-  const calendarDays = [
-    [25, 26, 27, 28, 29, 30, 1],
-    [2, 3, 4, 5, 6, 7, 8],
-    [9, 10, 11, 12, 13, 14, 15],
-    [16, 17, 18, 19, 20, 21, 22],
-    [23, 24, 25, 26, 27, 28, 29],
-    [30, 31, 1, 2, 3, 4, 5],
+    fetchAppointments();
+  }, [currentDate]);
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
+  const daysOfWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
-  // Events data
-  const events = [
-    {
-      id: 1,
-      title: "Design Conference",
-      date: "Today 07:19 AM",
-      location: "58 Davion Mission Suite 157",
-      city: "Meghanberg",
-      attendees: ["user1", "user2", "user3", "+10"],
-      calendarPosition: { week: 1, day: 3 }, // WED of second week
-      color: "blue",
-    },
-    {
-      id: 2,
-      title: "Weekend Festival",
-      date: "19 October 2019 at 5:00 PM",
-      location: "853 Moore Flats Suite 198",
-      city: "Sweden",
-      attendees: ["user1", "user2", "user3", "+10"],
-      calendarPosition: { week: 3, day: 0 }, // MON of fourth week
-      color: "purple",
-    },
-    {
-      id: 3,
-      title: "Glastonbury Festival",
-      date: "20-22 October 2019 at 8:00 PM",
-      location: "646 Walter Road Apt. 571",
-      city: "Turks and Caicos Islands",
-      attendees: ["user1", "user2", "user3", "+10"],
-      calendarPosition: { week: 3, day: 5, span: 3 }, // FRI-SUN of fourth week
-      color: "orange",
-    },
-    {
-      id: 4,
-      title: "Ultra Europe 2019",
-      date: "29 October 2019 at 10:00 PM",
-      location: "906 Sutherland Tunnel Apt. 963",
-      city: "San Marino",
-      attendees: ["user1", "user2", "user3", "+10"],
-      calendarPosition: { week: 4, day: 3 }, // THU of fifth week
-      color: "blue",
-    },
-  ];
+  const currentMonthStr = `${
+    monthNames[currentDate.getMonth()]
+  } ${currentDate.getFullYear()}`;
+
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    // Adjust getDay() to make Monday=0, Sunday=6
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Convert Sunday (0) to 6, others (1-6) to 0-5
+  };
+
+  const getTotalCalendarDays = () => {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInCurrentMonth = getDaysInMonth(year, month);
+    const firstDay = getFirstDayOfMonth(year, month);
+
+    const daysInPrevMonth = getDaysInMonth(year, month - 1);
+    const prevMonthStartDay = daysInPrevMonth - firstDay + 1;
+
+    const totalDays = [];
+
+    // Add days from previous month
+    for (let i = 0; i < firstDay; i++) {
+      totalDays.push({ day: prevMonthStartDay + i, currentMonth: false });
+    }
+
+    // Add days from current month
+    for (let i = 1; i <= daysInCurrentMonth; i++) {
+      totalDays.push({ day: i, currentMonth: true });
+    }
+
+    // Add days from next month to fill the last week
+    const remainingCells = 42 - totalDays.length; // 6 weeks * 7 days/week
+    for (let i = 1; i <= remainingCells; i++) {
+      totalDays.push({ day: i, currentMonth: false });
+    }
+    return totalDays;
+  };
+
+  const goToPreviousMonth = () => {
+    setCurrentDate(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+    );
+  };
+
+  const goToNextMonth = () => {
+    setCurrentDate(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+    );
+  };
+
+  const handleDateClick = (dayInfo: { day: number; currentMonth: boolean }) => {
+    if (!dayInfo.currentMonth) return; // Only show events for days in the current month
+
+    const selectedDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      dayInfo.day
+    );
+    const formattedSelectedDate = selectedDate.toISOString().split("T")[0];
+
+    const eventsForDay = appointments.filter((app) =>
+      app.Appointment_DateTime.startsWith(formattedSelectedDate)
+    );
+    setSelectedDayEvents(eventsForDay);
+    setIsModalOpen(true);
+  };
 
   // Render event on calendar
-  const renderEventOnCalendar = (week: number, day: number) => {
-    const event = events.find(
-      (e) => e.calendarPosition.week === week && e.calendarPosition.day === day
-    );
+  const renderEventsForDay = (dayInfo: {
+    day: number;
+    currentMonth: boolean;
+  }) => {
+    if (!dayInfo.currentMonth) return null;
 
-    if (event) {
+    const dayAppointments = appointments.filter((app) => {
+      const appDate = new Date(app.Appointment_DateTime);
       return (
-        <div className={`calendar-event ${event.color}`}>{event.title}</div>
+        appDate.getDate() === dayInfo.day &&
+        appDate.getMonth() === currentDate.getMonth() &&
+        appDate.getFullYear() === currentDate.getFullYear()
       );
-    }
-    return null;
+    });
+
+    return (
+      <div className="day-events">
+        {dayAppointments.slice(0, 2).map((app) => (
+          <div
+            key={app.Appointment_ID}
+            className={`calendar-event ${
+              app.Appointment_Type === "Meeting" ? "blue" : "purple"
+            }`}
+          >
+            {" "}
+            {/* Example color logic */}
+            {app.Appointment_Type}
+          </div>
+        ))}
+        {dayAppointments.length > 2 && (
+          <div className="more-events">+{dayAppointments.length - 2} more</div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -109,7 +198,7 @@ const DashboardCalendar: React.FC = () => {
         <Sidebar />
 
         <main className="main-content">
-          <h1 className="page-title">Calender</h1>
+          <h1 className="page-title">Calendar</h1>
 
           <div className="calendar-container">
             <div className="events-sidebar">
@@ -118,57 +207,63 @@ const DashboardCalendar: React.FC = () => {
               </button>
 
               <div className="upcoming-events">
-                <h3>You are going to</h3>
+                <h3>Upcoming Appointments</h3>
 
-                {events.map((event) => (
-                  <div className="event-card" key={event.id}>
+                {appointments.slice(0, 5).map((appointment) => (
+                  <div className="event-card" key={appointment.Appointment_ID}>
                     <div className="event-avatar">
+                      {/* Placeholder for user avatar or icon */}
                       <img
                         src="/placeholder.svg?height=40&width=40"
-                        alt="Event"
+                        alt="Appointment"
                       />
                     </div>
                     <div className="event-details">
-                      <h4>{event.title}</h4>
-                      <div className="event-date">{event.date}</div>
-                      <div className="event-location">{event.location}</div>
-                      <div className="event-city">{event.city}</div>
-                      <div className="event-attendees">
-                        {event.attendees.map((attendee, index) => (
-                          <div className="attendee" key={index}>
-                            {attendee.startsWith("+") ? (
-                              <div className="more-attendees">{attendee}</div>
-                            ) : (
-                              <img
-                                src="/placeholder.svg?height=24&width=24"
-                                alt="Attendee"
-                              />
-                            )}
-                          </div>
-                        ))}
+                      <h4>{appointment.Appointment_Type}</h4>
+                      <div className="event-date">
+                        {new Date(
+                          appointment.Appointment_DateTime
+                        ).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        })}
                       </div>
+                      <div className="event-location">
+                        {appointment.Notes || "No notes"}
+                      </div>
+                      {/* <div className="event-city">{event.city}</div> */}
+                      {/* <div className="event-attendees"></div> */}
                     </div>
                   </div>
                 ))}
 
-                <button className="see-more-btn">See More</button>
+                <button className="see-more-btn">See All Appointments</button>
               </div>
             </div>
 
             <div className="calendar-view">
               <div className="calendar-header">
-                <div className="calendar-today">Today</div>
+                <div
+                  className="calendar-today"
+                  onClick={() => setCurrentDate(new Date())}
+                >
+                  Today
+                </div>
                 <div className="calendar-navigation">
-                  <button className="nav-btn">
+                  <button className="nav-btn" onClick={goToPreviousMonth}>
                     <ChevronLeft size={16} />
                   </button>
-                  <h2>{currentMonth}</h2>
-                  <button className="nav-btn">
+                  <h2>{currentMonthStr}</h2>
+                  <button className="nav-btn" onClick={goToNextMonth}>
                     <ChevronRight size={16} />
                   </button>
                 </div>
                 <div className="view-options">
-                  {["Day", "Week", "Month"].map((mode) => (
+                  {["Month"].map((mode) => (
                     <button
                       key={mode}
                       className={`view-btn ${
@@ -186,36 +281,88 @@ const DashboardCalendar: React.FC = () => {
 
               <div className="calendar-grid">
                 <div className="calendar-days">
-                  {days.map((day) => (
+                  {daysOfWeek.map((day) => (
                     <div className="day-header" key={day}>
                       {day}
                     </div>
                   ))}
                 </div>
                 <div className="calendar-dates">
-                  {calendarDays.map((week, weekIndex) => (
-                    <div className="week" key={weekIndex}>
-                      {week.map((date, dayIndex) => (
-                        <div
-                          className={`date-cell ${
-                            date === 1 && weekIndex === 0
-                              ? "current-month-start"
-                              : ""
-                          }`}
-                          key={`${weekIndex}-${dayIndex}`}
-                        >
-                          <div className="date-number">{date}</div>
-                          {renderEventOnCalendar(weekIndex, dayIndex)}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+                  {getTotalCalendarDays().map((dayInfo, index) => {
+                    const cellDate = new Date(
+                      currentDate.getFullYear(),
+                      currentDate.getMonth(),
+                      dayInfo.day
+                    );
+                    const isCurrentDay =
+                      cellDate.toDateString() === new Date().toDateString() &&
+                      dayInfo.currentMonth;
+                    return (
+                      <div
+                        className={`date-cell ${
+                          !dayInfo.currentMonth ? "outside-month" : ""
+                        } ${isCurrentDay ? "current-day" : ""}`}
+                        key={index}
+                        onClick={() => handleDateClick(dayInfo)}
+                      >
+                        <div className="date-number">{dayInfo.day}</div>
+                        {renderEventsForDay(dayInfo)}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
           </div>
         </main>
       </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>
+              Appointments for{" "}
+              {selectedDayEvents.length > 0
+                ? new Date(
+                    selectedDayEvents[0].Appointment_DateTime
+                  ).toLocaleDateString()
+                : new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    1
+                  ).toLocaleDateString()}
+            </h2>
+            {selectedDayEvents.length > 0 ? (
+              selectedDayEvents.map((app) => (
+                <div
+                  key={app.Appointment_ID}
+                  className="modal-appointment-item"
+                >
+                  <p>
+                    <strong>Type:</strong> {app.Appointment_Type}
+                  </p>
+                  <p>
+                    <strong>Time:</strong>{" "}
+                    {new Date(app.Appointment_DateTime).toLocaleTimeString(
+                      "en-US",
+                      { hour: "numeric", minute: "numeric", hour12: true }
+                    )}
+                  </p>
+                  <p>
+                    <strong>Notes:</strong> {app.Notes || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {app.Appointment_Status}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>No appointments for this day.</p>
+            )}
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

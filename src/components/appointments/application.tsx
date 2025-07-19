@@ -75,22 +75,37 @@ function Appointments() {
       "Nov",
       "Dec",
     ];
-    const month = (monthNames.indexOf(monthStr) + 1)
+    // Remove comma from monthStr if present
+    const cleanMonthStr = monthStr.replace(",", "");
+    const month = (monthNames.indexOf(cleanMonthStr) + 1)
       .toString()
       .padStart(2, "0");
     const formattedDate = `${year}-${month}-${day}`;
 
     // Assuming time is in HH:MM AM/PM format, convert to HH:MM:SS
-    let [time, meridiem] = appointmentData.time.split(" ");
-    let [hours, minutes] = time.split(":");
+    // Correctly extract the first part of the time string (e.g., "5:30 PM")
+    let [timePart] = appointmentData.time.split("-");
+    timePart = timePart.trim(); // Remove any leading/trailing whitespace
+
+    let [hours, minutes] = timePart.split(":");
+    const meridiem = minutes.substring(minutes.length - 2); // Get AM/PM
+    minutes = minutes.substring(0, minutes.length - 3); // Remove AM/PM and space
+
     if (meridiem === "PM" && hours !== "12") {
       hours = (parseInt(hours, 10) + 12).toString();
     } else if (meridiem === "AM" && hours === "12") {
       hours = "00";
     }
-    const formattedTime = `${hours}:${minutes}:00`;
+    const formattedTime = `${hours.padStart(2, "0")}:${minutes.padStart(
+      2,
+      "0"
+    )}:00`;
 
     const appointmentDateTime = `${formattedDate} ${formattedTime}`;
+
+    console.log("Formatted Date:", formattedDate);
+    console.log("Formatted Time:", formattedTime);
+    console.log("Appointment DateTime being sent:", appointmentDateTime);
 
     // Placeholder for user ID (replace with actual user ID from session/auth)
     const userId = 1;
