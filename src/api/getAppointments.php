@@ -41,7 +41,7 @@ try {
     );
 
     // Fetch appointments from database
-    $stmt = $pdo->prepare("SELECT * FROM appointments");
+    $stmt = $pdo->prepare("SELECT a.*, u.Full_Name FROM appointments a JOIN users u ON a.User_ID = u.ID");
     $stmt->execute();
     $appointments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

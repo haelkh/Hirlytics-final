@@ -97,6 +97,15 @@ try {
         ]
     );
 
+    // Check for existing appointments at the requested time
+    $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM appointments WHERE Appointment_DateTime = :Appointment_DateTime");
+    $stmtCheck->execute([':Appointment_DateTime' => $data['Appointment_DateTime']]);
+    $appointmentCount = $stmtCheck->fetchColumn();
+
+    if ($appointmentCount > 0) {
+        throw new Exception('An appointment already exists for this date and time. Please choose a different slot.', 409); // 409 Conflict
+    }
+
     // Insert appointment into database
     $stmt = $pdo->prepare(
         "INSERT INTO appointments 

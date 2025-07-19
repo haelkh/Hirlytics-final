@@ -139,7 +139,16 @@ function Appointments() {
       }
     } catch (error) {
       console.error("Error scheduling appointment:", error);
-      alert("An error occurred while scheduling the appointment.");
+      if (error instanceof Response && error.status === 409) {
+        const errorResult = await error.json();
+        alert(`Failed to schedule appointment: ${errorResult.message}`);
+      } else if (error instanceof Error) {
+        alert(
+          `An error occurred while scheduling the appointment: ${error.message}`
+        );
+      } else {
+        alert("An unknown error occurred while scheduling the appointment.");
+      }
     }
   };
 

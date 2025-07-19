@@ -5,7 +5,10 @@ import {
   ChevronRight,
   Bell,
   ChevronDown,
-  Plus,
+  Calendar as CalendarIcon, // Renamed to avoid conflict with component
+  Tag, // For appointment type
+  FileText, // For notes
+  User, // For user ID
 } from "lucide-react";
 import Sidebar from "../admin-page/Sidebar";
 
@@ -16,6 +19,7 @@ interface Appointment {
   Appointment_Type: string;
   Appointment_Status: string;
   Notes: string;
+  Full_Name?: string; // Add Full_Name to the interface
 }
 
 const DashboardCalendar: React.FC = () => {
@@ -24,6 +28,12 @@ const DashboardCalendar: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [selectedDayEvents, setSelectedDayEvents] = useState<Appointment[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddAppointmentModalOpen, setIsAddAppointmentModalOpen] =
+    useState(false);
+  const [newAppointment, setNewAppointment] = useState<Partial<Appointment>>({
+    Appointment_Type: "Meeting",
+    Appointment_Status: "pending",
+  });
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -84,12 +94,11 @@ const DashboardCalendar: React.FC = () => {
     const daysInCurrentMonth = getDaysInMonth(year, month);
     const firstDay = getFirstDayOfMonth(year, month);
 
-    const daysInPrevMonth = getDaysInMonth(year, month - 1);
-    const prevMonthStartDay = daysInPrevMonth - firstDay + 1;
-
     const totalDays = [];
 
     // Add days from previous month
+    const daysInPrevMonth = getDaysInMonth(year, month - 1);
+    const prevMonthStartDay = daysInPrevMonth - firstDay + 1;
     for (let i = 0; i < firstDay; i++) {
       totalDays.push({ day: prevMonthStartDay + i, currentMonth: false });
     }
@@ -134,6 +143,74 @@ const DashboardCalendar: React.FC = () => {
     );
     setSelectedDayEvents(eventsForDay);
     setIsModalOpen(true);
+  };
+
+  const handleNewAppointmentChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setNewAppointment((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleNewAppointmentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      !newAppointment.User_ID ||
+      !newAppointment.Appointment_DateTime ||
+      !newAppointment.Appointment_Type
+    ) {
+      alert(
+        "Please fill in all required fields: User ID, Date & Time, and Appointment Type."
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost/Hirlytics-final/src/api/createAppointment.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newAppointment),
+        }
+      );
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Appointment created successfully!");
+        setIsAddAppointmentModalOpen(false);
+        setNewAppointment({
+          Appointment_Type: "Meeting",
+          Appointment_Status: "pending",
+        }); // Reset form
+        // Refetch appointments to update the calendar display
+        const updatedAppointmentsResponse = await fetch(
+          "http://localhost/Hirlytics-final/src/api/getAppointments.php"
+        );
+        const updatedAppointmentsData =
+          await updatedAppointmentsResponse.json();
+        if (updatedAppointmentsData.success) {
+          setAppointments(updatedAppointmentsData.appointments);
+        }
+      } else {
+        alert(`Failed to create appointment: ${result.message}`);
+      }
+    } catch (error) {
+      console.error("Error creating appointment:", error);
+      if (error instanceof Response && error.status === 409) {
+        const errorResult = await error.json();
+        alert(`Failed to create appointment: ${errorResult.message}`);
+      } else if (error instanceof Error) {
+        alert(
+          `An error occurred while creating the appointment: ${error.message}`
+        );
+      } else {
+        alert("An unknown error occurred while creating the appointment.");
+      }
+    }
   };
 
   // Render event on calendar
@@ -202,9 +279,12 @@ const DashboardCalendar: React.FC = () => {
 
           <div className="calendar-container">
             <div className="events-sidebar">
-              <button className="add-event-btn">
-                <Plus size={16} /> Add New Event
-              </button>
+              {/* <button
+                className="add-event-btn"
+                onClick={() => setIsAddAppointmentModalOpen(true)}
+              >
+                <Plus size={16} /> Add New Appointment
+              </button> */}
 
               <div className="upcoming-events">
                 <h3>Upcoming Appointments</h3>
@@ -233,10 +313,14 @@ const DashboardCalendar: React.FC = () => {
                         })}
                       </div>
                       <div className="event-location">
-                        {appointment.Notes || "No notes"}
+                        Notes: {appointment.Notes || "N/A"}
                       </div>
-                      {/* <div className="event-city">{event.city}</div> */}
-                      {/* <div className="event-attendees"></div> */}
+                      <div className="event-location">
+                        Status: {appointment.Appointment_Status}
+                      </div>
+                      <div className="event-location">
+                        User: {appointment.Full_Name || appointment.User_ID}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -354,12 +438,88 @@ const DashboardCalendar: React.FC = () => {
                   <p>
                     <strong>Status:</strong> {app.Appointment_Status}
                   </p>
+                  <p>
+                    <strong>User:</strong> {app.Full_Name || app.User_ID}
+                  </p>
                 </div>
               ))
             ) : (
               <p>No appointments for this day.</p>
             )}
             <button onClick={() => setIsModalOpen(false)}>Close</button>
+          </div>
+        </div>
+      )}
+
+      {isAddAppointmentModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Add New Appointment</h2>
+            <form onSubmit={handleNewAppointmentSubmit}>
+              <div className="form-group">
+                <label htmlFor="userId">
+                  <User size={16} /> User ID (for new appointment):
+                </label>
+                <input
+                  type="number"
+                  id="userId"
+                  name="User_ID"
+                  value={newAppointment.User_ID || ""}
+                  onChange={handleNewAppointmentChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="appointmentDateTime">
+                  <CalendarIcon size={16} /> Date & Time:
+                </label>
+                <input
+                  type="datetime-local"
+                  id="appointmentDateTime"
+                  name="Appointment_DateTime"
+                  value={
+                    newAppointment.Appointment_DateTime
+                      ? newAppointment.Appointment_DateTime.substring(0, 16)
+                      : ""
+                  } // Format for datetime-local
+                  onChange={handleNewAppointmentChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="appointmentType">
+                  <Tag size={16} /> Appointment Type:
+                </label>
+                <input
+                  type="text"
+                  id="appointmentType"
+                  name="Appointment_Type"
+                  value={newAppointment.Appointment_Type || ""}
+                  onChange={handleNewAppointmentChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="notes">
+                  <FileText size={16} /> Notes:
+                </label>
+                <textarea
+                  id="notes"
+                  name="Notes"
+                  value={newAppointment.Notes || ""}
+                  onChange={handleNewAppointmentChange}
+                ></textarea>
+              </div>
+              <div className="modal-actions">
+                <button type="submit">Create Appointment</button>
+                <button
+                  type="button"
+                  onClick={() => setIsAddAppointmentModalOpen(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
