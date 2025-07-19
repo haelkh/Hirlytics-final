@@ -158,7 +158,7 @@ const Home = (): React.JSX.Element => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(0, 0, 0, 0.75)",
-              zIndex: 1000,
+              zIndex: 999,
             },
             content: {
               position: "absolute",
@@ -198,7 +198,7 @@ const Home = (): React.JSX.Element => {
               right: 0,
               bottom: 0,
               backgroundColor: "rgba(0, 0, 0, 0.75)",
-              zIndex: 1000,
+              zIndex: 999,
             },
             content: {
               position: "absolute",

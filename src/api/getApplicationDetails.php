@@ -34,38 +34,36 @@ if (!isset($conn) || $conn === null) {
 try {
     // Get detailed application information
     $stmt = $conn->prepare("SELECT 
-        ja.application_id,
+        ja.ApplicationId,
         ja.status,
-        ja.created_at as ApplicationDate,
-        jb.job_id,
-        jb.job_title,
-        jb.job_type,
-        jb.company_name,
+        ja.ApplicationDate as ApplicationDate,
+        jb.ID as job_id,
+        jb.JobTitle as job_title,
+        jb.JobType as job_type,
         jb.image as company_image,
         jb.description as job_description,
-        jb.salary_range,
         jb.expiry_date,
-        u.name as applicant_name,
-        u.email as applicant_email,
-        u.phone as applicant_phone,
-        js.seeker_id,
-        js.CurrentEmploymentStatus,
-        js.SeekingPosition,
-        js.InterestedIndustries,
-        js.DesiredJobLocation,
-        js.WorkLocationPreference,
-        js.YearsExperience,
-        js.Skills,
-        js.Relocation,
-        js.ExpectedSalary,
-        js.AvailabilityToStart,
-        js.CVUpload,
-        js.Portfolio_Linkedin
+        IFNULL(u.Full_Name, '') as applicant_name,
+        IFNULL(u.Email_Address, '') as applicant_email,
+        IFNULL(u.phone_number, '') as applicant_phone,
+        js.JOBSeekerID as seeker_id,
+        IFNULL(js.CurrentEmploymentStatus, '') as CurrentEmploymentStatus,
+        IFNULL(js.SeekingPosition, '') as SeekingPosition,
+        IFNULL(js.InterestedIndustries, '') as InterestedIndustries,
+        IFNULL(js.DesiredJobLocation, '') as DesiredJobLocation,
+        IFNULL(js.WorkLocationPreference, '') as WorkLocationPreference,
+        IFNULL(js.YearsExperience, '') as YearsExperience,
+        IFNULL(js.Skills, '') as Skills,
+        IFNULL(js.Relocation, 0) as Relocation,
+        IFNULL(js.ExpectedSalary, '') as ExpectedSalary,
+        IFNULL(js.AvailabilityToStart, '') as AvailabilityToStart,
+        IFNULL(js.CVUpload, '') as CVUpload,
+        IFNULL(js.Portfolio_Linkedin, '') as Portfolio_Linkedin
     FROM job_application ja
-    LEFT JOIN job_board jb ON ja.job_id = jb.job_id
-    LEFT JOIN job_seeker js ON ja.seeker_id = js.seeker_id
-    LEFT JOIN users u ON js.user_id = u.user_id
-    WHERE ja.application_id = :application_id");
+    LEFT JOIN job_board jb ON ja.JobID = jb.ID
+    LEFT JOIN job_seeker js ON ja.JobSeekerID = js.JOBSeekerID
+    LEFT JOIN users u ON js.user_id = u.ID
+    WHERE ja.ApplicationId = :application_id");
 
     $stmt->bindParam(':application_id', $applicationId);
     $stmt->execute();

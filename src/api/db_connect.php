@@ -27,7 +27,6 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    // The script that includes this file will handle the connection error.
     // For debugging, you can temporarily uncomment the line below to see the error directly.
-    // die("Connection failed: " . $e->getMessage());
+    die("Connection failed: " . $e->getMessage());
 }

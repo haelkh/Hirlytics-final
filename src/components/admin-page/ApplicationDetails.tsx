@@ -52,7 +52,6 @@ const ApplicationDetails = () => {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [statusUpdateLoading, setStatusUpdateLoading] = useState(false);
 
   useEffect(() => {
     const fetchApplicationDetails = async () => {
@@ -90,71 +89,10 @@ const ApplicationDetails = () => {
   }, [id]);
 
   // Handle status change
-  const handleStatusChange = async (newStatus: string) => {
-    if (!application) return;
-
-    try {
-      setStatusUpdateLoading(true);
-
-      const response = await fetch(
-        "http://localhost/Hirlytics-final/src/api/updateApplicationStatus.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            application_id: application.application_id,
-            status: newStatus,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update status");
-      }
-
-      const result = await response.json();
-
-      if (result.status === "success") {
-        // Update the application state with the new status
-        setApplication({
-          ...application,
-          status: newStatus,
-        });
-
-        // Show success message
-        alert("Status updated successfully");
-      } else {
-        throw new Error(result.message || "Failed to update status");
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      alert(`Error: ${errorMessage}`);
-      console.error("Error updating application status:", error);
-    } finally {
-      setStatusUpdateLoading(false);
-    }
-  };
+ 
 
   // Function to determine status style
-  const getStatusStyle = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "submitted":
-        return { backgroundColor: "#E3EDF9", color: "#0b3b71" };
-      case "under review":
-        return { backgroundColor: "#FFF8E6", color: "#E5B454" };
-      case "shortlisted":
-        return { backgroundColor: "#e6f7ee", color: "#0d8a3e" };
-      case "rejected":
-        return { backgroundColor: "#FFE6E6", color: "#D32F2F" };
-      case "hired":
-        return { backgroundColor: "#E6F7EE", color: "#0d8a3e" };
-      default:
-        return { backgroundColor: "#E3EDF9", color: "#0b3b71" };
-    }
-  };
+  
 
   // Format date function
   const formatDate = (dateString: string) => {
@@ -216,77 +154,7 @@ const ApplicationDetails = () => {
                 </div>
 
                 <div className="application-details-container">
-                  <div className="application-status-section">
-                    <h2>Status</h2>
-                    <div className="application-current-status">
-                      <span
-                        className="application-status-badge"
-                        style={getStatusStyle(application.status)}
-                      >
-                        {application.status}
-                      </span>
-                    </div>
-                    <div className="application-status-update">
-                      <h3>Update Status</h3>
-                      <div className="status-buttons">
-                        <button
-                          className={`status-btn submitted ${
-                            application.status.toLowerCase() === "submitted"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleStatusChange("Submitted")}
-                          disabled={statusUpdateLoading}
-                        >
-                          Submitted
-                        </button>
-                        <button
-                          className={`status-btn under-review ${
-                            application.status.toLowerCase() === "under review"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleStatusChange("Under Review")}
-                          disabled={statusUpdateLoading}
-                        >
-                          Under Review
-                        </button>
-                        <button
-                          className={`status-btn shortlisted ${
-                            application.status.toLowerCase() === "shortlisted"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleStatusChange("Shortlisted")}
-                          disabled={statusUpdateLoading}
-                        >
-                          Shortlisted
-                        </button>
-                        <button
-                          className={`status-btn rejected ${
-                            application.status.toLowerCase() === "rejected"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleStatusChange("Rejected")}
-                          disabled={statusUpdateLoading}
-                        >
-                          Rejected
-                        </button>
-                        <button
-                          className={`status-btn hired ${
-                            application.status.toLowerCase() === "hired"
-                              ? "active"
-                              : ""
-                          }`}
-                          onClick={() => handleStatusChange("Hired")}
-                          disabled={statusUpdateLoading}
-                        >
-                          Hired
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  
 
                   <div className="application-info-grid">
                     <div className="application-section job-details">
@@ -294,19 +162,19 @@ const ApplicationDetails = () => {
                       <div className="detail-item">
                         <span className="detail-label">Job Title:</span>
                         <span className="detail-value">
-                          {application.job_title}
+                          {application.job_title || "Not specified"}
                         </span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">Company:</span>
                         <span className="detail-value">
-                          {application.company_name}
+                          {application.company_name || "Not specified"}
                         </span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">Job Type:</span>
                         <span className="detail-value">
-                          {application.job_type}
+                          {application.job_type || "Not specified"}
                         </span>
                       </div>
                       <div className="detail-item">
@@ -337,13 +205,13 @@ const ApplicationDetails = () => {
                       <div className="detail-item">
                         <span className="detail-label">Name:</span>
                         <span className="detail-value">
-                          {application.applicant_name}
+                          {application.applicant_name || "Not provided"}
                         </span>
                       </div>
                       <div className="detail-item">
                         <span className="detail-label">Email:</span>
                         <span className="detail-value">
-                          {application.applicant_email}
+                          {application.applicant_email || "Not provided"}
                         </span>
                       </div>
                       <div className="detail-item">
@@ -430,7 +298,7 @@ const ApplicationDetails = () => {
                         <span className="detail-label">CV/Resume:</span>
                         {application.CVUpload ? (
                           <a
-                            href={`http://localhost/Hirlytics-final/src/uploads/${application.CVUpload}`}
+                            href={`http://localhost/Hirlytics-final/src/api/uploads/${application.CVUpload}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="document-link"

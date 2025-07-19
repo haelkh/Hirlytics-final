@@ -14,15 +14,25 @@ interface Application {
   application_id: number;
   status: string;
   ApplicationDate: string;
-  job_title: string;
-  job_type: string;
+  jobTitle: string;
+  jobType: string;
   company_name: string;
   image: string | null;
   applicant_name: string;
   applicant_email: string;
+  applicant_phone: string;
   SeekingPosition: string;
   YearsExperience: string;
   Skills: string;
+  CurrentEmploymentStatus: string;
+  InterestedIndustries: string;
+  DesiredJobLocation: string;
+  WorkLocationPreference: string;
+  Relocation: number; // Assuming 0 or 1 for tinyint
+  ExpectedSalary: string; // Or number, depending on how it's formatted
+  AvailabilityToStart: string;
+  CVUpload: string;
+  Portfolio_Linkedin: string;
 }
 
 interface ApiResponse {
@@ -43,10 +53,7 @@ const ApplicationsDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [statusUpdateLoading, setStatusUpdateLoading] = useState<number | null>(
-    null
-  );
+  const [statusFilter] = useState("All");
 
   useEffect(() => {
     const fetchApplications = async () => {
@@ -83,64 +90,6 @@ const ApplicationsDashboard = () => {
   }, []);
 
   // Handle status change
-  const handleStatusChange = async (
-    applicationId: number,
-    newStatus: string
-  ) => {
-    try {
-      setStatusUpdateLoading(applicationId);
-
-      const response = await fetch(
-        "http://localhost/Hirlytics-final/src/api/updateApplicationStatus.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            application_id: applicationId,
-            status: newStatus,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update status");
-      }
-
-      const result = await response.json();
-
-      if (result.status === "success") {
-        // Update the applications state with the new status
-        const updatedApplications = applications.map((app) =>
-          app.application_id === applicationId
-            ? { ...app, status: newStatus }
-            : app
-        );
-
-        setApplications(updatedApplications);
-        setFilteredApplications((prevFiltered) =>
-          prevFiltered.map((app) =>
-            app.application_id === applicationId
-              ? { ...app, status: newStatus }
-              : app
-          )
-        );
-
-        // Show success message
-        alert("Status updated successfully");
-      } else {
-        throw new Error(result.message || "Failed to update status");
-      }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      alert(`Error: ${errorMessage}`);
-      console.error("Error updating application status:", error);
-    } finally {
-      setStatusUpdateLoading(null);
-    }
-  };
 
   // Filter applications based on search term and status
   useEffect(() => {
@@ -151,7 +100,7 @@ const ApplicationsDashboard = () => {
       const term = searchTerm.toLowerCase();
       results = results.filter(
         (app) =>
-          app.job_title?.toLowerCase().includes(term) ||
+          app.jobTitle?.toLowerCase().includes(term) ||
           app.applicant_name?.toLowerCase().includes(term) ||
           app.applicant_email?.toLowerCase().includes(term) ||
           app.company_name?.toLowerCase().includes(term)
@@ -167,22 +116,6 @@ const ApplicationsDashboard = () => {
   }, [searchTerm, statusFilter, applications]);
 
   // Function to determine status style
-  const getStatusStyle = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "submitted":
-        return { backgroundColor: "#E3EDF9", color: "#0b3b71" };
-      case "under review":
-        return { backgroundColor: "#FFF8E6", color: "#E5B454" };
-      case "shortlisted":
-        return { backgroundColor: "#e6f7ee", color: "#0d8a3e" };
-      case "rejected":
-        return { backgroundColor: "#FFE6E6", color: "#D32F2F" };
-      case "hired":
-        return { backgroundColor: "#E6F7EE", color: "#0d8a3e" };
-      default:
-        return { backgroundColor: "#E3EDF9", color: "#0b3b71" };
-    }
-  };
 
   // Format date function
   const formatDate = (dateString: string) => {
@@ -251,20 +184,6 @@ const ApplicationsDashboard = () => {
               <div className="applications-dashboard-content">
                 <div className="applications-dashboard-header">
                   <h1>Manage Applications</h1>
-                  <div className="applications-dashboard-filters">
-                    <select
-                      value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value)}
-                      className="applications-status-filter"
-                    >
-                      <option value="All">All Statuses</option>
-                      <option value="Submitted">Submitted</option>
-                      <option value="Under Review">Under Review</option>
-                      <option value="Shortlisted">Shortlisted</option>
-                      <option value="Rejected">Rejected</option>
-                      <option value="Hired">Hired</option>
-                    </select>
-                  </div>
                 </div>
 
                 <div className="applications-table-container">
@@ -273,78 +192,57 @@ const ApplicationsDashboard = () => {
                       <tr>
                         <th>ID</th>
                         <th>Job Title</th>
+                        <th>Job Type</th>
                         <th>Applicant</th>
-                        <th>Company</th>
                         <th>Date Applied</th>
-                        <th>Status</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredApplications.length > 0 ? (
-                        filteredApplications.map((app) => (
-                          <tr key={app.application_id}>
-                            <td>{app.application_id}</td>
-                            <td>
-                              {app.job_title || app.SeekingPosition || "N/A"}
-                            </td>
-                            <td>
-                              <div className="applicant-info">
-                                <div>{app.applicant_name || "Unknown"}</div>
-                                <div className="applicant-email">
-                                  {app.applicant_email || "No email"}
+                        filteredApplications.map((app) => {
+                          console.log("Current application object:", app);
+                          console.log(
+                            "Application ID in ApplicationsDashboard:",
+                            app.application_id
+                          );
+                          return (
+                            <tr key={app.application_id}>
+                              <td>{app.application_id}</td>
+                              <td>
+                                {app.jobTitle || app.SeekingPosition || "N/A"}
+                              </td>
+                              <td>{app.jobType || "N/A"}</td>
+                              <td>
+                                <div className="applicant-info">
+                                  <div>{app.applicant_name || "Unknown"}</div>
+                                  <div className="applicant-email">
+                                    {app.applicant_email || "No email"}
+                                  </div>
+                                  <div className="applicant-phone">
+                                    {app.applicant_phone || "No phone"}
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td>{app.company_name || "N/A"}</td>
-                            <td>{formatDate(app.ApplicationDate)}</td>
-                            <td>
-                              <span
-                                className="application-status"
-                                style={getStatusStyle(app.status)}
-                              >
-                                {app.status}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="application-actions">
-                                <button
-                                  className="view-btn"
-                                  onClick={() =>
-                                    navigate(
-                                      `/AdminPage/Manage/applications/${app.application_id}`
-                                    )
-                                  }
-                                >
-                                  View
-                                </button>
-                                <select
-                                  className="status-update-select"
-                                  defaultValue={app.status}
-                                  onChange={(e) =>
-                                    handleStatusChange(
-                                      app.application_id,
-                                      e.target.value
-                                    )
-                                  }
-                                  disabled={
-                                    statusUpdateLoading === app.application_id
-                                  }
-                                >
-                                  <option value="Submitted">Submitted</option>
-                                  <option value="Under Review">
-                                    Under Review
-                                  </option>
-                                  <option value="Shortlisted">
-                                    Shortlisted
-                                  </option>
-                                  <option value="Rejected">Rejected</option>
-                                  <option value="Hired">Hired</option>
-                                </select>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
+                              </td>
+                              <td>{formatDate(app.ApplicationDate)}</td>
+
+                              <td>
+                                <div className="application-actions">
+                                  <button
+                                    className="view-btn"
+                                    onClick={() => {
+                                      const targetPath = `/AdminPage/Manage/applications/${app.application_id}`;
+                                      console.log("Navigating to:", targetPath);
+                                      navigate(targetPath);
+                                    }}
+                                  >
+                                    View
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
                       ) : (
                         <tr>
                           <td colSpan={7} className="no-applications">

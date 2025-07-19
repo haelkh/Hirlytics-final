@@ -25,23 +25,24 @@ if (!isset($conn) || $conn === null) {
 try {
     // Get all applications with related information
     $stmt = $conn->query("SELECT 
-        ja.application_id,
+        ja.ApplicationId as application_id,
         ja.status,
-        ja.created_at as ApplicationDate,
-        jb.job_title,
-        jb.job_type,
-        jb.company_name,
+        ja.ApplicationDate as ApplicationDate,
+        jb.jobTitle,
+        jb.jobType,
         jb.image,
-        u.name as applicant_name,
-        u.email as applicant_email,
+        u.Full_Name as applicant_name,
+        u.Email_Address as applicant_email,
         js.SeekingPosition,
         js.YearsExperience,
-        js.Skills
+        js.Skills,
+        jb.expiry_date
     FROM job_application ja
-    LEFT JOIN job_board jb ON ja.job_id = jb.job_id
-    LEFT JOIN job_seeker js ON ja.seeker_id = js.seeker_id
-    LEFT JOIN users u ON js.user_id = u.user_id
-    ORDER BY ja.created_at DESC");
+    LEFT JOIN job_board jb ON ja.JobId = jb.ID
+    LEFT JOIN job_seeker js ON ja.JobSeekerID = js.JOBSeekerID
+    LEFT JOIN users u ON js.user_id = u.ID
+    WHERE jb.expiry_date >= CURDATE()
+    ORDER BY ja.ApplicationDate DESC");
 
     $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -54,8 +55,10 @@ try {
 } catch (PDOException $e) {
     // Return error response
     http_response_code(500);
+    // Temporarily output the exact database error for debugging
     echo json_encode([
         'status' => 'error',
         'message' => 'Database error: ' . $e->getMessage()
     ]);
+    // die("Database error: " . $e->getMessage()); // Also consider using die for direct output
 }
