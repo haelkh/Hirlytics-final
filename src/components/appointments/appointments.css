@@ -200,20 +200,19 @@ body {
 }
 
 .day {
-  height: 36px;
+  height: 40px; /* Slightly larger for better touch interaction */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  color: #ccc;
-  cursor: not-allowed;
-  border-radius: 50%;
+  font-size: 1rem; /* Slightly larger font */
+  color: #333; /* Default color for selectable days */
+  cursor: pointer; /* Indicate clickability */
+  border-radius: var(--border-radius); /* Use border-radius for softer edges */
+  transition: background-color 0.2s ease, color 0.2s ease; /* Smooth transitions */
 }
 
-.day.available {
-  color: #333;
-  cursor: pointer;
-  background-color: var(--light-gray);
+.day:hover {
+  background-color: var(--medium-gray); /* Hover effect */
 }
 
 .day.selected {
@@ -222,6 +221,7 @@ body {
 }
 
 .day.empty {
+  background-color: transparent; /* No background for empty days */
   cursor: default;
 }
 
