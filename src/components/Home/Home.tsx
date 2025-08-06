@@ -28,13 +28,6 @@ const Home = (): React.JSX.Element => {
   const [inView, setInView] = useState(false);
   const [isSignInModalOpen, setSignInModalOpen] = useState(false);
   const [isSignUpModalOpen, setSignUpModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Check if user is logged in
-    const userData = localStorage.getItem("user");
-    setIsLoggedIn(!!userData);
-  }, []);
 
   const openSignInModal = () => setSignInModalOpen(true);
   const closeSignInModal = () => setSignInModalOpen(false);
@@ -95,11 +88,7 @@ const Home = (): React.JSX.Element => {
 
   return (
     <>
-      <Header
-        onSignInClick={openSignInModal}
-        onSignUpClick={openSignUpModal}
-        isLoggedIn={isLoggedIn}
-      />
+      <Header />
       <br />
       <br />
       <br />

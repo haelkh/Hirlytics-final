@@ -1,41 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 :root {
-  font-family: "poppins", sans-serif;
+  /* Color Variables */
+  --deep-blue: #003366;
+  --aqua: #006898;
+  --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 100%);
+  --white: #ffffff;
+  --light-gray: #f8fafc;
+  --medium-gray: #e0e0e0;
+  --dark-gray: #4d4d4d;
+
+  /* Spacing Variables */
+  --header-height: 80px;
+  --header-height-mobile: 70px;
 }
 
-/* Page Banner */
+/* Main layout */
+.servicesPage {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: "Poppins", sans-serif;
+}
+
+/* EXACT MATCH TO ABOUT PAGE BANNER */
+.spacer {
+  height: var(--header-height); /* Same 80px spacer */
+}
+
+/* Update the banner styles for Services to match Blog banner */
 .page-banner {
-  background-color: #003a70;
+  background-image: var(--wave);
   color: white;
+  padding: 60px 0; /* You can keep this or remove it, depending on the final look */
   text-align: center;
-  padding: 40px 0;
-  margin-top: 80px;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  /* Remove flexbox properties if you want to use padding */
+}
+
+/* Add the pseudo-element for the wave effect from the blog header */
+.page-banner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/src/assets/Shape.png") no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 1;
 }
 
 .page-banner h1 {
-  font-size: 36px;
+  font-size: 3rem;
+  font-weight: 700;
   margin: 0;
-  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 2;
+  letter-spacing: 0.05em;
+  padding-top: 50px; /* Add this line to push the text down */
+  padding-bottom: 10px; /* Adjust this to control the banner's overall height */
 }
 
+/* Rest of your existing services CSS remains unchanged */
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 0 20px;
 }
 
-/* Specialties Section */
-.specialties-image-container {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.specialties-image {
-  max-width: 100%;
-  border-radius: 8px;
-}
-
-/* specialties styling */
 .specialties-section {
   font-family: "Inter", sans-serif;
   padding: 60px 0;
@@ -148,6 +187,15 @@ h2 {
 
   .specialty-item {
     gap: 12px;
+  }
+  .page-banner {
+    padding: 40px 0;
+  }
+
+  .page-banner h1 {
+    font-size: 2.5rem;
+    padding-top: 30px; /* Adjust for mobile view */
+    padding-bottom: 30px; /* Adjust for mobile view */
   }
 }
 

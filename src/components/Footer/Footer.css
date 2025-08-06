@@ -1,7 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+:root {
+  --deep-blue: #003366;
+  --aqua: #006898;
+  --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 100%);
+}
 
 .footer {
-  background-color: #003366;
+  background-image: var(
+    --wave
+  ); /* Changed from background-color to background-image */
   color: white;
   font-family: "Poppins", sans-serif;
   padding: 2rem 0 1rem;

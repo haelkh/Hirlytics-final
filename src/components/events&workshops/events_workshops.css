@@ -1,53 +1,120 @@
-/* Main container styles */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 :root {
+  /* Unified Color Variables */
   --deep-blue: #003366;
   --aqua: #006898;
   --ice: #f0faff;
-  --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 50%);
+  --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 100%);
   --glow: rgba(0, 247, 255, 0.3);
+  --white: #ffffff;
+  --light-gray: #f8fafc;
+  --medium-gray: #e0e0e0;
+  --dark-gray: #4d4d4d;
+
+  /* Spacing Variables */
+  --header-height: 80px;
+  --header-height-mobile: 70px;
 }
 
+/* Events & Workshops Container */
 .ew-container {
   font-family: "Poppins", sans-serif;
   margin: 0 auto;
   max-width: 100%;
+  background-color: var(--white);
 }
 
-/* Hero section styles */
+/* Unified Banner Styles - Matches Services Page */
 .ew-hero-section {
-  background: var(--wave);
-  padding: 80px 0 100px;
-  margin-bottom: 40px;
-  position: relative;
+  background-image: var(--wave);
+  color: white;
+  padding: 60px 0;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 40px;
+  margin-top: -20px;
 }
 
 .ew-hero-section::after {
   content: "";
   position: absolute;
-  bottom: -5px;
+  top: 0;
   left: 0;
-  width: 100%;
-  height: 10px;
-  background: var(--ice);
+  right: 0;
+  bottom: 0;
+  background: url("/src/assets/Shape.png") no-repeat center center;
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 1;
 }
 
 .ew-hero-content {
+  position: relative;
+  z-index: 2;
   max-width: 800px;
   margin: 0 auto;
 }
 
 .ew-hero-content h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.05em;
+  padding-top: 20px;
+  padding-bottom: 10px;
   color: white;
-  font-size: 2.5rem;
-  margin: 0 0 15px;
-  text-shadow: 0 0 20px var(--glow);
 }
 
 .ew-hero-content p {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  margin: 0;
+  font-size: 1.2rem;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+/* Main content styles */
+.ew-main-content {
+  padding: 0 20px 50px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Rest of your existing Events & Workshops styles... */
+/* [Include all the remaining CSS from your original Events & Workshops styles here] */
+/* This includes: filters, grid, cards, loading states, etc. */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ew-hero-section {
+    padding: 40px 0;
+  }
+
+  .ew-hero-content h1 {
+    font-size: 2.5rem;
+    padding-top: 15px;
+  }
+
+  .ew-hero-content p {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ew-hero-content h1 {
+    font-size: 2rem;
+    padding-bottom: 5px;
+  }
+
+  .ew-hero-content p {
+    font-size: 0.9rem;
+  }
 }
 
 /* Main content styles */

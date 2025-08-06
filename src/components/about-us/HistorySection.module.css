@@ -1,9 +1,29 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+:root {
+  --deep-blue: #003366;
+  --aqua: #006898;
+  --wave: linear-gradient(135deg, var(--deep-blue) 0%, var(--aqua) 100%);
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Main layout */
 .historyPage {
   width: 100%;
   min-height: 100vh;
   background-color: #ffffff;
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .spacer {
@@ -11,16 +31,17 @@
 }
 
 .aboutHeader {
-  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  background-image: var(--wave);
   color: white;
   padding: 60px 0;
   text-align: center;
   margin-bottom: 60px;
+  font-family: "Poppins", sans-serif;
 }
 
 .aboutHeader h1 {
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 600;
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -59,14 +80,14 @@
 .blueLine {
   width: 30px;
   height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #1e40af);
+  background: var(--wave);
   border-radius: 2px;
 }
 
 .historyTitle {
   font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: var(--deep-blue);
   margin: 0;
   line-height: 1.2;
 }
@@ -128,8 +149,8 @@
 
 .missionVisionTitle {
   font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: var(--deep-blue);
   margin-bottom: 15px;
   position: relative;
 }
@@ -138,7 +159,7 @@
   position: relative;
   width: 50px;
   height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #1e40af);
+  background: var(--wave);
   border-radius: 2px;
   margin-top: 8px;
 }
@@ -149,7 +170,7 @@
   top: -2px;
   width: 6px;
   height: 6px;
-  background: #3b82f6;
+  background: var(--aqua);
   border-radius: 50%;
 }
 
@@ -174,8 +195,8 @@
 
 .whyChooseTitle {
   font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: var(--deep-blue);
   text-align: center;
   margin-bottom: 40px;
 }
@@ -196,7 +217,7 @@
 
 .whyChooseText h3 {
   font-size: 1.3rem;
-  color: #1e293b;
+  color: var(--deep-blue);
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -209,12 +230,12 @@
 }
 
 .highlight {
-  color: #3b82f6;
+  color: var(--aqua);
   font-weight: 600;
   background: linear-gradient(
     120deg,
-    rgba(59, 130, 246, 0.1) 0%,
-    rgba(59, 130, 246, 0.2) 100%
+    rgba(0, 104, 152, 0.1) 0%,
+    rgba(0, 104, 152, 0.2) 100%
   );
   padding: 2px 4px;
   border-radius: 4px;
@@ -255,8 +276,8 @@
 
 .teamHeading {
   font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: var(--deep-blue);
   text-align: center;
   margin-bottom: 8px;
 }
@@ -300,7 +321,7 @@
 }
 
 .teamMember:hover .memberImageContainer {
-  border-color: #3b82f6;
+  border-color: var(--aqua);
 }
 
 .memberImage {
@@ -312,13 +333,13 @@
 .memberName {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--deep-blue);
   margin-bottom: 6px;
 }
 
 .memberTitle {
   font-size: 0.9rem;
-  color: #3b82f6;
+  color: var(--aqua);
   font-weight: 600;
   margin-bottom: 12px;
   text-transform: uppercase;
@@ -359,7 +380,7 @@
 
 .connectHeading {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 30px;
   text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
 }
@@ -385,25 +406,25 @@
 }
 
 .scheduleButton {
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  background: var(--wave);
   color: white;
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(0, 51, 102, 0.3);
 }
 
 .scheduleButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px -3px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 12px -3px rgba(0, 51, 102, 0.4);
 }
 
 .contactButton {
   background: transparent;
-  color: #1e293b;
-  border-color: #1e293b;
+  color: var(--deep-blue);
+  border-color: var(--deep-blue);
   backdrop-filter: blur(10px);
 }
 
 .contactButton:hover {
-  background: rgba(30, 41, 59, 0.1);
+  background: rgba(0, 51, 102, 0.1);
   transform: translateY(-2px);
 }
 
@@ -420,8 +441,8 @@
 
 .eventsHeading {
   font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: var(--deep-blue);
   text-align: center;
   margin-bottom: 40px;
 }
@@ -449,13 +470,13 @@
 }
 
 .eventDate {
-  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  background: var(--wave);
   color: white;
   padding: 15px;
   border-radius: 6px;
   text-align: center;
   min-width: 70px;
-  box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(0, 51, 102, 0.3);
 }
 
 .eventDay {
@@ -490,7 +511,7 @@
 .eventTitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--deep-blue);
   margin: 0;
   line-height: 1.3;
 }
@@ -503,7 +524,7 @@
 .arrowButton {
   background: transparent;
   border: none;
-  color: #3b82f6;
+  color: var(--aqua);
   padding: 6px;
   border-radius: 50%;
   cursor: pointer;
@@ -516,7 +537,7 @@
 }
 
 .arrowButton:hover {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(0, 104, 152, 0.1);
   transform: translateX(3px);
 }
 

@@ -8,80 +8,8 @@ interface JobDetailsProps {
 }
 
 const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange }) => {
-  const [jobType] = useState<string>(data.jobType || "");
-  const [salaryMin, setSalaryMin] = useState<string>(data.salaryMin || "");
-  const [salaryMax, setSalaryMax] = useState<string>(data.salaryMax || "");
-  const [paymentTerm, setPaymentTerm] = useState<string>(
-    data.paymentTerm || ""
-  );
-  const [additionalCompensation, setAdditionalCompensation] = useState<
-    string[]
-  >(data.additionalCompensation || []);
-  const [benefits, setBenefits] = useState<string[]>(data.benefits || []);
-  const [selectedJobTypes, setSelectedJobTypes] = useState<string[]>([]);
 
-  // Update parent data when local state changes
-  useEffect(() => {
-    onDataChange({
-      jobType,
-      salaryMin,
-      salaryMax,
-      paymentTerm,
-      additionalCompensation,
-      benefits,
-    });
-  }, [
-    jobType,
-    salaryMin,
-    salaryMax,
-    paymentTerm,
-    additionalCompensation,
-    benefits,
-  ]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    if (name === "salaryMin") setSalaryMin(value);
-    if (name === "salaryMax") setSalaryMax(value);
-    if (name === "paymentTerm") setPaymentTerm(value);
-  };
-
-  const handleJobTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (selectedJobTypes.includes(value)) {
-      setSelectedJobTypes(selectedJobTypes.filter((type) => type !== value));
-    } else {
-      setSelectedJobTypes([...selectedJobTypes, value]);
-    }
-  };
-
-  const handleAdditionalCompensationChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { value, checked } = e.target;
-    let updatedCompensation = [...additionalCompensation];
-    if (checked) {
-      updatedCompensation.push(value);
-    } else {
-      updatedCompensation = updatedCompensation.filter(
-        (item) => item !== value
-      );
-    }
-    setAdditionalCompensation(updatedCompensation);
-  };
-
-  const handleBenefitsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = e.target;
-    let updatedBenefits = [...benefits];
-    if (checked) {
-      updatedBenefits.push(value);
-    } else {
-      updatedBenefits = updatedBenefits.filter((item) => item !== value);
-    }
-    setBenefits(updatedBenefits);
-  };
 
   return (
     <div className="post-job-step-section">

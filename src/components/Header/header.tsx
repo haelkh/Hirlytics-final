@@ -1,37 +1,23 @@
-"use client";
-
-import type React from "react";
-import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, Search, X } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { Menu, X, User } from "lucide-react";
+import SignIn from "../SignIn/SignIn";
+import SignUp from "../SignUp/SignUp";
 import "./Header.css";
 
-interface HeaderProps {
-  onSignInClick?: () => void;
-  onSignUpClick?: () => void;
-  isLoggedIn?: boolean;
-}
-
-const Header: React.FC<HeaderProps> = ({
-  onSignInClick,
-  onSignUpClick,
-  isLoggedIn = false,
-}) => {
-  const location = useLocation();
+const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const searchBarRef = useRef<HTMLDivElement>(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+
+  const dropdownRef = useRef<HTMLLIElement>(null);
   const headerRef = useRef<HTMLElement>(null);
 
-  const placeholders = ["Search for services...", "Looking for solutions?"];
-
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return window.location.pathname === path;
   };
 
   useEffect(() => {
@@ -56,56 +42,68 @@ const Header: React.FC<HeaderProps> = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        // Handle click outside if needed
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
     document.body.classList.toggle("menu-open", !mobileMenuOpen);
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isFocused) {
-        setPlaceholderIndex((prev) => (prev + 1) % placeholders.length);
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [isFocused, placeholders.length]);
 
-  const handleSearchBarClick = () => {
-    inputRef.current?.focus();
-  };
 
   const handleLinkClick = () => {
     if (windowWidth <= 768) {
       setMobileMenuOpen(false);
       document.body.classList.remove("menu-open");
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  return (
-    <header className={`header${scrolled ? " scrolled" : ""}`} ref={headerRef}>
-      <div className="header-container">
-        {/* Logo and Auth Buttons Container */}
-        <div className="header-left-section">
-          <div className="logo-container">
-            <h1 className="logo">
-              <img src="/src/assets/logo.png" alt="Hirlytics Logo" />
-            </h1>
 
-            {/* Auth Buttons - Positioned directly under logo */}
-            {!isLoggedIn && (
-              <div className="auth-buttons-header">
-                <button className="btn-signin" onClick={onSignInClick}>
-                  Login
-                </button>
-                <button className="btn-signup" onClick={onSignUpClick}>
-                  Sign Up
-                </button>
-              </div>
-            )}
-          </div>
+  const handleSignInClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowSignInModal(true);
+    handleLinkClick();
+  };
+
+  const handleSignUpClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowSignUpModal(true);
+    handleLinkClick();
+  };
+
+  const closeModals = () => {
+    setShowSignInModal(false);
+    setShowSignUpModal(false);
+  };
+
+  const switchToSignUp = () => {
+    setShowSignInModal(false);
+    setShowSignUpModal(true);
+  };
+
+  const switchToSignIn = () => {
+    setShowSignUpModal(false);
+    setShowSignInModal(true);
+  };
+
+  return (
+    <header className={`header ${scrolled ? "scrolled" : ""}`} ref={headerRef}>
+      <div className="header-container">
+        <div className="logo-container">
+          <h1 className="logo">
+            <img src="/src/assets/logo.png" alt="Hirlytics Logo" />
+          </h1>
         </div>
 
-        <nav className={`nav-links${mobileMenuOpen ? " active" : ""}`}>
+        <nav className={`nav-links ${mobileMenuOpen ? "active" : ""}`}>
           <ul>
             <li className={isActive("/") ? "active" : ""}>
               <Link to="/" onClick={handleLinkClick}>
@@ -137,27 +135,22 @@ const Header: React.FC<HeaderProps> = ({
                 Events
               </Link>
             </li>
+            <li className={isActive("/contact-us") ? "active" : ""}>
+              <Link to="/contact-us" onClick={handleLinkClick}>
+                Contact Us
+              </Link>
+            </li>
           </ul>
         </nav>
 
         <div className="right-section">
-          <div
-            className={`search-bar${isFocused ? " focused" : ""}`}
-            onClick={handleSearchBarClick}
-            ref={searchBarRef}
-          >
-            <div className="search-icon">
-              <Search size={windowWidth <= 480 ? 16 : 18} />
-            </div>
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder={placeholders[placeholderIndex]}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-            <button className="search-button">
-              <span className="search-text">Search</span>
+          <div className="auth-buttons">
+            <button className="login-button" onClick={handleSignInClick}>
+              <User size={18} className="auth-icon" />
+              <span>Login</span>
+            </button>
+            <button className="signup-button" onClick={handleSignUpClick}>
+              <span>Sign Up</span>
             </button>
           </div>
 
@@ -170,6 +163,28 @@ const Header: React.FC<HeaderProps> = ({
           </button>
         </div>
       </div>
+
+      {showSignInModal && (
+        <div className="modal-overlay" onClick={closeModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModals}>
+              <X size={24} />
+            </button>
+            <SignIn toggleAuth={switchToSignUp} />
+          </div>
+        </div>
+      )}
+
+      {showSignUpModal && (
+        <div className="modal-overlay" onClick={closeModals}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModals}>
+              <X size={24} />
+            </button>
+            <SignUp toggleAuth={switchToSignIn} />
+          </div>
+        </div>
+      )}
     </header>
   );
 };
