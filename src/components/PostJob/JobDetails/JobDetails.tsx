@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { JobPostingData } from "../PostJobSteps/PostJobSteps";
 import "./JobDetails.css";
 
@@ -8,9 +8,6 @@ interface JobDetailsProps {
 }
 
 const JobDetails: React.FC<JobDetailsProps> = ({ data, onDataChange }) => {
-
-
-
   return (
     <div className="post-job-step-section">
       <h3>Job Details</h3>

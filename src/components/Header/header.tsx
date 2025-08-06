@@ -44,7 +44,10 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         // Handle click outside if needed
       }
     };
@@ -57,8 +60,6 @@ const Header: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
     document.body.classList.toggle("menu-open", !mobileMenuOpen);
   };
-
-
 
   const handleLinkClick = () => {
     if (windowWidth <= 768) {
