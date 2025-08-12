@@ -12,6 +12,7 @@ const Header: React.FC = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLLIElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -40,6 +41,11 @@ const Header: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    setIsAuthenticated(!!storedUser);
   }, []);
 
   useEffect(() => {
@@ -145,15 +151,17 @@ const Header: React.FC = () => {
         </nav>
 
         <div className="right-section">
-          <div className="auth-buttons">
-            <button className="login-button" onClick={handleSignInClick}>
-              <User size={18} className="auth-icon" />
-              <span>Login</span>
-            </button>
-            <button className="signup-button" onClick={handleSignUpClick}>
-              <span>Sign Up</span>
-            </button>
-          </div>
+          {!isAuthenticated && (
+            <div className="auth-buttons">
+              <button className="login-button" onClick={handleSignInClick}>
+                <User size={18} className="auth-icon" />
+                <span>Login</span>
+              </button>
+              <button className="signup-button" onClick={handleSignUpClick}>
+                <span>Sign Up</span>
+              </button>
+            </div>
+          )}
 
           <button
             className="mobile-menu-button"

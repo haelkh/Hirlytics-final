@@ -1,5 +1,5 @@
-import React, { useState, useEffect, FormEvent } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./events.css";
 import Header from "../Header/header";
 import Footer from "../Footer/Footer";
@@ -19,12 +19,9 @@ interface EventDetails {
 
 const EventWorkshopDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const location = useLocation();
   const [event, setEvent] = useState<EventDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [registered, setRegistered] = useState<boolean>(false);
-  const [debugMode] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -69,12 +66,6 @@ const EventWorkshopDetails: React.FC = () => {
     }
   }, [id]);
 
-  const handleRegister = (e: FormEvent) => {
-    e.preventDefault();
-    // Handle registration logic here
-    setRegistered(true);
-  };
-
   const formatDate = (dateString: string) => {
     if (!dateString) return "Date not available";
     try {
@@ -101,24 +92,6 @@ const EventWorkshopDetails: React.FC = () => {
       <br />
       <br />
       <br />
-
-      {debugMode && (
-        <div className="event-debug">
-          <h3>Debug Information:</h3>
-          <p>Current Path: {location.pathname}</p>
-          <p>Event ID from URL: {id || "Not provided"}</p>
-          <p>Loading State: {loading ? "Loading..." : "Completed"}</p>
-          <p>Error State: {error || "No errors"}</p>
-          <p>Event Data: {event ? "Loaded" : "Not loaded"}</p>
-          {event && (
-            <div>
-              <p>Event Title: {event.title}</p>
-              <p>Event Type: {event.type}</p>
-              <p>Event Host: {event.host}</p>
-            </div>
-          )}
-        </div>
-      )}
 
       <div className="event-detail-container">
         {loading ? (
@@ -233,54 +206,7 @@ const EventWorkshopDetails: React.FC = () => {
                 </div>
               </div>
 
-              <div className="event-sidebar">
-                <div className="event-registration-card">
-                  <h3>Register for this {event.type}</h3>
-                  {registered ? (
-                    <div className="registration-success">
-                      <div className="success-icon">✓</div>
-                      <h4>Registration Successful!</h4>
-                      <p>
-                        You have successfully registered for this {event.type}.
-                      </p>
-                      <p>
-                        We'll send you a confirmation email with all the
-                        details.
-                      </p>
-                    </div>
-                  ) : (
-                    <form
-                      onSubmit={handleRegister}
-                      className="registration-form"
-                    >
-                      <div className="form-group">
-                        <label htmlFor="name">Full Name</label>
-                        <input
-                          type="text"
-                          id="name"
-                          placeholder="Enter your full name"
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
-                        <input
-                          type="email"
-                          id="email"
-                          placeholder="Enter your email"
-                          required
-                        />
-                      </div>
-                      <button type="submit" className="register-button">
-                        Register Now
-                      </button>
-                      <p className="registration-note">
-                        Registration is free and only takes a minute.
-                      </p>
-                    </form>
-                  )}
-                </div>
-              </div>
+              <div className="event-sidebar"></div>
             </div>
           </>
         ) : (

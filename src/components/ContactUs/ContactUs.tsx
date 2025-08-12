@@ -2,10 +2,7 @@ import React from "react";
 import "./ContactUs.css";
 import Footer from "../Footer/Footer";
 import Header from "../Header/header";
-// Note: Make sure to include Bootstrap in your project
-// You can add this to your index.html or install via npm
-// npm install bootstrap
-// import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const ContactUs: React.FC = () => {
   return (
